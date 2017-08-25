@@ -1,0 +1,42 @@
+a.dropdown-toggle, .dropdown-menu > li > a{
+    cursor:pointer;
+}
+.dt-bootstrap{
+    /*border: 1px solid gray;*/
+    padding: 5px;
+    height: 360px;
+}
+
+.red {
+    color: red;
+}
+
+.green{
+    color : green;
+}
+
+.white{
+    color: white;
+}
+
+div.dataTables_wrapper div.dataTables_length select {
+  width: 77px;
+  height: 24px;
+  display: inline-block;
+}
+
+div.dataTables_info{
+    margin-top: -6px;
+}
+
+td{
+    height: 0px;
+    padding: -2px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
