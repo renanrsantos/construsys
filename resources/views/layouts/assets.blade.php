@@ -1,3 +1,5 @@
+<link rel="icon" href="{{URL::asset('favicon.ico')}}" type="image/x-icon"/>
+
 <!-- Fonts -->
 <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
 
