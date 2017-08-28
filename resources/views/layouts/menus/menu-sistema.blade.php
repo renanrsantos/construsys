@@ -17,16 +17,16 @@
         $url = url($entidadeSelecionada->identidade.'/modulo'.$moduloSelecionado->modpath.'/rotina'.$rotina->rotpath);
         $subrotinas = $rotina->subrotinas;
         if(!$subrotinas->isEmpty()){
-            $aux = true;
+            $aux = $rotina->rotpath != "";
             foreach($subrotinas as $subrotina){
                 if(!$active){
                     $active = '/'.Request::segment(5) == $subrotina->sbrpath ? 'active': '';
                 }
                 $url = url($entidadeSelecionada->identidade.'/modulo'.$rotina->modulo->modpath.'/rotina'.$subrotina->sbrpath);
                 $dropDownSubRotinas[] = Html::dropDownItem(url($url),$subrotina->sbrnome,['icon'=>Html::icon($subrotina->sbricone)]);
-                if($rotina->rotpath === $subrotina->sbrpath){
-                    $aux = false;
-                }
+//                if($rotina->rotpath === $subrotina->sbrpath){
+//                    $aux = false;
+//                }
             }
             if($aux){
                 $url = url($entidadeSelecionada->identidade.'/modulo'.$rotina->modulo->modpath.'/rotina'.$rotina->rotpath);

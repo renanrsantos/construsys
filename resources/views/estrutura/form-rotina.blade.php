@@ -15,7 +15,7 @@ Rotina
             'value'=>$record->modulo ? $record->modulo->modnome : ''],true)
     ])}}
     {{Form::formGroup([
-        Form::text('rotpath',$record->rotpath,['required','label'=>'Path','size'=>'md1'])
+        Form::text('rotpath',$record->rotpath,['label'=>'Path','size'=>'md1'])
     ])}}
     {{Form::formGroup([
     Form::text('roticone',$record->roticone,['label'=>'Ícone','size'=>'md1'])        
