@@ -114,9 +114,11 @@ abstract class Controller extends BaseController
             }
             $column = $column[count($column)-1];
             return $objeto->$column;
-        } else {
-            return $record->$column;
         }
+        if ($record->getCampoAtivo() === $column){
+            return $record->ativo();
+        }
+        return $record->$column;
     }
     
     protected function getRecordsDataTable(){
@@ -159,7 +161,8 @@ abstract class Controller extends BaseController
     
     protected function getColumnsDataTable(){
         $columns[] = app('html')->column('checkbox',app('form')->checkboxSimple('','',null,['id'=>'chk-all','title'=>'Selecionar todos'])->toHtml());
-        $widthFixed = 100 / count($this->getColumns());
+        $totalColunas = count($this->getColumns());
+        $widthFixed = 100 / $totalColunas;
         foreach ($this->getColumns() as $column) {
             if((!is_array($column['name'])) && (strpos($column['name'], ','))){
                 $column['name'] = explode(',', $column['name']);
@@ -171,7 +174,7 @@ abstract class Controller extends BaseController
             }
             $grupo = isset($column['grupo']) ? $column['grupo'] : '';
             $type = isset($column['type']) ? $column['type'] : 'text';
-            $width = isset($column['width']) ? $column['width'] : $widthFixed;
+            $width = isset($column['width']) ? $column['width'].'%' : $widthFixed;
             $columns[] = app('html')->column($name,$column['label'],$type,$grupo,$width);
         }
         return $columns;

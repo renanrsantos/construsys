@@ -224,13 +224,16 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder{
     public function getTableHeader($columns){
         $rowspanDef = 1;
         $colSpanGrupo = [];
+        $width = [];
         foreach ($columns as $column){
             if(isset($column['grupo'])){
                 $rowspanDef = 2;
                 if(!isset($colSpanGrupo[$column['grupo']])){
                     $colSpanGrupo[$column['grupo']] = 0;
+                    $width[$column['grupo']] = 0;
                 }
                 $colSpanGrupo[$column['grupo']]++;
+                $width[$column['grupo']] += str_replace('%','',$column['width']);
             }
         }
         foreach ($columns as $column){
@@ -240,6 +243,7 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder{
                 $ths2[] = $this->tag('th',$column['title'],$attributes)->toHtml();
                 if(isset($colSpanGrupo[$column['grupo']])){
                     $attributes['colspan'] = $colSpanGrupo[$column['grupo']];
+                    $attributes['width'] = $width[$column['grupo']].'%';
                     $ths1[] = $this->tag('th', $column['grupo'],$attributes)->toHtml();
                     unset($colSpanGrupo[$column['grupo']]);
                 }

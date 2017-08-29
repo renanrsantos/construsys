@@ -5,7 +5,7 @@ namespace App\Http\Models\Estrutura;
 use App\Http\Models\Model;
 
 /**
- * Description of Sistema
+ * Description of Rotina
  *
  * @author renan
  */

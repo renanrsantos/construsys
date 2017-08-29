@@ -9,7 +9,11 @@ class Moduloinstalado extends Model
     protected $fillable = [
         'idmoduloinstalado', 'idmodulo', 'identidade', 'mdiativo',
     ];
-       
+      
+    public function getCampoAtivo() {
+        return 'mdiativo';
+    }
+    
     public function modulo(){
         return $this->belongsTo(Modulo::class,'idmodulo','idmodulo');
     }

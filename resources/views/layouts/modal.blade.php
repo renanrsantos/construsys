@@ -1,8 +1,11 @@
 <?php
     $disableAll = ($acao == 'Visualizar');
     $table = Request::segment(3).'-'.Request::segment(5);
+    if(!isset($size)){
+        $size = "";
+    }
 ?>
-<div class="modal-dialog" role="document">
+<div class="modal-dialog {{$size}}" role="document">
     <div class="modal-content">
         {{Form::open(['url'=>Request::url(),'class'=>'form-horizontal','id'=>'fr-'.$table])}}
         <div class="modal-header">

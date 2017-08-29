@@ -3,6 +3,8 @@
 namespace App\Http\Models;
 
 class Model extends \Illuminate\Database\Eloquent\Model{
+       
+    protected $ativo;
     
     public function __construct(array $attributes = array()) {
         parent::__construct($attributes);
@@ -38,5 +40,16 @@ class Model extends \Illuminate\Database\Eloquent\Model{
         $key = $this->getKeyName();
         $this->$key = $this->max($key)+1;
     }
+    
+    public function getCampoAtivo(){
+        return '';
+    }
 
+    public function ativo(){
+        if($this->getCampoAtivo()){
+            $campoAtivo = $this->getCampoAtivo();
+            return $this->$campoAtivo ? 'Sim' : 'Não';
+        }
+        throw new \Exception('Campo ativo não determinado.');
+    }
 }

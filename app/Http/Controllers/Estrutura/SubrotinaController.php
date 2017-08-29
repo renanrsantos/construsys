@@ -8,14 +8,14 @@ class SubrotinaController extends Controller{
     
     protected function getColumns() {
         return [
-                ['name'=>'rotina,modulo,idmodulo','label'=>'Código','width'=>10,'grupo'=>'Módulo'],
-                ['name'=>'rotina,modulo,modnome','label'=>'Nome','width'=>10,'grupo'=>'Módulo'],
-                ['name'=>'rotina,idrotina','label'=>'Código','width'=>10,'grupo'=>'Rotina'],
-                ['name'=>'rotina,rotnome','label'=>'Nome','width'=>10,'grupo'=>'Rotina'],
-                ['name'=>'idsubrotina','label'=>'Código','width'=>10,'grupo'=>'Subrotina'],
-                ['name'=>'sbrnome','label'=>'Nome','width'=>30,'grupo'=>'Subrotina'],
-                ['name'=>'sbrpath','label'=>'Path','width'=>30,'grupo'=>'Subrotina'],
-                ['name'=>'sbricone','label'=>'Ícone','width'=>30,'grupo'=>'Subrotina'] 
+                ['name'=>'rotina,modulo,idmodulo','label'=>'Código','width'=>5,'grupo'=>'Módulo'],
+                ['name'=>'rotina,modulo,modnome','label'=>'Nome','width'=>15,'grupo'=>'Módulo'],
+                ['name'=>'rotina,idrotina','label'=>'Código','width'=>5,'grupo'=>'Rotina'],
+                ['name'=>'rotina,rotnome','label'=>'Nome','width'=>15,'grupo'=>'Rotina'],
+                ['name'=>'idsubrotina','label'=>'Código','width'=>5,'grupo'=>'Subrotina'],
+                ['name'=>'sbrnome','label'=>'Nome','width'=>20,'grupo'=>'Subrotina'],
+                ['name'=>'sbrpath','label'=>'Path','width'=>20,'grupo'=>'Subrotina'],
+                ['name'=>'sbricone','label'=>'Ícone','width'=>15,'grupo'=>'Subrotina'] 
             ];
     }
 

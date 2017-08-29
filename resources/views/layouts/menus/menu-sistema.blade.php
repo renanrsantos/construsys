@@ -1,4 +1,4 @@
-<?php
+@php
     foreach ($modulosEntidade as $moduloEntidade){
         $modulo = $moduloEntidade->modulo;
         if(!in_array($modulo->idmodulo,[1])){
@@ -12,10 +12,14 @@
 
     $brand = Html::navItemDropDown('Construsys',$dropDownModulos,false,[],true,true);
     $items = [];
+    if($moduloSelecionado->modnome){
+        $items[] .= Html::navItem('#',' | ' . Html::icon($moduloSelecionado->modicone) . $moduloSelecionado->modnome . ' | ');
+    }
     foreach($moduloSelecionado->rotinas as $rotina){
         $active = '/'.Request::segment(5) == $rotina->rotpath ? 'active': '';
         $url = url($entidadeSelecionada->identidade.'/modulo'.$moduloSelecionado->modpath.'/rotina'.$rotina->rotpath);
         $subrotinas = $rotina->subrotinas;
+        $dropDownSubRotinas = [];
         if(!$subrotinas->isEmpty()){
             $aux = $rotina->rotpath != "";
             foreach($subrotinas as $subrotina){
@@ -37,7 +41,7 @@
             $items[] = Html::navItem($url,$rotina->rotnome,['icon'=>Html::icon($rotina->roticone),'class'=>$active]);
         }
     }
-?>
+@endphp
 
 {{
     Html::navBarTop('navbar-menu-sistema',$brand,[Html::nav($items),Html::userMenu()])

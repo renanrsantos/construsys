@@ -8,8 +8,8 @@ class TipocomodoController extends Controller{
     
     protected function getColumns() {
         return [
-                ['name'=>'idtipocomodo','label'=>'Código','width'=>'10'],
-                ['name'=>'tconome','label'=>'Tipo','width'=>'15'],
+                ['name'=>'idtipocomodo','label'=>'Código','width'=>'5'],
+                ['name'=>'tconome','label'=>'Tipo','width'=>'85'],
             ];
     }
 
