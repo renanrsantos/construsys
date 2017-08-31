@@ -27,5 +27,9 @@ class ModuloinstaladoController extends Controller{
         $records = $records->where('identidade',$this->entidade);
         return $records;
     }
+    
+    protected function getTitulo() {
+        return 'Módulos Instalados';
+    }
 
 }

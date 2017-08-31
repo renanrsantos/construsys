@@ -17,5 +17,9 @@ class CadastrosController extends Controller{
     protected function getFilters() {
         
     }
+    
+    protected function getTitulo() {
+        return 'Cadastros';
+    }
 
 }

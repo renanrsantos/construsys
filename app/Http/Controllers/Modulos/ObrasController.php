@@ -18,4 +18,7 @@ class ObrasController extends Controller{
         
     }
 
+    protected function getTitulo() {
+        return 'Obras';
+    }
 }

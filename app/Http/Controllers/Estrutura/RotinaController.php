@@ -25,5 +25,9 @@ class RotinaController extends Controller{
                 ['value'=>'rotnome','label'=>'Rotina','type'=>'string','data-column'=>4],
             ];
     }
+    
+    protected function getTitulo() {
+        return 'Rotinas';
+    }
 
 }

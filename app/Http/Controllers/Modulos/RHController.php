@@ -17,5 +17,9 @@ class RHController extends Controller{
     protected function getFilters() {
         
     }
+    
+    protected function getTitulo() {
+        return 'Recursos Humanos';
+    }
 
 }

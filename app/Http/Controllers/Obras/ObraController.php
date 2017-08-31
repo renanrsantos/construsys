@@ -27,5 +27,9 @@ class ObraController extends Controller{
                 ['value'=>'endereco','label'=>'Endereço','type'=>'string','data-column'=>4]
             ];
     }
+    
+    protected function getTitulo() {
+        return 'Obras';
+    }
 
 }

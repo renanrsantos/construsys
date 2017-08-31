@@ -19,4 +19,7 @@ class TipocomodoController extends Controller{
                 ['value'=>'tconome','label'=>'Tipo','type'=>'string','data-column'=>2],
             ];
     }
+    protected function getTitulo() {
+        return 'Tipos de Cômodo';
+    }
 }

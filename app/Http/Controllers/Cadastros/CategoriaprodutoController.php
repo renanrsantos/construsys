@@ -19,5 +19,8 @@ class CategoriaprodutoController extends Controller{
                 ['value'=>'catdescricao','label'=>'Descrição','type'=>'string','data-column'=>2],
             ];
     }
+    protected function getTitulo() {
+        return 'Categoria dos Produtos';
+    }
 
 }

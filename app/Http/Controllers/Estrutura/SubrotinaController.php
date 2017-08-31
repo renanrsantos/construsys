@@ -29,5 +29,7 @@ class SubrotinaController extends Controller{
                 ['value'=>'sbrnome','label'=>'Subrotina','type'=>'string','data-column'=>6],
             ];
     }
-
+    protected function getTitulo() {
+        return 'Sub rotinas';
+    }
 }

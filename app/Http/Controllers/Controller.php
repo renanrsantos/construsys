@@ -92,10 +92,10 @@ abstract class Controller extends BaseController
     }
     
     protected function getHeightTable(){
-        $height = 355;
+        $height = 325;
         foreach($this->getColumns() as $column){
             if(isset($column['grupo'])){
-                $height = 325;
+                $height = 295;
                 break;
             }
         }
@@ -185,6 +185,8 @@ abstract class Controller extends BaseController
         return [];
     }
 
+    protected abstract function getTitulo();
+    
     public function index(){
         if(!$this->rotina){
             return self::view('home');
@@ -194,7 +196,8 @@ abstract class Controller extends BaseController
         $ajax = false;
         $section = 'content';
         $scrollY = $this->getHeightTable();
-        return self::view('layouts.table',compact('filters','btns','ajax','section','scrollY'));
+        $titulo = $this->getTitulo();
+        return self::view('layouts.table',compact('filters','btns','ajax','section','scrollY','titulo'));
     }
     
     public function novo(){

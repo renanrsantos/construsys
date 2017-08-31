@@ -22,5 +22,9 @@ class UnidademedidaController extends Controller{
                 ['value'=>'unmdescricao','label'=>'Descrição','type'=>'string','data-column'=>3],
             ];
     }
+    
+    protected function getTitulo() {
+        return 'Unidades de Medida';
+    }
 
 }

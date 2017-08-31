@@ -17,5 +17,9 @@ class EstruturaController extends Controller{
     protected function getFilters() {
         
     }
+    
+    protected function getTitulo() {
+        return 'Estrutura';
+    }
 
 }

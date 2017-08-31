@@ -94,5 +94,9 @@ class PessoaController extends Controller{
             Pessoaendereco::create($this->request->toArray());
         }
     }
+    
+    protected function getTitulo() {
+        return 'Pessoas';
+    }
 
 }

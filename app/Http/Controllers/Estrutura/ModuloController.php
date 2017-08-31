@@ -28,4 +28,8 @@ class ModuloController extends Controller{
 //                ['label'=>'Sub Rotinas','type'=>'btn-single','icon'=>'cogs','url'=>$this->entidade.'/modulo/estrutura/rotina/subrotina'],
             ];
     }
+    
+    protected function getTitulo() {
+        return 'Módulos';
+    }
 }

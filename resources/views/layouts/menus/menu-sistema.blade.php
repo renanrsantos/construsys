@@ -10,11 +10,13 @@
     $dropDownModulos[] = Html::dropDownDivider();
     $dropDownModulos[] = Html::dropDownItem(url($entidadeSelecionada->identidade.'/modulo/estrutura'),'Estrutura',['icon'=>Html::icon('fa fa-cog')]);
 
-    $brand = Html::navItemDropDown('Construsys',$dropDownModulos,false,[],true,true);
     $items = [];
     if($moduloSelecionado->modnome){
-        $items[] .= Html::navItem('#',' | ' . Html::icon($moduloSelecionado->modicone) . $moduloSelecionado->modnome . ' | ');
+        $tituloBrand = Html::icon($moduloSelecionado->modicone) . $moduloSelecionado->modnome;
+    } else {
+        $tituloBrand = 'Construsys';
     }
+    $brand = Html::navItemDropDown($tituloBrand,$dropDownModulos,false,[],true,true);
     foreach($moduloSelecionado->rotinas as $rotina){
         $active = '/'.Request::segment(5) == $rotina->rotpath ? 'active': '';
         $url = url($entidadeSelecionada->identidade.'/modulo'.$moduloSelecionado->modpath.'/rotina'.$rotina->rotpath);

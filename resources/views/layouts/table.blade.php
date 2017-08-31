@@ -7,6 +7,7 @@
 @section('content')
 {{Html::tag('div','',['class'=>'modal fade mymodal', 'id'=>'modal-fr-'.$table, 'tabindex'=>'-1','role'=>'dialog','data-keyboard'=>'false', 'data-backdrop'=>'static'])}}
 {{Html::tag('div','',['id'=>'msg-global'])}}
+<p>{{$titulo}}</p>
 <div class="row">
     {{Form::tableFilter($filters,$table)}}
 </div><br>
