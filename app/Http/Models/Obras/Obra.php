@@ -25,4 +25,13 @@ class Obra extends Model{
     public function endereco(){
         return "";
     }
+    
+    public function getTiposPrevisao(){
+        return [
+            ['value'=>'','label'=>''],
+            ['value'=>1,'label'=>'Dia(s)'],
+            ['value'=>2,'label'=>'Mês(es)'],
+            ['value'=>3,'label'=>'Ano(s)']
+        ];
+    }
 }
