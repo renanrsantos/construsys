@@ -31,8 +31,4 @@
         Form::text('obrtamanho',$record->obrtamanho,['label'=>'Tamanho total'])
       ])
     }}
-    
-    
-    
-    
 @endsection

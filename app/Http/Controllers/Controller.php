@@ -87,6 +87,17 @@ abstract class Controller extends BaseController
         return $this->entidade.'/modulo/'.$this->modulo.'/rotina/'.$this->rotina;
     }
     
+    private function formatFilters($filters){
+        $filtersAux = ['options'=>[],'attributes'=>[]];
+        foreach ($filters as $filter){
+            $value = $filter['value'];
+            $filtersAux['options'][$value] = $filter['label'];
+            unset($filter['value']);
+            unset($filter['label']);
+            $filtersAux['attributes'][$value] = $filter;
+        }
+        return $filtersAux;
+    }
     protected function getRecords(){
         return $this->getModel()->orderBy($this->getCamposOrdenacao());
     }
@@ -191,7 +202,7 @@ abstract class Controller extends BaseController
         if(!$this->rotina){
             return self::view('home');
         }
-        $filters = $this->getFilters();
+        $filters = $this->formatFilters($this->getFilters());
         $btns = $this->getBtns();
         $ajax = false;
         $section = 'content';

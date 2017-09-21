@@ -12,7 +12,7 @@
                 @include('layouts.menus.menu-sistema')
             @endif
         @show
-        <div class="container" style="margin-top: 60px;">
+        <div class="container">
             {{Html::listGroup($errors->all(),'danger')}}
             @if (!$auth && Request::url() != 'login')
                 @include('layouts.form-login')

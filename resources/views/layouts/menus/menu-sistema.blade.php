@@ -1,4 +1,4 @@
-@php
+<?php
     foreach ($modulosEntidade as $moduloEntidade){
         $modulo = $moduloEntidade->modulo;
         if(!in_array($modulo->idmodulo,[1])){
@@ -43,7 +43,7 @@
             $items[] = Html::navItem($url,$rotina->rotnome,['icon'=>Html::icon($rotina->roticone),'class'=>$active]);
         }
     }
-@endphp
+?>
 
 {{
     Html::navBarTop('navbar-menu-sistema',$brand,[Html::nav($items),Html::userMenu()])

@@ -35,23 +35,11 @@ protected function formatSizeInput($size){
     }
     
     public function input($type, $name, $value = null, $options = array()) {
-        $label = '';
-        $input = parent::input($type, $name, $value, $options);
         if(!in_array($type, ['checkbox','hidden','button'])){
             $this->html->addClassAttributes($options,'form-control input-sm');
-            if(!isset($options['label'])){
-                $options['label'] = $this->html->nbsp();
-            }
-            if($options['label'] != ''){
-                $label = $this->label($name,$options['label'],['class'=>'col-md-3 control-label']);
-            }
-            if(!isset($options['size'])){
-                $options['size'] = 'md2';
-            }
-            $input = $this->html->tag('div',parent::input($type, $name, $value, $options),['class'=>$this->formatSizeInput($options['size'])]);
+            return parent::input($type, $name, $value, $options);
         }
-        
-        return $this->toHtmlString($label . $input);
+        return parent::input($type, $name, $value, $options);
     }
     
     public function open(array $options = array()) {
@@ -77,7 +65,7 @@ protected function formatSizeInput($size){
         if($label){
             $checkbox = $this->html->tag('label',$checkbox . ' ' . $label);
         }
-        return $this->html->tag('div',$checkbox/*,['class'=>'checkbox col-md-offset-2']*/);
+        return $this->html->tag('div',$checkbox);
     }
 
     public function checkboxSimple($name, $value = 1, $checked = null, $options = []){
@@ -115,26 +103,10 @@ protected function formatSizeInput($size){
         return $this->html->tag('div', $html, $attributes);
     }
     
-    public function select($name, $list = [], $selected = null,
-            array $selectAttributes = [], array $optionsAttributes = [])  {
-        $this->html->addClassAttributes($selectAttributes, 'form-control ');
-        $label = "";
-        if(isset($selectAttributes['label'])){
-            $label = $this->label($name,$selectAttributes['label'],['class'=>'col-md-3 control-label']);
-        }
-        $listAlt = [];
-        foreach($list as $item){
-            $value = $item['value'];
-            $listAlt[$value] = $item['label'];
-            unset($item['value']);
-            unset($item['label']);
-            $optionsAttributes[$value] = $item;
-        }
-        $select = parent::select($name, $listAlt, $selected, $selectAttributes, $optionsAttributes);
-        if(isset($selectAttributes['size'])){
-            $select = $this->html->tag('div',$select, ['class'=>$this->formatSizeInput($selectAttributes['size'])]);
-        }
-        return $this->toHtmlString($label . $select); 
+    public function select($name, $list = [], $selected = null, array $selectAttributes = [], array $optionsAttributes = [])  {
+        $this->html->addClassAttributes($selectAttributes, 'form-control');
+        $select = parent::select($name, $list, $selected, $selectAttributes, $optionsAttributes);
+        return $this->toHtmlString($select); 
     }
     
 //     public function getSelectOption($display,$value, $selected,array $attributes = []) {
@@ -142,15 +114,16 @@ protected function formatSizeInput($size){
 //     }
     
     public function getOperadoresFiltro(){
-        $operadores[] = ['value'=>'=','label'=>'Igual'];
-        $operadores[] = ['value'=>'<>','label'=>'Diferente'];
-        $operadores[] = ['value'=>'%%','label'=>'Contém'];
-        return $operadores;
+        return [
+            '=' => 'Igual',
+            '<>' => 'Diferente',
+            '%%' => 'Contém'
+        ];
     }
     
     public function tableFilter($filters,$table){
         $pattern = $this->formGroup([
-            $this->select('campo-filtro',$filters,null,['class'=>'input-sm','style'=>'width:100px;']),
+            $this->select('campo-filtro',$filters['options'],null,['class'=>'input-sm','style'=>'width:100px;'],$filters['attributes']),
             $this->select('operador-filtro',$this->getOperadoresFiltro(),null,['class'=>'input-sm','style'=>'width:100px;']),
             $this->html->tag('input','',['placeholder'=>'Pesquisar...','name'=>'valor-filtro','class'=>'form-control input-sm','style'=>'width:200px;'])
         ],[],false,false);

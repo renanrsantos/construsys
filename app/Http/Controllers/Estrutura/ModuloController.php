@@ -20,6 +20,7 @@ class ModuloController extends Controller{
                 ['value'=>'idmodulo','label'=>'Código','type'=>'int','data-column'=>1],
                 ['value'=>'modnome','label'=>'Nome','type'=>'string','data-column'=>2],
             ];
+        
     }
 
     protected function getBtns(){

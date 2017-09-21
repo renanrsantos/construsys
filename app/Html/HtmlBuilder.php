@@ -91,17 +91,15 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder{
     }
     
     public function navBar($id, $brand = '', $content = [],$attributes = []){
-        $this->addClassAttributes($attributes, 'navbar navbar-default');
-        $btnToggle = $this->tag('button',
-                $this->tag('span','Toggle navigation',['class'=>'sr-only']).
-                $this->tag('span','',['class'=>'icon-bar']).
-                $this->tag('span','',['class'=>'icon-bar']).
-                $this->tag('span','',['class'=>'icon-bar']),
+        $this->addClassAttributes($attributes, 'navbar navbar-expand-lg navbar-light bg-light');
+        $btnToggle = $this->tag('button',$this->tag('span','',['class'=>'navbar-toggler-icon']),
                     [
-                        'class'=>'navbar-toggle collapsed',
+                        'class'=>'navbar-toggler',
                         'data-toggle'=>'collapse',
                         'data-target'=>"#$id", 
-                        'aria-expanded'=>'false'
+                        'aria-controls'=>$id,
+                        'aria-expanded'=>'false',
+                        'aria-label'=>'Alternar de navegação'
                     ]);
         $contentNavBar = '';
         foreach ($content as $element) {
@@ -110,18 +108,18 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder{
         if($brand == ''){
             $brand = $this->tag('a','&nbsp;',['class'=>'navbar-brand']);
         }
-        $divHeader = $this->tag('div',$btnToggle . $brand,['class'=>'navbar-header']);
+        $divHeader = $brand . $btnToggle;
         $divNavBar = $this->tag('div', $contentNavBar,['class'=>'collapse navbar-collapse', 'id'=>$id]);
         return $this->tag('nav', $divHeader . $divNavBar,$attributes);
     }
     
     public function navBarBottom($id, $brand = '', $content = [],$attributes = []){
-        $this->addClassAttributes($attributes, 'navbar-fixed-bottom');
+        $this->addClassAttributes($attributes, 'fixed-bottom');
         return $this->navBar($id,$brand,$content,$attributes);
     }
     
     public function navBarTop($id, $brand = '', $content = [],$attributes = []){
-        $this->addClassAttributes($attributes, 'navbar-fixed-top');        
+        $this->addClassAttributes($attributes, 'navbar-fixed-top sticky-top');        
         return $this->navBar($id,$brand,$content,$attributes);
     }
 
@@ -130,9 +128,9 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder{
             return '';
         }
         if($pullRight){
-            $this->addClassAttributes($attributes, 'navbar-right');
+            $this->addClassAttributes($attributes, 'justify-content-end');
         }
-        $this->addClassAttributes($attributes, 'nav navbar-nav');
+        $this->addClassAttributes($attributes, 'navbar-nav');
         $contentItems = '';
         foreach ($items as $item){
             $contentItems .= $item;
@@ -163,10 +161,12 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder{
     
     public function navItem($url,$title,$attributes = []){
         $attributesLink = $attributes;
+        $this->addClassAttributes($attributesLink, 'nav-link');
         $item = $this->link($url,$title,$attributesLink);
         if(isset($attributes['icon'])){
             unset($attributes['icon']);
         }
+        $this->addClassAttributes($attributes, 'nav-item');
         return $this->li($item,$attributes);
     }
     
@@ -175,7 +175,7 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder{
         $classBrand = ($brand) ? 'navbar-brand ' : '';
         
         $disabled = isset($attributes['disabled']) ? ' disabled' : '';
-        $item = $this->tag('a',$item . $caret,[$disabled,'class'=>$classBrand.'dropdown-toggle'.$disabled, 'data-toggle'=>'dropdown','role'=>'button', 'aria-haspopup'=>'true', 'aria-expanded'=>'false']);
+        $item = $this->tag('a',$item . $caret,[$disabled,'class'=>$classBrand.'nav-link dropdown-toggle'.$disabled, 'data-toggle'=>'dropdown', 'aria-haspopup'=>'true', 'aria-expanded'=>'false']);
         if($dropup){
             $this->addClassAttributes($attributes, 'dropup');
         }
@@ -183,8 +183,8 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder{
         foreach ($dropDownItems as $dropDownItem) {
             $items .= $dropDownItem;
         }
-        $dropDownMenu = $this->tag('ul', $items,['class'=>'dropdown-menu']);
-        $this->addClassAttributes($attributes, 'dropdown');
+        $dropDownMenu = $this->tag('div', $items,['class'=>'dropdown-menu']);
+        $this->addClassAttributes($attributes, 'nav-item dropdown');
         $this->addClassAttributes($attributes, $disabled);
         if($brand){
             return $this->toHtmlString($item . $dropDownMenu);
@@ -193,11 +193,12 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder{
     }
 
     public function dropDownItem($url,$title,$attributes = array()){
-        return $this->li($this->link($url,$title,$attributes,null,false));
+        $this->addClassAttributes($attributes, 'dropdown-item');
+        return $this->link($url,$title,$attributes,null,false);
     }
     
     public function dropDownDivider(){
-        return $this->li('',['role'=>'separator','class'=>'divider']);
+        return $this->tag('div','',['class'=>'dropdown-divider']);
     }
     
     public function userMenu(){
@@ -210,7 +211,7 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder{
         $dropDownItems[] = $this->dropDownItem(url('/preferences'),$this->icon('fa fa-cogs').'Preferências');
         $dropDownItems[] = $this->dropDownDivider();
         $dropDownItems[] = $this->dropDownItem(url('/logout'),$this->icon('fa fa-sign-out').'Sair');
-        return $this->nav([$this->navItemDropDown($user, $dropDownItems),$this->li($this->nbsp(2))],[],true);
+        return $this->nav([$this->navItemDropDown($user, $dropDownItems)],[],true);
     }
     
     public function column($name,$title,$type = 'text',$grupo = '',$width = 0){

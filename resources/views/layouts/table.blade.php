@@ -34,7 +34,7 @@
             @endif
         </div>
         <div class="form-group">
-            <table id="{{$table}}" scrollY="{{$scrollY}}" class="table table-bordered table-striped table-hover table-condensed" url="{{Request::url()}}/data"></table>
+            <table id="{{$table}}" scrollY="{{$scrollY}}" class="table table-bordered table-hover table-sm" url="{{Request::url()}}/data"></table>
         </div>
     {{Form::close()}}
     <div class="minmaxCon" style="margin-bottom: 50px;"></div>
