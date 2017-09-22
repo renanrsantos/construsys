@@ -144,9 +144,9 @@ $.fn.dataTable.ext.search.push(
 );
 
 $.extend(true, $.fn.dataTable.defaults, {
-        "dom":  "<'row'<'col-sm-8 btn-group-to'><'col-sm-4'f>>" +
-                "<'row'<'col-sm-12'tr>>" +
-                "<'row'<'col-sm-8'p><'pull-right'<'col-sm-7'l><'col-sm-4'i>>>",
+        "dom":  "<'row'<'col-8 btn-group-to'><'col-4'f>>" +
+                "<'row'<'col-12'tr>>" +
+                "<'row'<'col-9'<'float-left'p>><'col-auto'l><'col-auto'i>>",
         "destroy" : true,
         "columnDefs" : [
             {"targets" : 0,

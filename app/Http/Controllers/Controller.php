@@ -103,10 +103,10 @@ abstract class Controller extends BaseController
     }
     
     protected function getHeightTable(){
-        $height = 325;
+        $height = 305;
         foreach($this->getColumns() as $column){
             if(isset($column['grupo'])){
-                $height = 295;
+                $height = 275;
                 break;
             }
         }

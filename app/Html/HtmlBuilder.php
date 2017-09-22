@@ -40,22 +40,22 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder{
         $divBody = '';
         $divFooter = '';
         if($header){
-            $divHeader = $this->tag('div', $this->tag('h3',$header),['class'=>'panel-heading text-center']);
+            $divHeader = $this->tag('div', $this->tag('h3',$header),['class'=>'card-header text-center']);
         }
         if($body){
             $html = '';
             foreach($body as $element){
                 $html .= ($element instanceof HtmlString) ? $element->toHtml() : $element;
             }
-            $divBody = $this->tag('div', $html,['class'=>'panel-body']);
+            $divBody = $this->tag('div', $html,['class'=>'card-body']);
         }
         if($footer){
-            $divFooter = $this->tag('div', $this->tag('small',$footer),['class'=>'panel-footer']);
+            $divFooter = $this->tag('div', $this->tag('small',$footer),['class'=>'card-footer']);
         }
         if(!isset($attributes['color'])){
             $attributes['color'] = 'default';
         }
-        $this->addClassAttributes($attributes, 'panel panel-'.$attributes['color']);
+        $this->addClassAttributes($attributes, 'card card-'.$attributes['color']);
         return $this->tag('div', $divHeader . $divBody . $divFooter,$attributes);
     }
     
@@ -259,9 +259,9 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder{
         return $this->tag('thead', implode('', $trs))->toHtml();
     }
     
-    public function col($content = '', $md = 12, $sm = 12, $lg = 12,$xs = 12,$attributes = []){
-        $this->addClassAttributes($attributes, "col-md-$md col-sm-$sm col-lg-$lg col-xs-$xs");
-        return $this->tag('div',$content,$attributes);
+    public function col($content = '', $size = ''){
+        $col = $size != '' ? 'col-'.$size : 'col';
+        return $this->tag('div',$content,['class'=>$col]);
     }
     
     public function alert($content, $type){
