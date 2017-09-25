@@ -268,4 +268,8 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder{
         $span = '<button type="button" class="close" data-dismiss="alert" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>';
         return $this->tag('div',$span.$content,['class'=>'alert alert-'.$type.' alert-dismissible'])->toHtml();
     }
+    
+    public function test(){
+        return '';
+    }
 }
