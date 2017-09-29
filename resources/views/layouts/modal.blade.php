@@ -2,16 +2,17 @@
     $disableAll = ($acao == 'Visualizar');
     $table = Request::segment(3).'-'.Request::segment(5);
     if(!isset($size)){
-        $size = "";
+        $size = "modal-md";
     }
 ?>
-<div class="modal-dialog {{$size}}" role="document">
-    <div class="modal-content">
+<div class="modal-dialog {{$size}}">
+    <div class="modal-content" role="document">
         {{Form::open(['url'=>Request::url(),'class'=>'form-horizontal','id'=>'fr-'.$table])}}
         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&nbsp;&times;&nbsp;</span></button>
-            <button type="button" class="close modalMinimize" aria-label="Minimizar"><span aria-hidden="true">&nbsp;&minus;&nbsp;</span></button>
-            <h4 class="modal-title" id="myModalLabel">{{$acao}} @yield('header')</h4>
+            <h5 class="modal-title" id="modal-label">{{$acao}} @yield('header')</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
         <div class="modal-body">
             <div id="msg-fr-modal"></div>
@@ -27,3 +28,5 @@
     </div>
     {{Form::close()}}
 </div>
+
+@include('layouts.modal-script')

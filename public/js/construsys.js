@@ -397,7 +397,7 @@ $(document).ready(function(){
             });
         }
     });
-    
+
     $('body').on('click','[data-toggle="modal"]',function(){
         var btn = setBtnLoading($(this),true);
         var modal = $(this).data('target');
@@ -419,31 +419,6 @@ $(document).ready(function(){
             success : function(data){
                 setBtnLoading(btn,false);
                 $(modal).html(data);
-                $('.flexdatalist').each(function(){
-                    var readonly = $(this).prop('readonly');
-                    if(!readonly){
-                        $(this).flexdatalist();
-                    }
-                });
-                $('.disable-all :input').prop('disabled',true);
-                $('.disable-all :button').prop('disabled',true);
-                $('form[data-toggle="validator"]').validator().on('submit',function(e){
-                    if (!e.isDefaultPrevented()) {
-                        e.preventDefault();
-                        var url = $(this).prop('action');
-                        var data = $(this).serialize();
-                        $.post(url,data,function(data){
-                            switch(data.status){
-                                case 'ERRO':
-                                    $('#msg-fr-modal').html(data.msg);
-                                    break;
-                                case 'OK' :
-                                    window.location.href = data.redirect;
-                                    break;
-                            }
-                        });
-                    }
-                });
             },
             error : function(errorMessage){
                 var sModal = '<div class="modal-dialog modal-lg" role="document"><div class="modal-content" style="width:120%;margin-left:-100px;"><div class="modal-header">        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">'+errorMessage.statusText+'</h4></div>';
@@ -455,9 +430,10 @@ $(document).ready(function(){
         });
     });
     
-    $('body').on('hidden.bs.modal','.modal', function () {
-        $(this).html('');
-    });
+//    $('body').on('hidden.bs.modal','.modal', function () {
+//        console.log('a');
+//        $(this).html('');
+//    });
     
 //    $('body').on('hide.bs.modal','.modal', function(e) {
 //        if(!confirm('Existem informações que ainda não foram salvas, deseja realmente cancelar?')){

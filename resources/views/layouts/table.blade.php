@@ -5,12 +5,13 @@
 @extends('layouts.app')
 
 @section('content')
-{{Html::tag('div','',['class'=>'modal fade mymodal', 'id'=>'modal-fr-'.$table, 'tabindex'=>'-1','role'=>'dialog','data-keyboard'=>'false', 'data-backdrop'=>'static'])}}
-{{Html::tag('div','',['id'=>'msg-global'])}}
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true" id="modal-fr-{{$table}}"></div>
+<div id="msg-global"></div>
 <p>{{$titulo}}</p>
 <div class="row">
     {{Form::tableFilter($filters,$table)}}
-</div><br>
+</div>
+<br/>
 <div class="row">
     {{Form::open(array('url'=>Request::url(),'class'=>'form-horizontal','id'=>'form-registros'))}}
         <div class="btn-group-from">

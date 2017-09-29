@@ -269,7 +269,4 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder{
         return $this->tag('div',$span.$content,['class'=>'alert alert-'.$type.' alert-dismissible'])->toHtml();
     }
     
-    public function test(){
-        return '';
-    }
 }
