@@ -31,5 +31,9 @@ class ModuloinstaladoController extends Controller{
     protected function getTitulo() {
         return 'Módulos Instalados';
     }
+    
+    protected function getModalSize() {
+        return 'modal-lg';
+    }
 
 }

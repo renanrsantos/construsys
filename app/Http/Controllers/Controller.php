@@ -196,6 +196,10 @@ abstract class Controller extends BaseController
         return [];
     }
 
+    protected function getModalSize(){
+        return '';
+    }
+    
     protected abstract function getTitulo();
     
     public function index(){
@@ -208,7 +212,8 @@ abstract class Controller extends BaseController
         $section = 'content';
         $scrollY = $this->getHeightTable();
         $titulo = $this->getTitulo();
-        return self::view('layouts.table',compact('filters','btns','ajax','section','scrollY','titulo'));
+        $modalSize = $this->getModalSize();
+        return self::view('layouts.table',compact('filters','btns','ajax','section','scrollY','titulo','modalSize'));
     }
     
     public function novo(){

@@ -98,5 +98,9 @@ class PessoaController extends Controller{
     protected function getTitulo() {
         return 'Pessoas';
     }
+    
+    protected function getModalSize() {
+        return 'modal-lg';
+    }
 
 }

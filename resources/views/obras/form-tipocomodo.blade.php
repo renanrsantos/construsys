@@ -4,9 +4,14 @@
     Tipos de Cômodos
 @endsection
 @section('body')
-    {{Form::hidden('idtipocomodo',$record->idtipocomodo,['label'=>'Código','required','readonly'])}}
+    {{Form::hidden('idtipocomodo',$record->idtipocomodo)}}
     {{Form::formGroup([
-        Form::text('tconome',$record->tconome,['label'=>'Tipo','required'])
+        Html::col(
+            Form::validate(
+                Form::text('tconome',$record->tconome,['data-vindicate'=>'required|format:alpha']),
+                Form::label('tconome','Tipo')
+            )
+        ,'12')
       ])
     }}
 @endsection

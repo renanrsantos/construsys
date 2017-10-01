@@ -143,17 +143,20 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder{
         $htmlBody = "";
         $i = 0;
         foreach ($tabs as $tab) {
-            $active = ($i===0) ? "active" : "";
-            $tabActve = ($i===0) ? "tab-pane fade in active" : "tab-pane fade";
+            $active = ($i===0) ? " active" : "";
+            $tabActve = ($i===0) ? "tab-pane fade show active" : "tab-pane fade";
             $i=1;
-            $htmlHeader.= $this->tag('li', $this->tag('a', $tab['label'],
-                    ['href'=>'#'.$tab['link'],
-                     'data-toggle'=>'tab']),
-                    ["class"=>$active]);
+            $link = $this->tag('a', $tab['label'],
+                    ['class'=>'nav-link'.$active,
+                     'href'=>'#'.$tab['link'],
+                     'data-toggle'=>'tab',
+                     'aria-controls'=>$tab['link']]);
+            $htmlHeader.= $this->tag('li',$link,["class"=>'nav-item']);
             
-            $htmlBody .= $this->tag('div', $tab['tab'],['class'=>$tabActve,'id'=>$tab['link']]);
+            $htmlBody .= $this->tag('div', $tab['tab'],['class'=>$tabActve,'id'=>$tab['link'],'role'=>'tabpanel']);
         }
         $this->addClassAttributes($attributes, "nav nav-tabs");
+        $attributes['role'] = 'tablist';
         $header = $this->tag('ul',$htmlHeader,$attributes);
         $body = $this->tag('div', $htmlBody,['class'=>'tab-content']);
         return $this->toHtmlString($header . '<br/>' . $body);
@@ -201,17 +204,26 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder{
         return $this->tag('div','',['class'=>'dropdown-divider']);
     }
     
-    public function userMenu(){
+    public function userMenu($drop = 'dropup'){
         if(!Auth::check()){
             return '';
         }
         $user = Auth::user()->pessoa->pesnome;
         $length = (strpos($user,' ') > 0) ? strpos($user,' ') : strlen($user);
         $user = $this->icon('fa fa-user').substr($user, 0, $length).' ['.Auth::user()->usulogin.']';
-        $dropDownItems[] = $this->dropDownItem(url('/preferences'),$this->icon('fa fa-cogs').'Preferências');
-        $dropDownItems[] = $this->dropDownDivider();
-        $dropDownItems[] = $this->dropDownItem(url('/logout'),$this->icon('fa fa-sign-out').'Sair');
-        return $this->nav([$this->navItemDropDown($user, $dropDownItems)],[],true);
+        $dropDownItems = $this->dropDownItem(url('/preferences'),$this->icon('fa fa-cogs').'Preferências');
+        $dropDownItems .= $this->dropDownDivider();
+        $dropDownItems .= $this->dropDownItem(url('/logout'),$this->icon('fa fa-sign-out').'Sair');
+//        return $this->nav([$this->navItemDropDown($user, $dropDownItems)],[],true);
+//        return $this->navItemDropDown($user, $dropDownItems,true);        
+        return $this->toHtmlString('<div class="float-left"><div class="'.$drop.'">
+                    <button class="btn btn-light dropdown-toggle" type="button" id="dropdown-user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      '.$user.' 
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdown-user">
+                      '.$dropDownItems.'
+                    </div>
+                  </div></div>');
     }
     
     public function column($name,$title,$type = 'text',$grupo = '',$width = 0){
@@ -269,4 +281,7 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder{
         return $this->tag('div',$span.$content,['class'=>'alert alert-'.$type.' alert-dismissible'])->toHtml();
     }
     
+    public function test(){
+        return '';
+    }
 }

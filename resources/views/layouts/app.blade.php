@@ -12,7 +12,7 @@
                 @include('layouts.menus.menu-sistema')
             @endif
         @show
-        <div class="container">
+        <div class="container-fluid">
             {{Html::listGroup($errors->all(),'danger')}}
             @if (!$auth && Request::url() != 'login')
                 @include('layouts.form-login')

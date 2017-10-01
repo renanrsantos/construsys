@@ -6,7 +6,7 @@
     } else {
         $list[] = $login;
     }
-    $list[] = Html::userMenu();
+    $list[] = Html::userMenu('dropdown');
 ?>
 
     {{Html::navBar('navbar-menu-home','',[Html::nav($list,[],true)])}}

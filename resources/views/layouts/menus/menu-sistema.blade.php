@@ -46,6 +46,6 @@
 ?>
 
 {{
-    Html::navBarTop('navbar-menu-sistema',$brand,[Html::nav($items),Html::userMenu()])
+    Html::navBarTop('navbar-menu-sistema',$brand,[Html::nav($items)])
 
 }}

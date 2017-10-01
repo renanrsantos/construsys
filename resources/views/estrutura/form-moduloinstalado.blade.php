@@ -5,16 +5,24 @@ Módulo x Empresa
 @endsection
 
 @section('body')
-    {{Form::hidden('idmoduloinstalado',$record->idmoduloinstalado,['required','readonly','label'=>'Id'])}}
+    {{Form::hidden('idmoduloinstalado',$record->idmoduloinstalado)}}
     {{Form::formGroup([
-        Form::text('identidade',$entidadeSelecionada->identidade,['required','readonly','label'=>'Empresa','size'=>'sm']),
-        Form::text('pesnome',$entidadeSelecionada->pessoa->pesnome,['required','readonly','label'=>''])        
+        Html::col(
+            Form::label('identidade','Cod. Empresa').
+            Form::text('identidade',$entidadeSelecionada->identidade,['readonly'])
+        ,'3'),
+        Html::col(
+            Form::label('pesnome','Empresa') .
+            Form::text('pesnome',$entidadeSelecionada->pessoa->pesnome,['readonly'])
+        ,'9')
     ])}}
     {{Form::formGroup([
-            Form::inputConsulta('estrutura','modulo',[$acao!='Inserir'?'readonly':null,
+        Html::col(
+            Form::inputConsulta('estrutura','modulo',['data-vindicate'=>'required|format:numeric',
                 'value-id'=>$record->modulo ? $record->modulo->idmodulo : '',
-                'value'=>$record->modulo ? $record->modulo->modnome : ''])
-        ])
+                'value'=>$record->modulo ? $record->modulo->modnome : ''],true)
+        ,'8'),
+        Html::col('<br/>'.Form::checkbox('mdiativo',$record->mdiativo,$record->mdiativo,['label'=>'Módulo Ativo']),'4')
+      ])
     }}
-    {{Form::hidden('mdiativo',$record->mdiativo)}}
 @endsection

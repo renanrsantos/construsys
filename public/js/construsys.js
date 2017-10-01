@@ -343,7 +343,7 @@ $(document).ready(function(){
        
     $('body').on('input','.flexdatalist-id',function(){
         $(this).attr('validado',false);
-        $(this).tooltip("destroy");
+        $(this).tooltip('dispose');
     });
     
     $('body').on('blur','.flexdatalist-id',function(){
@@ -368,7 +368,7 @@ $(document).ready(function(){
                 success : function(data){
                     var result = data;//JSON.parse(data);
                     if(result.length > 0){
-                        $('#'+id).tooltip("destroy");
+                        $('#'+id).tooltip('dispose');
                         for(i = 0; i <  props.length; i++){
                             var prop = props[i];
                             var propAlt = propsAlt[i];
@@ -397,43 +397,23 @@ $(document).ready(function(){
             });
         }
     });
-
+    
     $('body').on('click','[data-toggle="modal"]',function(){
-        var btn = setBtnLoading($(this),true);
-        var modal = $(this).data('target');
+        var modal = $($(this).data('target')+' .modal-dialog');
         var form = $('#form-registros');
         var action = $(this).data('action');
         var url = form.prop('action') + '/' + action;
         var data = null;
-        var method = 'GET';
         var arr = ['alterar','visualizar'];
         if(arr.indexOf(action) > -1){ 
             data = form.serialize();
-            method = 'POST';
         }
-        $(modal).html('');
-        $.ajax({
-            url : url,
-            data : data,
-            type : method,
-            success : function(data){
-                setBtnLoading(btn,false);
-                $(modal).html(data);
-            },
-            error : function(errorMessage){
-                var sModal = '<div class="modal-dialog modal-lg" role="document"><div class="modal-content" style="width:120%;margin-left:-100px;"><div class="modal-header">        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">'+errorMessage.statusText+'</h4></div>';
-                sModal += '<div class="modal-body">'+errorMessage.responseText+'</div>';
-                sModal += '<div class="modal-footer">Contate o suporte</div></div></div>';
-                $(modal).html(sModal);
-                setBtnLoading(btn,false);
-            }
-        });
+        modal.load(url,data);
     });
     
-//    $('body').on('hidden.bs.modal','.modal', function () {
-//        console.log('a');
-//        $(this).html('');
-//    });
+    $('body').on('hidden.bs.modal','.modal', function () {
+        $(this).find('.modal-dialog').html('');
+    });
     
 //    $('body').on('hide.bs.modal','.modal', function(e) {
 //        if(!confirm('Existem informações que ainda não foram salvas, deseja realmente cancelar?')){

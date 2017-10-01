@@ -5,19 +5,32 @@ Sub Rotina
 @endsection
 
 @section('body')
+    {{Form::hidden('idsubrotina',$record->idsubrotina)}}
     {{Form::formGroup([
-        Form::text('idsubrotina',$record->idsubrotina,['required','readonly','label'=>'Sub Rotina','size'=>'sm']),
-        Form::text('sbrnome',$record->sbrnome,['required','label'=>'','size'=>'md'])
+        Html::col(
+            Form::inputConsulta('estrutura','rotina',['data-vindicate'=>'required',
+                'value-id'=>$record->rotina ? $record->rotina->idrotina : '',
+                'value'=>$record->rotina ? $record->rotina->rotnome : ''])
+        ,'12')    
     ])}}
     {{Form::formGroup([
-        Form::inputConsulta('estrutura','rotina',['required',
-            'value-id'=>$record->rotina ? $record->rotina->idrotina : '',
-            'value'=>$record->rotina ? $record->rotina->rotnome : ''])
-    ])}}
-    {{Form::formGroup([
-        Form::text('sbrpath',$record->sbrpath,['required','label'=>'Path','size'=>'md1'])
-    ])}}
-    {{Form::formGroup([
-    Form::text('sbricone',$record->sbricone,['label'=>'Ícone','size'=>'md1'])        
+        Html::col(
+            Form::validate(    
+                Form::text('sbrnome',$record->sbrnome,['data-vindicate'=>'required|format:alpha']),
+                Form::label('sbrnome','Subrotina') 
+            )
+        ,'4'),
+        Html::col(        
+            Form::validate(    
+                Form::text('sbrpath',$record->sbrpath,['data-vindicate'=>'required']),
+                Form::label('sbrpath','Caminho Execução')
+            )
+        ,'4'),
+        Html::col(
+            Form::validate(    
+                Form::text('sbricone',$record->sbricone),
+                Form::label('sbricone','Ícone')
+            )
+        ,'4')
     ])}}
 @endsection

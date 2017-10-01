@@ -19,6 +19,12 @@ class FormBuilder extends \Collective\Html\FormBuilder {
     }
 
     public function input($type, $name, $value = null, $options = array()) {
+        if(!isset($options['id'])){
+            $options['id'] = $name;
+        }
+        if(isset($options['data-vindicate'])){
+            $options['data-function'] = 'vindicate';
+        }
         if (!in_array($type, ['checkbox', 'hidden', 'button'])) {
             $this->html->addClassAttributes($options, 'form-control form-control-sm');
             return parent::input($type, $name, $value, $options);
@@ -26,8 +32,10 @@ class FormBuilder extends \Collective\Html\FormBuilder {
         return parent::input($type, $name, $value, $options);
     }
 
-    public function open(array $options = array()) {
-        $options['data-toggle'] = 'validator';
+    public function open(array $options = array(),$validator = false) {
+        if($validator){
+            $options['data-toggle'] = 'validator';
+        }
         return $this->toHtmlString(parent::open($options) . $this->hidden('redirect', Request::url()));
     }
 
@@ -40,16 +48,13 @@ class FormBuilder extends \Collective\Html\FormBuilder {
     }
 
     public function checkbox($name, $value = 1, $checked = null, $options = []) {
-        $label = '';
-        if (isset($options['label'])) {
-            $label = $this->html->tag('strong', $options['label']);
-            unset($options['label']);
-        }
+        $options['class'] = 'custom-control-input';
+        $label = isset($options['label']) ? $options['label'] : '';
         $checkbox = parent::checkbox($name, $value, $checked, $options);
-        if ($label) {
-            $checkbox = $this->html->tag('label', $checkbox . ' ' . $label);
-        }
-        return $this->html->tag('div', $checkbox);
+        $spanIndicator = $this->html->tag('span','',['class'=>'custom-control-indicator']);
+        $spanLabel = $this->html->tag('span',$label,['class'=>'custom-control-description']);
+        return $this->html->tag('label', $checkbox . $spanIndicator . $spanLabel,
+                    ['class'=>'custom-control custom-checkbox']);
     }
 
     public function checkboxSimple($name, $value = 1, $checked = null, $options = []) {
@@ -69,19 +74,25 @@ class FormBuilder extends \Collective\Html\FormBuilder {
         return parent::button($value, $options);
     }
 
-    public function formGroup($elements = array(), $attributes = array(), $row = true, $validator = true) {
+    public function formGroup($elements = array(), $attributes = array(), $row = true) {
         if (count($elements) == 0) {
             return '';
         }
         $html = $this->getElementsAsString($elements);
         $classRow = ($row) ? ' row' : '';
         $this->html->addClassAttributes($attributes, 'form-group' . $classRow);
-        if ($validator) {
-//            $this->html->addClassAttributes($attributes,'has-feedback');
-//            $html .= $this->html->tag('span', '',['class'=>'glyphicon form-control-feedback','aria-hiden'=>'true']);
-            $html .= $this->html->tag('div', '', ['class' => 'col-md-12 col-md-offset-3 help-block with-errors']);
-        }
         return $this->html->tag('div', $html, $attributes);
+    }
+    
+    public function validate($input,$label = '',$attributes = []){
+        $this->html->addClassAttributes($attributes, 'input-validate');
+        $feedback = $this->html->tag('small','',['class'=>'form-control-feedback']);
+        return $this->html->tag('div',$label.$input.$feedback,$attributes);
+    }
+    
+    public function label($name, $value = null, $options = array(), $escape_html = true) {
+        $this->html->addClassAttributes($options, "control-label");
+        return parent::label($name, $value, $options, $escape_html);
     }
 
     public function formRow($elements = []) {
@@ -93,10 +104,6 @@ class FormBuilder extends \Collective\Html\FormBuilder {
         $this->html->addClassAttributes($selectAttributes, 'form-control form-control-sm');
         return parent::select($name, $list, $selected, $selectAttributes, $optionsAttributes);
     }
-
-//     public function getSelectOption($display,$value, $selected,array $attributes = []) {
-//         return $this->html->tag('option', $display['label'],$display);
-//     }
 
     public function getOperadoresFiltro() {
         return [
@@ -139,7 +146,7 @@ class FormBuilder extends \Collective\Html\FormBuilder {
             $this->html->addClassAttributes($element[1], 'dropdown-item');
             $list[] = $this->html->tag('a', $element[0], $element[1])->toHtml();
         }
-        $elements = $this->html->ul($list, ['class' => 'dropdown-menu']);
+        $elements = $this->html->ul($list, ['class' => 'dropdown-menu dropdown-menu-right']);
         $content = $btn . $split . $elements;
         return $this->html->tag('div', $content, ['class' => 'btn-group']);
     }
@@ -170,7 +177,7 @@ class FormBuilder extends \Collective\Html\FormBuilder {
             'class' => 'flexdatalist']);
     }
 
-    public function inputConsulta(string $modulo, string $rotina, array $attributes, $required = true, $consulta = null) {
+    public function inputConsulta(string $modulo, string $rotina, array $attributes, $consulta = null) {
         $model = app()->make('\\App\\Http\\Models\\' . ucfirst($modulo) . '\\' . ucfirst($rotina));
         $visible = $this->formataCamposInputConsulta($model->consulta['visible']);
         $search = $this->formataCamposInputConsulta($model->consulta['search']);
@@ -179,21 +186,25 @@ class FormBuilder extends \Collective\Html\FormBuilder {
         $visibleAlt = isset($consulta['visible']) ? $this->formataCamposInputConsulta($consulta['visible']) : $visible;
         $placeholder = isset($consulta['placeholder']) ? $consulta['placeholder'] : isset($model->consulta['placeholder']) ? $model->consulta['placeholder'] : 'Digite para pesquisar...';
         $id = isset($consulta['id']) ? $consulta['id'] : $model->getKeyName();
-        $label = $model->consulta['label'];
+        $label = isset($consulta['label']) ? $consulta['label'] : $model->consulta['label'];
+        $labelId = $this->label($id,'Cod. '.$label);
+        $labelText = $this->label($text,$label);
         $url = Request::segment(1) . '/modulo/' . $modulo . '/rotina/' . $rotina . '/data?datalist=true&campos=' . $model->consulta['visible']; //.'&_token='.csrf_token();
         if (!isset($attributes['readonly'])) {
             $attributes = $this->mergeAttributesConsulta($attributes, $url, $search, $visible, $visibleAlt, $text, $textAlt, $placeholder);
         }
         $readonly = in_array('readonly', $attributes) ? 'readonly' : '';
         $validado = in_array('readonly', $attributes) ? 'true' : 'false';
-        $attributesId = ['campoId' => $model->getKeyName(), 'class' => 'flexdatalist-id', 'label' => $label, 'size' => 'sm', 'validado' => $validado, 'data-target' => '#' . $textAlt, $readonly];
-        if ($required) {
-            $attributesId['required'] = '';
-        }
-        unset($attributes[0]);
-        $inputId = $this->input('text', $id, $attributes['value-id'], $attributesId);
-        $inputText = $this->input('text', $textAlt, $attributes['value'], $attributes);
-        return $this->toHtmlString($inputId . $inputText);
+        $attributesId = ['campoId' => $model->getKeyName(), 'class' => 'flexdatalist-id', 'validado' => $validado, 'data-target' => '#' . $textAlt, $readonly];
+        if(isset($attributes['data-vindicate'])){
+            $attributesId['data-vindicate'] = $attributes['data-vindicate']. '|format:numeric';
+            unset($attributes['data-vindicate']);
+        } 
+        $colId = isset($attributes['colid']) ? $attributes['colid'] : '3';
+        $colText = isset($attributes['colid']) ? $attributes['coltext'] : '9';
+        $inputId = $this->html->tag('div',$this->validate($this->input('text', $id, $attributes['value-id'], $attributesId),$labelId),['class'=>'col-'.$colId]);
+        $inputText = $this->html->tag('div',$this->validate($this->input('text', $textAlt, $attributes['value'], $attributes),$labelText),['class'=>'col-'.$colText]);
+        return $this->html->tag('div',$inputId . $inputText,['class'=>'row']);
     }
 
     public function textarea($name, $value = null, $options = array()) {

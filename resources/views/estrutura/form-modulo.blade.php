@@ -4,17 +4,19 @@
     Módulo
 @endsection
 @section('body')
-    {{Form::hidden('idmodulo',$record->idmodulo,['label'=>'Código','required','readonly'])}}
+    {{Form::hidden('idmodulo',$record->idmodulo)}}
     {{Form::formGroup([
-        Form::text('modnome',$record->modnome,['label'=>'Nome','required'])
-      ])
-    }}
-    {{Form::formGroup([
-        Form::text('modpath',$record->modpath,['label'=>'Path','required'])
-      ])
-    }}
-    {{Form::formGroup([
-        Form::text('modicone',$record->modicone,['label'=>'Ícone'])
+        Html::col(
+            Form::validate(Form::text('modnome',$record->modnome,["data-vindicate"=>"required|format:alpha"]),
+                Form::label('modnome','Nome'))
+        ,'5'),
+        Html::col(
+            Form::validate(Form::text('modpath',$record->modpath,["data-vindicate"=>"required"]),
+                Form::label('modpath','Caminho Execução'))
+        ,'4'),    
+        Html::col(
+            Form::label('modicone','Ícone') . Form::text('modicone',$record->modicone)
+        ,'3')
       ])
     }}
 @endsection

@@ -15,6 +15,6 @@
 <script type="text/javascript" src="{{URL::asset('js/jquery.flexdatalist.min.js')}}"></script>
 <script type="text/javascript" src="{{URL::asset('js/jquery.datatables.min.js')}}"></script>
 <script type="text/javascript" src="{{URL::asset('js/datatables.bootstrap.js')}}"></script>
-<script type="text/javascript" src="{{URL::asset('js/validator.min.js')}}"></script>
+<script type="text/javascript" src="{{URL::asset('js/vindicate.js')}}"></script>
 <!--<script type="text/javascript" src="{{URL::asset('js/jquery.minimizemodal.js')}}"></script>-->
 <script type="text/javascript" src="{{URL::asset('js/construsys.js')}}"></script>

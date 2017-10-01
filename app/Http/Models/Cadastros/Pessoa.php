@@ -17,8 +17,8 @@ class Pessoa extends Model{
 
     public function tiposPessoa(){
     	return [
-            ['value'=>1,'label'=>'Física'],
-            ['value'=>2,'label'=>'Jurídica']
+            1=>'Física',
+            2=>'Jurídica'
         ];
     }
 

@@ -1,32 +1,24 @@
 <?php
     $disableAll = ($acao == 'Visualizar');
-    $table = Request::segment(3).'-'.Request::segment(5);
-    if(!isset($size)){
-        $size = "modal-md";
-    }
+    $table = Request::segment(3) . '-' . Request::segment(5);
 ?>
-<div class="modal-dialog {{$size}}">
-    <div class="modal-content" role="document">
-        {{Form::open(['url'=>Request::url(),'class'=>'form-horizontal','id'=>'fr-'.$table])}}
-        <div class="modal-header">
-            <h5 class="modal-title" id="modal-label">{{$acao}} @yield('header')</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div id="msg-fr-modal"></div>
-            <div class="{{$disableAll ? 'disable-all' : 'enable-all'}}">
-                @yield('body')
-            </div>
-        </div>
-        <div class="modal-footer">
-            <div class="{{$disableAll ? 'disable-all' : 'enable-all'}}">
-                @include('layouts.buttons-form')
-            </div>
+<div class="modal-content">
+    {{Form::open(['url'=>Request::url(),'class'=>'form-horizontal','id'=>'fr-'.$table],true)}}
+    <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">{{$acao}} @yield('header')</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&nbsp;&times;&nbsp;</span></button>
+    </div>
+    <div class="modal-body">
+        <div id="msg-fr-modal"></div>
+        <div class="{{$disableAll ? 'disable-all' : 'enable-all'}}">
+            @yield('body')
         </div>
     </div>
-    {{Form::close()}}
+    <div class="modal-footer">
+        <div class="{{$disableAll ? 'disable-all' : 'enable-all'}}">
+            @include('layouts.buttons-form',['table'=>'fr-'.$table])
+        </div>
+    </div>
 </div>
-
-@include('layouts.modal-script')
+{{Form::close()}}
+@include('scripts.modal')

@@ -41,10 +41,13 @@ input::-webkit-inner-spin-button {
     margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
 
-/*.form-group{
-    margin-top: 1px;
+li.active{
+    background-color:#e2e6ea;
 }
 
-.row{
-    margin-top: 1px;
-}*/
+.navbar{
+    padding: 1px;
+}
+.nav-item:hover{
+    background-color:#e2e6ea;
+}

@@ -5,19 +5,26 @@ Rotina
 @endsection
 
 @section('body')
+    {{Form::hidden('idrotina',$record->idrotina)}}
     {{Form::formGroup([
-        Form::text('idrotina',$record->idrotina,['required','readonly','label'=>'Rotina','size'=>'sm']),
-        Form::text('rotnome',$record->rotnome,['required','label'=>'','size'=>'md'])
+        Html::col(
+            Form::inputConsulta('estrutura','modulo',['data-vindicate'=>'required|format:numeric',
+                'value-id'=>$record->modulo ? $record->modulo->idmodulo : '',
+                'value'=>$record->modulo ? $record->modulo->modnome : ''],true)
+        ,'12')    
     ])}}
     {{Form::formGroup([
-        Form::inputConsulta('estrutura','modulo',['required',
-            'value-id'=>$record->modulo ? $record->modulo->idmodulo : '',
-            'value'=>$record->modulo ? $record->modulo->modnome : ''],true)
-    ])}}
-    {{Form::formGroup([
-        Form::text('rotpath',$record->rotpath,['label'=>'Path','size'=>'md1'])
-    ])}}
-    {{Form::formGroup([
-    Form::text('roticone',$record->roticone,['label'=>'Ícone','size'=>'md1'])        
+        Html::col(
+            Form::validate(Form::text('rotnome',$record->modnome,["data-vindicate"=>"required|format:alpha"]),
+                Form::label('rotnome','Nome'))
+        ,'4'),
+        Html::col(
+            Form::validate(Form::text('rotpath',$record->rotpath,["data-vindicate"=>"required"]),
+                Form::label('rotpath','Caminho Execução'))
+        ,'4'),
+        Html::col(
+            Form::validate(Form::text('roticone',$record->roticone),
+                Form::label('roticone','Ícone'))
+        ,'4')
     ])}}
 @endsection

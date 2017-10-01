@@ -5,15 +5,14 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true" id="modal-fr-{{$table}}"></div>
-<div id="msg-global"></div>
+{{Html::tag('div','<div class="modal-dialog '.$modalSize.'" role="document"></div>',['class'=>'modal fade mymodal', 'id'=>'modal-fr-'.$table, 'tabindex'=>'-1','role'=>'dialog','data-keyboard'=>'false', 'data-backdrop'=>'static'])}}
+{{Html::tag('div','',['id'=>'msg-global'])}}
 <p>{{$titulo}}</p>
-<div class="row">
+<div class="row col-12">
     {{Form::tableFilter($filters,$table)}}
-</div>
-<br/>
-<div class="row">
-    {{Form::open(array('url'=>Request::url(),'class'=>'form-horizontal','id'=>'form-registros'))}}
+</div><br>
+<div class="form-row">
+    {{Form::open(array('url'=>Request::url(),'class'=>'col-12 form-horizontal','id'=>'form-registros'))}}
         <div class="btn-group-from">
             <div class="btn-group btn-group-sm">
                 <button type="button" class="btn btn-primary" data-action="novo" data-toggle="modal" data-target="#modal-fr-{{$table}}"><i class="fa fa-plus">&nbsp;</i> Inserir</button>
@@ -38,7 +37,7 @@
             <table id="{{$table}}" scrollY="{{$scrollY}}" class="table table-bordered table-hover table-sm" url="{{Request::url()}}/data"></table>
         </div>
     {{Form::close()}}
-    <div class="minmaxCon" style="margin-bottom: 50px;"></div>
+    <!--<div class="minmaxCon" style="margin-bottom: 50px;"></div>-->
 </div>
 @overwrite
 

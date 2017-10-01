@@ -4,16 +4,32 @@
      'tab'=>
         Form::hidden('idpessoa',$record->idpessoa) . 
         Form::formGroup([
-            Form::select('pestipo',$tiposPessoa,$record->pestipo,['label'=>'Tipo','required','size'=>'sm1'])
+            Html::col(
+                Form::validate(
+                    Form::select('pestipo',$tiposPessoa,$record->pestipo),
+                    Form::label('pestipo','Tipo')
+                )
+            ,'4'),
+            Html::col(
+                Form::validate(
+                    Form::text('pesnome',$record->pesnome,['data-vindicate'=>'required']),
+                    Form::label('pesnome','Nome')
+                )
+            ,'8')
         ]) .
         Form::formGroup([
-            Form::text('pesnome',$record->pesnome,['label'=>'Nome','required'])
-        ]) .
-        Form::formGroup([
-            Form::text('pescpfcnpj',$record->pescpfcnpj,['label'=>'Cpf / Cnpj','required','size'=>'md'])
-        ]) .
-        Form::formGroup([
-            Form::text('pesrgie',$record->pesrgie,['label'=>'RG / IE','required','size'=>'sm1'])
+            Html::col(
+                Form::validate(
+                    Form::text('pescpfcnpj',$record->pescpfcnpj,['data-vindicate'=>'required']),
+                    Form::label('pescpfcnpj','CPF / CNPJ')
+                )
+            ,'7'),
+            Html::col(
+                Form::validate(
+                    Form::text('pesrgie',$record->pesrgie,['data-vindicate'=>'required']),
+                    Form::label('pesrgie','RG / IE')
+                )
+            ,'5')            
         ])
     ],
     ['label'=>'Endereço',
@@ -21,28 +37,58 @@
      'tab'=>
         Form::hidden('idpessoaendereco',$record->endereco()->idpessoaendereco) .
         Form::formGroup([
-            Form::select('peetipo',$record->endereco()->tiposEndereco(),$record->endereco()->peetipo,['label'=>'Tipo','size'=>'md'])
+            Html::col(
+                Form::validate(
+                    Form::select('peetipo',$record->endereco()->tiposEndereco(),$record->endereco()->peetipo),
+                    Form::label('peetipo','Tipo')
+                )
+            ,'auto'),
+            Html::col(
+                Form::validate(
+                    Form::text('peecep',$record->endereco()->peecep),
+                    Form::label('peecep','CEP')
+                )
+            ,'3'),
+            Html::col(
+                Form::validate(
+                    Form::select('peeestado',$record->endereco()->estados(),$record->endereco()->peeestado),
+                    Form::label('peeestado','UF')
+                )
+            ,'auto'),
+            Html::col(
+                Form::validate(
+                    Form::text('peecidade',$record->endereco()->peecidade),
+                    Form::label('peecidade','Cidade')
+                )
+            ,'3')
         ]) .
         Form::formGroup([
-            Form::text('peecep',$record->endereco()->peecep,['label'=>'CEP','size'=>'sm1'])
-        ]) . 
-        Form::formGroup([
-            Form::select('peeestado',$record->endereco()->estados(),$record->endereco()->peeestado,['label'=>'UF','size'=>'sm'])
+            Html::col(
+                Form::validate(
+                    Form::text('peebairro',$record->endereco()->peebairro),
+                    Form::label('peebairro','Bairro')
+                )
+            ,'3'),
+            Html::col(
+                Form::validate(
+                    Form::text('peelogradouro',$record->endereco()->peelogradouro),
+                    Form::label('peelogradouro','Logradouro')
+                )
+            ,'5'),
+            Html::col(
+                Form::validate(
+                    Form::text('peenumero',$record->endereco()->peenumero),
+                    Form::label('peenumero','Nº.')
+                )
+            ,'2')
         ]) .
         Form::formGroup([
-            Form::text('peecidade',$record->endereco()->peecidade,['label'=>'Cidade','size'=>'md1'])
-        ]) .
-        Form::formGroup([
-            Form::text('peebairro',$record->endereco()->peebairro,['label'=>'Bairro','size'=>'md1'])
-        ]) .
-        Form::formGroup([
-            Form::text('peelogradouro',$record->endereco()->peelogradouro,['label'=>'Logradouro','size'=>'md2'])
-        ]) .
-        Form::formGroup([
-            Form::text('peenumero',$record->endereco()->peenumero,['label'=>'N.','size'=>'sm'])
-        ]) .
-        Form::formGroup([
-            Form::text('peecomplemento',$record->endereco()->peecomplemento,['label'=>'Complemento','size'=>'md2'])
+            Html::col(
+                Form::validate(
+                    Form::text('peecomplemento',$record->endereco()->peecomplemento),
+                    Form::label('peecomplemento','Complemento')
+                )
+            ,'10')            
         ])
     ],
     ['label'=>'Contato',
@@ -52,13 +98,24 @@
         Form::hidden('idpeccelular' , $record->contato(2)->idpessoacontato) .
         Form::hidden('idpecemail' , $record->contato(3)->idpessoacontato) .
         Form::formGroup([
-            Form::text('pectelefone',$record->contato(1)->peccontato,['label'=>'Telefone','size'=>'sm1'])
-        ]) . 
-        Form::formGroup([
-            Form::text('peccelular',$record->contato(2)->peccontato,['label'=>'Celular','size'=>'sm1'])
-        ]) .
-        Form::formGroup([
-            Form::text('pecemail',$record->contato(3)->peccontato,['label'=>'E-mail','size'=>'md2'])
+            Html::col(
+                Form::validate(
+                    Form::text('pectelefone',$record->contato(1)->peccontato),
+                    Form::label('pectelefone','Telefone')
+                )
+            ,'3'),
+            Html::col(
+                Form::validate(
+                    Form::text('peccelular',$record->contato(2)->peccontato),
+                    Form::label('peccelular','Celular')
+                )
+            ,'3'),
+            Html::col(
+                Form::validate(
+                    Form::text('pecemail',$record->contato(3)->peccontato),
+                    Form::label('pecemail','E-mail')
+                )
+            ,'6')
         ]) 
     ]
   ])

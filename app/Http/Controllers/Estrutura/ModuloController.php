@@ -11,7 +11,7 @@ class ModuloController extends Controller{
                 ['name'=>'idmodulo','label'=>'Código','width'=>'10'],
                 ['name'=>'modnome','label'=>'Nome','width'=>'30'],
                 ['name'=>'modpath','label'=>'Path','width'=>'30'],
-                ['name'=>'modicone','label'=>'Ícone','width'=>'15'],
+                ['name'=>'modicone','label'=>'Ícone','width'=>'20'],
             ];
     }
 
@@ -32,5 +32,9 @@ class ModuloController extends Controller{
     
     protected function getTitulo() {
         return 'Módulos';
+    }
+    
+    protected function getModalSize() {
+        return 'modal-lg';
     }
 }
