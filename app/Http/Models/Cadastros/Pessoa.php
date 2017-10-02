@@ -23,11 +23,11 @@ class Pessoa extends Model{
     }
 
     public function tipoPessoaFisica(){
-    	return [['value'=>1,'label'=>'Física']];
+    	return [1=>'Física'];
     }
 
     public function tipoPessoaJuridica(){
-    	return [['value'=>2,'label'=>'Jurídica']];
+    	return [2=>'Jurídica'];
     }
         
     public function contatos(){

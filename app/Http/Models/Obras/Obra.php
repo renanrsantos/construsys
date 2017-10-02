@@ -3,6 +3,7 @@
 namespace App\Http\Models\Obras;
 
 use App\Http\Models\Model;
+use App\Http\Models\Cadastros\Cliente;
 /**
  * Description of Obra
  *
@@ -10,8 +11,8 @@ use App\Http\Models\Model;
  */
 class Obra extends Model{
     protected $fillable = [
-        'idobra','obrdescricao','obrtipoprevisao','idcliente','obrdatainicio',
-        'obrprevisao','obrtamanho'
+        'idobra','idcliente','idorcamento','obrtamanho','obrdescricao','obrdatainicio',
+        'obrprevisao','obrvalororcado','obrtipoprevisao'
     ];
     
     public function comodos(){
@@ -19,6 +20,7 @@ class Obra extends Model{
     }
     
     public function cliente(){
+        return $this->belongsTo(Cliente::class,'idcliente');
         
     }
     
@@ -28,10 +30,10 @@ class Obra extends Model{
     
     public function getTiposPrevisao(){
         return [
-            ['value'=>'','label'=>''],
-            ['value'=>1,'label'=>'Dia(s)'],
-            ['value'=>2,'label'=>'Mês(es)'],
-            ['value'=>3,'label'=>'Ano(s)']
+            ''=>'',
+            1=>'Dia(s)',
+            2=>'Mês(es)',
+            3=>'Ano(s)'
         ];
     }
 }

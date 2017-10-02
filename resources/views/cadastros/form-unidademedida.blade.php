@@ -6,11 +6,18 @@
 @section('body')
     {{Form::hidden('idunidademedida',$record->idunidademedida,['label'=>'Código','required','readonly'])}}
     {{Form::formGroup([
-        Form::text('unmsigla',$record->unmsigla,['label'=>'Sigla','required'])
-      ])
-    }}
-    {{Form::formGroup([
-        Form::text('unmdescricao',$record->unmdescricao,['label'=>'Descrição','required'])
+        Html::col(
+            Form::validate(
+                Form::text('unmsigla',$record->unmsigla,['data-vindicate'=>'required']),
+                Form::label('unmsigla','Sigla')
+            )
+        ,'4'),
+        Html::col(
+            Form::validate(
+                Form::text('unmdescricao',$record->unmdescricao,['data-vindicate'=>'required']),
+                Form::label('unmdescricao','Descrição')
+            )
+        ,'8')
       ])
     }}
 @endsection

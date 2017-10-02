@@ -208,7 +208,8 @@ class FormBuilder extends \Collective\Html\FormBuilder {
     }
 
     public function textarea($name, $value = null, $options = array()) {
-        parent::textarea($name, $value, $options);
+        $this->html->addClassAttributes($options,'form-control');   
+        return parent::textarea($name, $value, $options);
     }
 
 }

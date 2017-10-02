@@ -13,10 +13,11 @@ class ObraController extends Controller{
     protected function getColumns() {
         return [
                 ['name'=>'idobra','label'=>'Código','width'=>'5'],
-                ['name'=>'obrdescricao','label'=>'Obra','width'=>'30'],
-                ['name'=>'cliente,pessoa,pesnome','label'=>'Cliente','width'=>'15'],
-                ['name'=>'endereco','label'=>'Endereço','width'=>'10'],
-                ['name'=>'obrtamanho','label'=>'Tamanho','width'=>'10']
+                ['name'=>'obrdescricao','label'=>'Descrição','width'=>'20'],
+                ['name'=>'cliente,pessoa,pesnome','label'=>'Cliente','width'=>'20'],
+                ['name'=>'endereco()','label'=>'Endereço','width'=>'20'],
+                ['name'=>'obrvalororcado','label'=>'Valor','width'=>'10'],
+                ['name'=>'obrtamanho','label'=>'Tamanho (m²)','width'=>'10']
             ];
     }
 
@@ -30,6 +31,10 @@ class ObraController extends Controller{
     
     protected function getTitulo() {
         return 'Obras';
+    }
+
+    protected function getModalSize(){
+        return 'modal-lg';
     }
 
 }

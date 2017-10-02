@@ -4,31 +4,71 @@
     Obra
 @endsection
 @section('body')
-    {{Form::hidden('idobra',$record->idobra)}}
-    {{Form::formGroup([
-        Form::inputConsulta('cadastros','cliente',['value-id'=>$record->idcliente,
-          'value'=>$record->pessoa ? $record->pessoa->pesnome : ''])
-      ])
-    }}
-    {{Form::formGroup([
-        Form::textarea('obrdescricao',$record->obrdescricao,['label'=>'Descrição'])
-      ])
-    }}
-    {{Form::formGroup([
-        Form::text('obrvalororcado',$record->obrvalororcado,['label'=>'Valor Orçado'])
-      ])
-    }}
-    {{Form::formGroup([
-        Form::date('obrdatainicio',$record->obrdatainicio,['label'=>'Data Início'])
-      ])  
-    }}
-    {{Form::formGroup([
-        Form::text('obrprevisao',$record->obrprevisao,['label'=>'Previsão Entrega']),
-        Form::select('obrtipoprevisao',$record->getTiposPrevisao(),$record->obrtipoprevisao)
-      ])  
-    }}
-    {{Form::formGroup([
-        Form::text('obrtamanho',$record->obrtamanho,['label'=>'Tamanho total'])
-      ])
+    {{Html::navTabs([
+      [
+        'link'=>'obra',
+        'label'=>'Obra',
+        'tab'=>  
+          Form::hidden('idobra',$record->idobra) .
+          Form::formGroup([
+            Html::col(
+              Form::validate(
+                Form::inputConsulta('cadastros','cliente',['value-id'=>$record->idcliente,
+                  'value'=>$record->pessoa ? $record->pessoa->pesnome : '','data-vindicate'=>'required'])
+              )
+            ,'9'),
+            Html::col(
+              Form::validate(
+                Form::date('obrdatainicio',$record->obrdatainicio,['data-vindicate'=>'required|format:date']),
+                Form::label('obrdatainicio','Data Início')
+              )
+            ,'3')
+          ]) .
+          Form::formGroup([
+            Html::col(
+              Form::validate(
+                Form::textarea('obrdescricao',$record->obrdescricao),
+                Form::label('obdescricao','Descrição')
+              )
+            ,'12')
+          ]) .
+          Form::formGroup([
+            Html::col(
+              Form::validate(
+                Form::text('obrvalororcado',$record->obrvalororcado),
+                Form::label('obrvalororcado','Valor Orçado (R$)')
+              )
+            ,'3'),
+            Html::col(
+              Form::validate(
+                Form::text('obrprevisao',$record->obrprevisao,['data-vindicate'=>'format:numeric']),
+                Form::label('obrprevisao','Prev. de Entrega')
+              ) 
+            ,'3'),
+            Html::col(
+              Form::validate(
+                Form::select('obrtipoprevisao',$record->getTiposPrevisao(),$record->obrtipoprevisao),
+                Form::label('obrtipoprevisao','Tipo da Previsão')
+              )  
+            ,'3'),
+            Html::col(
+              Form::validate(
+                Form::text('obrtamanho',$record->obrtamanho),
+                Form::label('obrtamanho','Tamanho total (m²)')
+              )
+            ,'3')
+          ])
+        ],
+        [
+          'link'=>'comodos',
+          'label'=>'Divisões da Obra',
+          'tab'=>''
+        ],
+        [
+          'link'=>'fases',
+          'label'=>'Fases da Obra',
+          'tab'=>''
+        ]
+      ])   
     }}
 @endsection

@@ -6,7 +6,12 @@
 @section('body')
     {{Form::hidden('idcategoriaproduto',$record->idcategoriaproduto)}}
     {{Form::formGroup([
-        Form::text('catdescricao',$record->catdescricao,['label'=>'Descrição','required'])
+    	Html::col(
+    		Form::validate(
+    			Form::text('catdescricao',$record->catdescricao,['data-vindicate'=>'required']),
+    			Form::label('catdescricao','Descrição')
+    		)
+    	,'12')
       ])
     }}
 @endsection

@@ -16,6 +16,14 @@ class Cliente extends Model{
         'idcliente','idpessoa',
     ];
     
+
+	public $consulta = ['visible'=>'idcliente,pesnome,pescpfcnpj',
+        'search'=>'pesnome,pescpfcnpj',
+        'text'=>'pesnome',
+        'label'=>'Cliente',
+        'objetos'=>['pesnome'=>'pessoa','pescpfcnpj'=>'pessoa']
+    ];
+
     public function pessoa(){
         return $this->belongsTo(Pessoa::class,'idpessoa','idpessoa');
     }
