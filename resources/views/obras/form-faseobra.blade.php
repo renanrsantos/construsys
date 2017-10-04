@@ -1,0 +1,1 @@
+idfaseobra,fsoporcentagem,fsodatainicio,fsoobservacao,fsostatus,idfase

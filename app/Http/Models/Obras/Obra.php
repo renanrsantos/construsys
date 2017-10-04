@@ -16,7 +16,11 @@ class Obra extends Model{
     ];
     
     public function comodos(){
-        
+        return $this->hasMany(Comodo::class,'idobra');
+    }
+    
+    public function fases(){
+        return $this->hasMany(Faseobra::class,'idobra');
     }
     
     public function cliente(){

@@ -27,7 +27,7 @@
           Form::formGroup([
             Html::col(
               Form::validate(
-                Form::textarea('obrdescricao',$record->obrdescricao),
+                Form::textarea('obrdescricao',$record->obrdescricao,['rows'=>3,'data-vindicate'=>'required']),
                 Form::label('obdescricao','Descrição')
               )
             ,'12')
@@ -35,7 +35,7 @@
           Form::formGroup([
             Html::col(
               Form::validate(
-                Form::text('obrvalororcado',$record->obrvalororcado),
+                Form::text('obrvalororcado',$record->obrvalororcado,['data-vindicate'=>'required|format:numeric']),
                 Form::label('obrvalororcado','Valor Orçado (R$)')
               )
             ,'3'),
@@ -53,7 +53,7 @@
             ,'3'),
             Html::col(
               Form::validate(
-                Form::text('obrtamanho',$record->obrtamanho),
+                Form::text('obrtamanho',$record->obrtamanho,['data-vindicate'=>'required|format:numeric']),
                 Form::label('obrtamanho','Tamanho total (m²)')
               )
             ,'3')
@@ -62,13 +62,14 @@
         [
           'link'=>'comodos',
           'label'=>'Divisões da Obra',
-          'tab'=>''
+          'tab'=> View::make('obras.form-comodo',['record'=>$record])->render()
         ],
         [
           'link'=>'fases',
           'label'=>'Fases da Obra',
-          'tab'=>''
+          'tab'=>View::make('obras.form-faseobra',['record'=>$record])->render()
         ]
       ])   
     }}
+@include('scripts.obras.obra')
 @endsection

@@ -61,9 +61,18 @@ class FormBuilder extends \Collective\Html\FormBuilder {
         return parent::checkbox($name, $value, $checked, $options);
     }
 
+    public function buttonGroup(array $btns,array $attributes = []){
+        $htmlBtns = '';
+        foreach($btns as $btn){
+            $htmlBtns.= $btn;
+        }
+        $this->html->addClassAttributes($attributes, 'btn-group btn-group-sm');
+        return $this->html->tag('div',$htmlBtns,$attributes);
+    }
+    
     public function button($value = null, $options = array()) {
         if (isset($options['icon'])) {
-            $value = $this->html->icon($options['icon']) . $value;
+            $value = $this->html->icon($options['icon'],'') . $value;
             unset($options['icon']);
         }
         if (!isset($options['color'])) {
@@ -114,7 +123,7 @@ class FormBuilder extends \Collective\Html\FormBuilder {
     }
 
     public function tableFilter($filters, $table) {
-        $botaoFiltro = $this->splitButton(['Filtrar', ['id' => 'btn-filtrar', 'aria-controls' => $table]], [[$this->html->icon('fa fa-plus') . 'Adicionar Filtro', ['id' => 'add-filter', 'aria-controls' => '#filtro-' . $table]],
+        $botaoFiltro = $this->splitButton([' Filtrar', ['id' => 'btn-filtrar', 'aria-controls' => $table]], [[$this->html->icon('fa fa-plus') . ' Adicionar Filtro', ['id' => 'add-filter', 'aria-controls' => '#filtro-' . $table]],
             [$this->html->icon('fa fa-close') . 'Remover Filtros', ['id' => 'remove-filter', 'aria-controls' => '#filtro-' . $table]],
             [$this->html->icon('fa fa-refresh') . 'Limpar Filtros', ['id' => 'reset-filter', 'aria-controls' => '#filtro-' . $table]]], 'info');
 

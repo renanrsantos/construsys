@@ -9,11 +9,14 @@ class Tipocomodo extends Model{
     protected $fillable = [
         'idtipocomodo', 'tconome', 
     ];
+
+    public function getTiposComodo(){
+        $tipos = [];
+        foreach($this->all() as $tipo){
+            $tipos[$tipo->idtipocomodo] = $tipo->tconome;
+        }
+        return $tipos;
+    }    
     
-//    public $consulta = ['visible'=>'idmodulo,modnome',
-//        'search'=>'modnome',
-//        'text'=>'modnome',
-//        'label'=>'Módulo'
-//    ];
            
 }
