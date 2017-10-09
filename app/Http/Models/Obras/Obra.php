@@ -40,4 +40,9 @@ class Obra extends Model{
             3=>'Ano(s)'
         ];
     }
+
+    public function getTiposComodo(){
+        $tipos = new Tipocomodo();
+        return $tipos->getTiposComodo();
+    }
 }
