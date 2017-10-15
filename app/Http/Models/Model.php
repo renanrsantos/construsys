@@ -37,8 +37,8 @@ class Model extends \Illuminate\Database\Eloquent\Model{
 //    }
     
     public function processaNovo(){
-        $key = $this->getKeyName();
-        $this->$key = $this->max($key)+1;
+        // $key = $this->getKeyName();
+        // $this->$key = $this->max($key)+1;
     }
     
     public function getCampoAtivo(){

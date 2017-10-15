@@ -14,6 +14,13 @@ class Produto extends Model{
         'idcategoriaproduto','idsubcategoriaproduto'
     ];
     
+    public $consulta = ['visible'=>'idproduto,prddescricao,unmsigla',
+        'search'=>'prddescricao,prddescdet',
+        'text'=>'prddescricao',
+        'label'=>'Produto',
+        'objetos'=>['unmsigla'=>'unidadeMedida']
+    ];
+
     public function unidadeMedida(){
         return $this->belongsTo(Unidademedida::class,'idunidademedida');
     }

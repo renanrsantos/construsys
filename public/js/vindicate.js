@@ -5,6 +5,7 @@ function vindicateForm(options) {
     this.fields = {};
     this.validationSoftFail = false;
     this.validationHardFail = false;
+    this.firstInvalid = null;
     this.options = $.extend(true, {
         // These are the defaults.
         soft: false,
@@ -50,7 +51,7 @@ function vindicateForm(options) {
                 message: "Insira uma data válida. (DD-MM-AAAA)"
             },
             decimal: {
-                regex: /^\d+$/,
+                regex: /^\d+\.\d{0,2}$/,
                 message: "Insira um decimal válido. (xxx.xx)"
             },
             email: {
@@ -82,9 +83,13 @@ function vindicateForm(options) {
 
     this.validate = function () {
         var retornoGeral = true;
+        this.firstInvalid = null;
         for (var index in this.fields) {
             var retornoIndividual = this.fields[index].validate(this.options);
             retornoGeral = retornoGeral && retornoIndividual;
+            if(this.firstInvalid === null && !retornoIndividual){
+                this.firstInvalid = this.fields[index];
+            }
         }
         return retornoGeral;
     };
@@ -99,8 +104,9 @@ function vindicateForm(options) {
     };
 }
 
-function vindicateField($element, formId, options) {
+function vindicateField($element,$form, formId, options) {
     this.element = $element;
+    this.form = $form;
     this.formId = formId;
     this.formGroup = this.element.closest("." + options.parent);
     this.formFeedback = this.formGroup.find(".form-control-feedback");
@@ -130,9 +136,9 @@ function vindicateField($element, formId, options) {
     this.minLength = false;
     this.matchValue = false;
     this.matchField = false;
-
     // Determine type of input field
-    if (this.element.is(":text") || this.element.is("textarea") || this.element.is("[type=email]") || this.element.is("[type=date]")) {
+    if (this.element.is(":text") || this.element.is("textarea") || this.element.is("[type=email]") 
+        || this.element.is("[type=date]")|| this.element.is("[type=password]")) {
         this.fieldType = "text";
     } else if (this.element.is("select")) {
         this.fieldType = "dropdown";
@@ -285,6 +291,13 @@ function vindicateField($element, formId, options) {
                 }
             }
         }
+        if(this.fieldType === "dropdown"){
+            if (this.element.val() === null) {
+                this.validationSoftFail = true;
+                this.validationMessage = options.requiredMessage;
+                return false;
+            }
+        }
         return true;
     };
 
@@ -292,7 +305,7 @@ function vindicateField($element, formId, options) {
         strict_validation = ["alpha", "alphanumeric", "creditcard", "date", "decimal", "email", "numeric", "phone", "cellphone", "time", "url"];
         for (var index in strict_validation) {
             format = strict_validation[index];
-            if (this.format === format) {
+            if (this.format === format && this.element.val() !== "") {
                 if (!this.element.val().match(options.formats[format].regex)) {
                     this.validationHardFail = true;
                     this.validationMessage = options.formats[format].message;
@@ -315,9 +328,9 @@ function vindicateField($element, formId, options) {
     };
 
     this.validateEquals = function (options) {
-        if (this.element.val() !== this.matchValue) {
+        if (this.element.val() !== this.form.findById(this.matchField).element.val()) {
             this.validationSoftFail = true;
-            this.validationMessage = "Um valor incorreto foi inserido.";
+            this.validationMessage = "Os valores precisam ser iguais.";
         }
     };
 
@@ -333,7 +346,7 @@ function vindicateField($element, formId, options) {
         } else {
             // Check for empty and exit?
         }
-        if (this.matchValue) {
+        if (this.matchField) {
             this.validateEquals(options);
         }
         if (this.format) {
@@ -370,7 +383,7 @@ function vindicateField($element, formId, options) {
             var fields = $form_this.find(":input").map(function () {
                 var $input_this = $(this);
                 if ($input_this.attr('data-vindicate')) {
-                    var field = new vindicateField($input_this, form_id, vin.options);
+                    var field = new vindicateField($input_this, vin,form_id, vin.options);
                     return field;
                 }
             }).toArray();
@@ -389,7 +402,7 @@ function vindicateField($element, formId, options) {
             // form_index = (window.vindicate.length-1); // Minus 1 because array is 0 based
             //$form_this.data("vindicate-index", form_index);
             // }
-//            console.log("Vindicate - Form Initialized", vin);
+            // console.log("Vindicate - Form Initialized", vin);
         } 
         if (action === "validate") {
             var vin = window.vindicate[form_id];

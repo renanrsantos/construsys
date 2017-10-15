@@ -77,7 +77,7 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder{
         return parent::tag($tag, $content, $attributes);
     }
 
-    public function addClassAttributes(&$attributes,string $class,$substitute = false){
+    public function addClassAttributes(&$attributes,$class,$substitute = false){
         if($substitute){
             $attributes['class'] = $class;
             return $attributes;
@@ -87,7 +87,7 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder{
             $classAux = $attributes['class'];
         }
         $attributes['class'] = trim($class.' '.$classAux);
-//        return $attributes;
+       // return $attributes;
     }
     
     public function navBar($id, $brand = '', $content = [],$attributes = []){

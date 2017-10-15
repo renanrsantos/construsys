@@ -1,44 +1,38 @@
 @php
     $table = Request::segment(3).'-'.Request::segment(5);
 @endphp
-
-@extends('layouts.app')
-
-@section('content')
-{{Html::tag('div','<div class="modal-dialog '.$modalSize.'" role="document"></div>',['class'=>'modal fade mymodal', 'id'=>'modal-fr-'.$table, 'tabindex'=>'-1','role'=>'dialog','data-keyboard'=>'false', 'data-backdrop'=>'static'])}}
+{{Html::tag('div','<div class="modal-dialog '.$modalSize.'" role="document"></div>',['class'=>'modal fade mymodal '.$main, 'id'=>'modal-fr-'.$table, 'tabindex'=>'-1','role'=>'dialog','data-keyboard'=>'false', 'data-backdrop'=>'static'])}}
 {{Html::tag('div','',['id'=>'msg-global'])}}
-<p>{{$titulo}}</p>
 <div class="row col-12">
     {{Form::tableFilter($filters,$table)}}
 </div><br>
 <div class="form-row">
-    {{Form::open(array('url'=>Request::url(),'class'=>'col-12 form-horizontal','id'=>'form-registros'))}}
+    {{Form::open(array('url'=>Request::url(),'class'=>'col-12 form-horizontal','id'=>'fr-registros-'.$table))}}
+        @if(!$main)
+            {{$inputId}}
+        @endif
         <div class="btn-group-from">
-            <div class="btn-group btn-group-sm">
-                <button type="button" class="btn btn-primary" data-action="novo" data-toggle="modal" data-target="#modal-fr-{{$table}}"><i class="fa fa-plus">&nbsp;</i> Inserir</button>
-                <button type="button" class="btn btn-primary btn-single" data-action="alterar" data-toggle="modal" data-target="#modal-fr-{{$table}}"><i class="fa fa-pencil">&nbsp;</i> Alterar</button>
-                <button type="button" class="btn btn-primary btn-excluir btn-multi"><i class="fa fa-trash">&nbsp;</i> Excluir</button>
-                <button type="button" class="btn btn-primary btn-single" data-action="visualizar" data-toggle="modal" data-target="#modal-fr-{{$table}}"><i class="fa fa-eye">&nbsp;</i> Visualizar</button>
-            </div> 
-            @if($btns)
-            <div class="btn-group btn-group-sm">
-                @foreach($btns as $btn)
-                    <{{$btn['type']}} type="button" 
-                        href="{{$btn['url']}}" 
-                        class="btn btn-primary btn-extra {{$btn['type']}}">
-                        <i class="fa fa-{{$btn['icon']}}">&nbsp;</i> 
-                        {{$btn['label']}}
-                    </{{$btn['type']}}>
-                @endforeach
-            </div>
-            @endif
+        {{Form::buttonGroup([
+            Form::button('Inserir',['color'=>'primary','icon'=>'fa fa-plus','data-toggle'=>'modal','data-target'=>'#modal-fr-'.$table,'data-form'=>'#fr-registros-'.$table,'data-action'=>'novo']),
+            Form::button('Alterar',['color'=>'primary','icon'=>'fa fa-pencil','data-toggle'=>'modal','data-target'=>'#modal-fr-'.$table,'data-form'=>'#fr-registros-'.$table,'class'=>'btn-single','data-action'=>'alterar']),
+            Form::button('Excluir',['color'=>'primary','icon'=>'fa fa-trash','data-toggle'=>'modal','data-target'=>'#modal-fr-'.$table,'data-form'=>'#fr-registros-'.$table,'class'=>'btn-excluir btn-multi']),
+            Form::button('Visualizar',['color'=>'primary','icon'=>'fa fa-eye','data-toggle'=>'modal','data-target'=>'#modal-fr-'.$table,'data-form'=>'#fr-registros-'.$table,'class'=>'btn-single','data-action'=>'visualizar'])
+        ])}}
+        @if($btns)
+            @foreach($btns as $btn)
+                <div class="btn-group btn-group-sm">
+                    {{$btn}}
+                </div>
+            @endforeach
+        @endif
         </div>
         <div class="form-group">
             <table id="{{$table}}" scrollY="{{$scrollY}}" class="table table-bordered table-hover table-sm" url="{{Request::url()}}/data"></table>
+            <script>
+                montaDataTable($('#{{$table}}'),$('#fr-registros-{{$table}}').serialize());
+                atualizaBotoes($('#fr-registros-{{$table}}'));
+            </script>
         </div>
     {{Form::close()}}
     <!--<div class="minmaxCon" style="margin-bottom: 50px;"></div>-->
 </div>
-@overwrite
-
-

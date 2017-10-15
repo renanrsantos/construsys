@@ -17,6 +17,7 @@
     $('.disable-all :input').prop('disabled', true);
     $('.disable-all :button').prop('disabled', true);
     $('[data-dismiss="modal"]').prop('disabled',false);
+
     $('form[data-toggle="validator"]').each(function(){
         $(this).vindicate("init");
         $(this).prop('submited',false);
@@ -38,6 +39,12 @@
                         break;
                 }
             });
+        } else {
+            var firstInvalid = form.vindicate('get').firstInvalid.element;
+            var closest = firstInvalid.closest('.tab-pane');
+            var id = closest.attr('id');
+            $('.nav a[href="#' + id + '"]').tab('show');
+            firstInvalid.focus();
         }
     });
 </script>

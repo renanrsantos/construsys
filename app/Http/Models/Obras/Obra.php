@@ -19,13 +19,28 @@ class Obra extends Model{
         return $this->hasMany(Comodo::class,'idobra');
     }
     
-    public function fases(){
+    public function fasesObra(){
         return $this->hasMany(Faseobra::class,'idobra');
     }
     
+    public function comodosAsArray(){
+        $comodos = [''=>''];
+        foreach ($this->comodos as $comodo) {
+            $comodos[$comodo->idcomodo] = $comodo->comdescricao . ' ('.$comodo->tipoComodo->tconome.')';
+        }
+        return $comodos;
+    }
+
+    public function fasesObraAsArray(){
+        $fases = [''=>''];
+        foreach ($this->fasesObra as $fase) {
+            $fases[$fase->idfaseobra] = $fase->fsodescricao . ' ('.$fase->fase->fsedescricao.')';
+        }
+        return $fases;        
+    }
+
     public function cliente(){
         return $this->belongsTo(Cliente::class,'idcliente');
-        
     }
     
     public function endereco(){
@@ -42,7 +57,14 @@ class Obra extends Model{
     }
 
     public function getTiposComodo(){
-        $tipos = new Tipocomodo();
-        return $tipos->getTiposComodo();
+        return Tipocomodo::getTiposComodo();
+    }
+
+    public function getFases(){
+        return Fase::getFases();
+    }
+
+    public function getStatusFase(){
+        return [1=>'Não iniciada',2=>'Iniciada',3=>'Parada',4=>'Finalizada'];
     }
 }

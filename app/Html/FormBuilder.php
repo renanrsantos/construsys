@@ -72,7 +72,7 @@ class FormBuilder extends \Collective\Html\FormBuilder {
     
     public function button($value = null, $options = array()) {
         if (isset($options['icon'])) {
-            $value = $this->html->icon($options['icon'],'') . $value;
+            $value = $this->html->icon($options['icon'],'') .' '. $value;
             unset($options['icon']);
         }
         if (!isset($options['color'])) {
@@ -186,7 +186,7 @@ class FormBuilder extends \Collective\Html\FormBuilder {
             'class' => 'flexdatalist']);
     }
 
-    public function inputConsulta(string $modulo, string $rotina, array $attributes, $consulta = null) {
+    public function inputConsulta(string $modulo, string $rotina, array $attributes = [], $consulta = null) {
         $model = app()->make('\\App\\Http\\Models\\' . ucfirst($modulo) . '\\' . ucfirst($rotina));
         $visible = $this->formataCamposInputConsulta($model->consulta['visible']);
         $search = $this->formataCamposInputConsulta($model->consulta['search']);
@@ -196,7 +196,7 @@ class FormBuilder extends \Collective\Html\FormBuilder {
         $placeholder = isset($consulta['placeholder']) ? $consulta['placeholder'] : isset($model->consulta['placeholder']) ? $model->consulta['placeholder'] : 'Digite para pesquisar...';
         $id = isset($consulta['id']) ? $consulta['id'] : $model->getKeyName();
         $label = isset($consulta['label']) ? $consulta['label'] : $model->consulta['label'];
-        $labelId = $this->label($id,'Cod. '.$label);
+        $labelId = $this->label($id,'Id.');
         $labelText = $this->label($text,$label);
         $url = Request::segment(1) . '/modulo/' . $modulo . '/rotina/' . $rotina . '/data?datalist=true&campos=' . $model->consulta['visible']; //.'&_token='.csrf_token();
         if (!isset($attributes['readonly'])) {
@@ -210,7 +210,7 @@ class FormBuilder extends \Collective\Html\FormBuilder {
             unset($attributes['data-vindicate']);
         } 
         $colId = isset($attributes['colid']) ? $attributes['colid'] : '3';
-        $colText = isset($attributes['colid']) ? $attributes['coltext'] : '9';
+        $colText = isset($attributes['coltext']) ? $attributes['coltext'] : '9';
         $inputId = $this->html->tag('div',$this->validate($this->input('text', $id, $attributes['value-id'], $attributesId),$labelId),['class'=>'col-'.$colId]);
         $inputText = $this->html->tag('div',$this->validate($this->input('text', $textAlt, $attributes['value'], $attributes),$labelText),['class'=>'col-'.$colText]);
         return $this->html->tag('div',$inputId . $inputText,['class'=>'row']);
@@ -219,6 +219,19 @@ class FormBuilder extends \Collective\Html\FormBuilder {
     public function textarea($name, $value = null, $options = array()) {
         $this->html->addClassAttributes($options,'form-control');   
         return parent::textarea($name, $value, $options);
+    }
+
+    public function dropdownButton($value, $items,$attributes = []){
+        $attributes = array_merge($attributes,['data-toggle'=>'dropdown','aria-haspopup'=>'true','aria-expanded'=>'false']);
+        $this->html->addClassAttributes($attributes,'dropdown-toggle btn-sm');
+        $button = $this->button($value,$attributes);
+        $dropdownButtons = '';
+        foreach($items as $item => $attributesAux){
+            $this->html->addClassAttributes($attributesAux,'dropdown-item');
+            $dropdownButtons .= $this->html->tag('a',$item,$attributesAux);
+        }
+
+        return $this->html->tag('div',$button . $this->html->tag('div',$dropdownButtons,['class'=>'dropdown-menu']),['class'=>'dropdown']);
     }
 
 }

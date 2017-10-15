@@ -10,9 +10,9 @@ class Tipocomodo extends Model{
         'idtipocomodo', 'tconome', 
     ];
 
-    public function getTiposComodo(){
-        $tipos = [];
-        foreach($this->all() as $tipo){
+    public static function getTiposComodo(){
+        $tipos = [''=>''];
+        foreach(self::all() as $tipo){
             $tipos[$tipo->idtipocomodo] = $tipo->tconome;
         }
         return $tipos;

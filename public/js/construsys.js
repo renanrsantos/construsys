@@ -64,12 +64,12 @@ function atualizaBotoes(table = null) {
     }
 }
 
-function montaDataTable(table) {
+function montaDataTable(table,data = '') {
     var url = table.attr('url');
     $.getJSON(url + '?columns=true', function (result) {
         table.html(result.columns);
 //            setFiltro(table,true);
-        carregaDados(table, table.attr('data'));
+        carregaDados(table, data);
 //        $('.btn-group-from').appendTo('.btn-group-to');
     });
 }
@@ -212,8 +212,6 @@ $(document).ready(function () {
         ctrl = false;
     });
 
-    atualizaBotoes();
-
     $('table').on('click', '.chk-acao', function () {
         atualizaBotoes($(this).closest('table'));
         clickChk = true;
@@ -238,14 +236,12 @@ $(document).ready(function () {
 
     $('body').on('click', '#chk-all', function () {
         var inputs, x, chks;
-        chks = $(this).closest('table').parent().find('tr');
+        chks = $('table[url="'+$(this).closest('table').attr('url')+'"]').find('.chk-acao');
         inputs = chks.get();
-        console.log(chks);
-//        console.log(inputs);
         for (x = 0; x < inputs.length; x++) {
             inputs[x].checked = this.checked;
         }
-        atualizaBotoes($(this).closest('table'));
+        atualizaBotoes(chks.closest('table'));
     });
 
     $('body').on('click', '#reset-filter', function (event) {
@@ -304,7 +300,7 @@ $(document).ready(function () {
     $('.btn-excluir').on('click', function () {
         if (botaoHabilitado($(this))) {
             if (confirm('Deseja realmente excluir o(s) registro(s) selecionado(s)?')) {
-                var form = $('#form-registros');
+                var form = $($(this).data('form'));
                 $.post(form.prop('action') + '/excluir', form.serialize(), function (data) {
                     switch (data.status) {
                         case 'ERRO':
@@ -323,10 +319,10 @@ $(document).ready(function () {
         $(this).attr('value', ($(this).prop('checked') ? 1 : 0));
     });
 
-    $('table').each(function () {
-        var table = $(this);
-        montaDataTable(table);
-    });
+    // $('table').each(function () {
+    //     var table = $(this);
+    //     montaDataTable(table);
+    // });
 
     $('#btn-filtrar').on('click', function () {
         var btn = setBtnLoading($(this), true);
@@ -345,12 +341,13 @@ $(document).ready(function () {
     $('body').on('select:flexdatalist', '.flexdatalist', function (item, options) {
         var props = $(this).data('visible-properties');
         var propsAlt = $(this).data('visible-properties-alt');
+        var divMain = $(this).closest('.row'); 
         props = props.slice(0, props.length);
         propsAlt = propsAlt.slice(0, propsAlt.length);
         for (i = 0; i < props.length; i++) {
             if (propsAlt[i] !== $(this).prop("id")) {
-                $('#' + propsAlt[i]).val(options[props[i]]);
-                $('#' + propsAlt[i]).attr('validado', true);
+                divMain.find('#' + propsAlt[i]).val(options[props[i]]);
+                divMain.find('#' + propsAlt[i]).attr('validado', true);
             }
         }
     });
@@ -361,8 +358,9 @@ $(document).ready(function () {
     });
 
     $('body').on('blur', '.flexdatalist-id', function () {
+        var divMain = $(this).closest('.row');
         var idFlex = $(this).data('target');
-        var flex = $(idFlex);
+        var flex = divMain.find(idFlex);
         var campoId = $(this).attr('campoid');
         var id = $(this).prop('id');
         var valId = $(this).val();
@@ -374,38 +372,38 @@ $(document).ready(function () {
             propsAlt = propsAlt.slice(0, propsAlt.length);
             $(flex).removeClass('flexdatalist-selected');
             $(flex).val("");
-            $(idFlex + '-flexdatalist').val("");
-            $(idFlex + '-flexdatalist').removeClass('flexdatalist-selected');
+            divMain.find(idFlex + '-flexdatalist').val("");
+            divMain.find(idFlex + '-flexdatalist').removeClass('flexdatalist-selected');
             $.ajax({
                 url: $(flex).data('data'),
                 data: campoId + "=" + valId,
                 success: function (data) {
                     var result = data;//JSON.parse(data);
                     if (result.length > 0) {
-                        $('#' + id).tooltip('dispose');
+                        divMain.find('#' + id).tooltip('dispose');
                         for (i = 0; i < props.length; i++) {
                             var prop = props[i];
                             var propAlt = propsAlt[i];
                             if (propAlt === $(flex).attr('id')) {
-                                $('#' + propAlt + '-flexdatalist').val(result[0][prop]);
-                                $('#' + propAlt).attr('validado', true);
+                                divMain.find('#' + propAlt + '-flexdatalist').val(result[0][prop]);
+                                divMain.find('#' + propAlt).attr('validado', true);
                             } else {
-                                $('#' + propAlt).val(result[0][prop]);
-                                $('#' + propAlt).attr('validado', true);
+                                divMain.find('#' + propAlt).val(result[0][prop]);
+                                divMain.find('#' + propAlt).attr('validado', true);
                             }
                         }
-                        $(idFlex + '-flexdatalist').focus();
+                        divMain.find(idFlex + '-flexdatalist').focus();
                     } else {
                         for (i = 0; i < props.length; i++) {
                             var propAlt = propsAlt[i];
-                            $('#' + propAlt).val("");
+                            divMain.find('#' + propAlt).val("");
                         }
-                        $('#' + id).tooltip({
+                        divMain.find('#' + id).tooltip({
                             placement: "bottom",
                             title: 'Registro "' + valId + '" não encontrado'
                         });
-                        $('#' + id).val('');
-                        $('#' + id).focus();
+                        divMain.find('#' + id).val('');
+                        divMain.find('#' + id).focus();
                     }
                 }
             });
@@ -414,15 +412,27 @@ $(document).ready(function () {
 
     $('body').on('click', '[data-toggle="modal"]', function () {
         var modal = $($(this).data('target') + ' .modal-dialog');
-        var form = $('#form-registros');
+        var form = $($(this).data('form'));
+        var url = $(this).data('url');
         var action = $(this).data('action');
-        var url = form.prop('action') + '/' + action;
         var data = null;
         var arr = ['alterar', 'visualizar'];
-        if (arr.indexOf(action) > -1) {
+
+        if ((arr.indexOf(action) > -1) || (url !== "")) {
             data = form.serialize();
         }
-        modal.load(url, data);
+        url = url !== undefined ? url : form.prop('action') + '/' + action;
+        modal.load(url, data,function (responseText, textStatus, XMLHttpRequest){
+            if(textStatus === "error"){
+                var title = $('<h5></h5>').addClass('modal-title').html('Erro');
+                var buttonClose = $('<button></button>').addClass('close').attr('data-dismiss','modal').html('<span>&times;</span>');
+                var header = $('<div></div>').addClass('modal-header').append(title).append(buttonClose);
+                var body = $('<div></div>').addClass('modal-body').html(responseText);
+                var content = $('<div></div>').addClass('modal-content').addClass('modal-xl').append(header).append(body);
+                modal.html('');
+                modal.append(content);
+            }
+        });
     });
 
     $('body').on('hidden.bs.modal', '.modal', function () {
@@ -445,4 +455,65 @@ $(document).ready(function () {
         }
     });
 
+    $('body').on('click','[data-action="replicar"]',function(){
+        var from = $($(this).data('from')).clone(),
+            appendTo = $($(this).data('append'));
+        from.removeClass('sr-only');
+        from.find('.flexdatalist').each(function () {
+            console.log($(this));
+            var readonly = $(this).prop('readonly');
+            if (!readonly) {
+                $(this).flexdatalist();
+            }
+        });
+        appendTo.append(from.prop('outerHTML'));
+    });
+
+    $('body').on('click','[data-action="remover"]',function(){
+        var $this = $(this),
+            $campoId = $this.closest('.form-group').find('[name="'+$this.data('id')+'[]"]'),
+            valorId = "";
+        if($campoId.length > 0){
+            valorId = $campoId.val();
+        }
+        if(valorId === ""){
+            if($this.closest('.tab-pane').find('.form-group').length > 2){
+                $this.closest('.form-group').remove();
+            }
+        } else {
+            if(confirm($this.data('confirm'))){
+                var data = '_token='+$('[name="_token"]').val()+'&id[]='+valorId;
+                $.post($this.data('url'),data,function(data){
+                    switch (data.status) {
+                        case 'ERRO':
+                            $('#msg-fr-modal').html(data.msg);
+                            break;
+                        case 'OK' :
+                            if($this.closest('.tab-pane').find('.form-group').length <= 2){
+                                $this.closest('.form-group').find('[data-action="replicar"]').trigger('click');
+                            }
+                            $this.closest('.form-group').remove();
+                            break;
+                    }
+                });
+            }
+        }
+    });
+
+    $('body').on('show.bs.modal','.modal',function(e){
+        parent = $(this).parent().closest('.modal');                
+        if(parent.length > 0){
+            $(this).appendTo(parent.parent());
+        }
+    });
+
+    $('body').on('hidden.bs.modal','.modal',function(e){
+        if($(this).hasClass('main')){
+            $('.modal').each(function(){
+                if(!$(this).hasClass('main')){
+                    $(this).remove();
+                }
+            })
+        }
+    });
 });

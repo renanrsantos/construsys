@@ -1,4 +1,4 @@
-a.dropdown-toggle, .dropdown-menu > li > a{
+a.dropdown-toggle, .dropdown-menu > a, .dataTables_empty{
     cursor:pointer;
 }
 .dt-bootstrap{
@@ -48,6 +48,14 @@ li.active{
 .navbar{
     padding: 1px;
 }
-.nav-item:hover{
+
+.nav-item:hover, .dropdown-item:hover{
     background-color:#e2e6ea;
+}
+
+@media (min-width: 768px) {
+  .modal-xl {
+    width: 90%;
+   max-width:1200px;
+  }
 }

@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>{{config('app.cliente')}}</title>
-        
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         @include('layouts.assets')
         <?php $auth = Auth::check();?>
     </head>

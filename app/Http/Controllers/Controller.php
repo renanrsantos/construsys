@@ -83,7 +83,7 @@ abstract class Controller extends BaseController
         return $this->model;
     }
     
-    private function getUrl(){
+    protected function getUrl(){
         return $this->entidade.'/modulo/'.$this->modulo.'/rotina/'.$this->rotina;
     }
     
@@ -202,6 +202,14 @@ abstract class Controller extends BaseController
     
     protected abstract function getTitulo();
     
+    protected function getPropExtra($acao){
+        return [];
+    }
+
+    protected function getInputIdPai(){
+        return null;
+    }
+
     public function index(){
         if(!$this->rotina){
             return self::view('home');
@@ -210,31 +218,38 @@ abstract class Controller extends BaseController
         $btns = $this->getBtns();
         $ajax = false;
         $section = 'content';
-        $scrollY = $this->getHeightTable();
+        $main = $this->indexAsModal() ? '' : 'main';
+        $scrollY = $this->getHeightTable() - ($main ? 0 : 80);
         $titulo = $this->getTitulo();
         $modalSize = $this->getModalSize();
-        return self::view('layouts.table',compact('filters','btns','ajax','section','scrollY','titulo','modalSize'));
+        $view = $this->indexAsModal() ? 'layouts.table-modal' : 'layouts.table-index';
+        $acao = '';
+        $inputId = null;
+        if(!$main){
+            $inputId = $this->getInputIdPai();
+        }
+        return self::view($view,array_merge(compact('filters','btns','ajax','section','scrollY','titulo','modalSize','acao','main','inputId'),$this->getPropExtra('index')));
     }
     
     public function novo(){
         $record = $this->getModel();
         $record->processaNovo();
         $acao = 'Inserir';
-        return self::view($this->modulo.'.form-'.$this->rotina,compact('record','acao'));
+        return self::view($this->modulo.'.form-'.$this->rotina,array_merge(compact('record','acao'),$this->getPropExtra('novo')));
     }
     
     public function alterar(){
         $id = $this->request->get('id');
         $record = $this->getModel()->find($id[0]);
         $acao = 'Alterar';
-        return self::view($this->modulo.'.form-'.$this->rotina,compact('record','acao'));
+        return self::view($this->modulo.'.form-'.$this->rotina,array_merge(compact('record','acao'),$this->getPropExtra('alterar')));
     }
     
     public function visualizar(){
         $id = $this->request->get('id');
         $record = $this->getModel()->find($id[0]);
         $acao = 'Visualizar';
-        return self::view($this->modulo.'.form-'.$this->rotina,compact('record','acao'));
+        return self::view($this->modulo.'.form-'.$this->rotina,array_merge(compact('record','acao'),$this->getPropExtra('visualizar')));
     }
     
     public function data(){
@@ -268,7 +283,7 @@ abstract class Controller extends BaseController
             DB::commit();
         } catch (\Exception $ex2){
             DB::rollBack();
-            $response = $this->getResponseAsError('[Problema ao inserir o registro]'.$msgRelacao, $ex2->getMessage());
+            $response = $this->getResponseAsError('[Problema ao inserir o registro]'.$msgRelacao.$this->getModel(), $ex2->getMessage());
         }
         return $response;
     }
@@ -284,6 +299,7 @@ abstract class Controller extends BaseController
                 throw new Exception();
             }
             $model->update($this->request->toArray());
+            $this->model = $model;
             try{
                 $this->processaAlterarRelacao();
             } catch (Exception $ex1) {
@@ -361,4 +377,7 @@ abstract class Controller extends BaseController
         // implementar caso haja registros filhos em uma mesma tela
     }
     
+    protected function indexAsModal(){
+        return false;
+    }
 }

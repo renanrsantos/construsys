@@ -1,5 +1,5 @@
 <?php
-    $disableAll = ($acao == 'Visualizar');
+    $disableAll = !isset($disableAll) ? ($acao == 'Visualizar') : $disableAll;
     $table = Request::segment(3) . '-' . Request::segment(5);
 ?>
 <div class="modal-content">
@@ -15,9 +15,11 @@
         </div>
     </div>
     <div class="modal-footer">
+        @section('footer')
         <div class="{{$disableAll ? 'disable-all' : 'enable-all'}}">
             @include('layouts.buttons-form',['table'=>'fr-'.$table])
         </div>
+        @show
     </div>
 </div>
 {{Form::close()}}

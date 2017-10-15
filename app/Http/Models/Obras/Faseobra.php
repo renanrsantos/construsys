@@ -9,7 +9,7 @@ use App\Http\Models\Model;
  *
  * @author Renan Rodrigues
  */
-class Fasobra extends Model{
+class Faseobra extends Model{
     protected $fillable = [
         'idfaseobra','idobra','fsoporcentagem','fsodatainicio','fsoobservacao','fsostatus','idfase'
     ];

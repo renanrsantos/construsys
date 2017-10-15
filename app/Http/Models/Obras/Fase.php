@@ -13,9 +13,9 @@ class Fase extends Model{
         'idfase','fsedescricao',
     ];
     
-    public function getFases(){
-        $fases = [];
-        foreach($this->all() as $fase){
+    public static function getFases(){
+        $fases = [''=>''];
+        foreach(self::all() as $fase){
             $fases[$fase->idfase] = $fase->fsedescricao;
         }
         return $fases;
