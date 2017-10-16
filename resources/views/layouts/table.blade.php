@@ -15,7 +15,7 @@
         {{Form::buttonGroup([
             Form::button('Inserir',['color'=>'primary','icon'=>'fa fa-plus','data-toggle'=>'modal','data-target'=>'#modal-fr-'.$table,'data-form'=>'#fr-registros-'.$table,'data-action'=>'novo']),
             Form::button('Alterar',['color'=>'primary','icon'=>'fa fa-pencil','data-toggle'=>'modal','data-target'=>'#modal-fr-'.$table,'data-form'=>'#fr-registros-'.$table,'class'=>'btn-single','data-action'=>'alterar']),
-            Form::button('Excluir',['color'=>'primary','icon'=>'fa fa-trash','data-toggle'=>'modal','data-target'=>'#modal-fr-'.$table,'data-form'=>'#fr-registros-'.$table,'class'=>'btn-excluir btn-multi']),
+            Form::button('Excluir',['color'=>'primary','icon'=>'fa fa-trash','data-form'=>'#fr-registros-'.$table,'class'=>'btn-excluir btn-multi']),
             Form::button('Visualizar',['color'=>'primary','icon'=>'fa fa-eye','data-toggle'=>'modal','data-target'=>'#modal-fr-'.$table,'data-form'=>'#fr-registros-'.$table,'class'=>'btn-single','data-action'=>'visualizar'])
         ])}}
         @if($btns)

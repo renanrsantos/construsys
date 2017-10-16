@@ -1,8 +1,18 @@
-<?php
+@extends('layouts.modal')
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+@section('header')
+	Produto
+@endsection
 
+@section('body')
+	{{
+		Form::hidden('idproduto',$record->idproduto)
+	}}
+	{{
+		Form::formGroup([
+			Html::col(
+				''
+			,'2')
+		])
+	}}
+@endsection

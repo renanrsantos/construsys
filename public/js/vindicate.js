@@ -51,8 +51,13 @@ function vindicateForm(options) {
                 message: "Insira uma data válida. (DD-MM-AAAA)"
             },
             decimal: {
-                regex: /^\d+\.\d{0,2}$/,
-                message: "Insira um decimal válido. (xxx.xx)"
+                regex: /^(\d+\.\d{0,2})|(\d)$/,
+                message: "Insira um decimal válido. (xxx.xx)",
+                mask : {
+                    mask: '#0.00',
+                    placeholder : '0.00',
+                    reverse : true
+                }
             },
             email: {
                 regex: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/,
@@ -63,12 +68,20 @@ function vindicateForm(options) {
                 message: "Insira um número válido. (0-9)"
             },
             phone: {
-                regex: /^([0-9]{2}[-\s\.]?[0-9]{4}[-\s\.]?[0-9]{4})$/,
-                message: "Insira um número de telefone válido. (xx-xxxx-xxxx)"
+                regex: /^(\([0-9]{2}\)[-\s\.]?[0-9]{4}[-\s\.]?[0-9]{4})$/,
+                message: "Insira um número de telefone válido. (xx) xxxx-xxxx",
+                mask : {
+                    mask : '(00) 0000-0000',
+                    placeholder: '(00) 0000-0000'
+                }
             },
             cellphone: {
-                regex: /^([0-9]{2}[-\s\.]?[0-9]{5}[-\s\.]?[0-9]{4})$/,
-                message: "Insira um número de celular válido. (xx-xxxxx-xxxx)"
+                regex: /^(\([0-9]{2}\)[-\s\.]?[0-9]{1}\.[-\s\.]?[0-9]{4}[-\s\.]?[0-9]{4})$/,
+                message: "Insira um número de celular válido. (xx) x.xxxx-xxxx",
+                mask : {
+                    mask: '(00) 0.0000-0000',
+                    placeholder: '(00) 0.0000-0000'
+                }
             },
             time: {
                 regex: /[0-9]{1,2}(\:[0-9]{0,2})?/,
@@ -77,6 +90,33 @@ function vindicateForm(options) {
             url: {
                 regex: /^\d+$/,
                 message: "Insira uma url válida. (www.website.com/example)"
+            },
+            cpf: {
+                regex : /^([0-9]{3}[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{2})$/,
+                message: "Insira um cpf válido. (xxx.xxx.xxx-xx)",
+                mask : {
+                    mask : '000.000.000-00',
+                    placeholder : '000.000.000-00', 
+                    reverse: true
+                }
+            },
+            cnpj: {
+                regex : /^([0-9]{2}[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{3}[-\s\/]?[0-9]{4}[-\s\-]?[0-9]{2})$/,
+                message: "Insira um cnpj válido. (xx.xxx.xxx/xxxx-xx)",
+                mask : {
+                    mask : '00.000.000/0000-00', 
+                    placeholder : '00.000.000/0000-00', 
+                    reverse: true
+                }                
+            },
+            cep : {
+                regex : /^([0-9]{2}[-\s\.]?[0-9]{3}[-\s\-]?[0-9]{3})$/, 
+                message : 'Insira um cep válido',
+                mask : {
+                    mask : '00.000-000',
+                    placeholder : '00.000-000',
+                    reverse : true
+                }
             }
         }
     }, options);
@@ -136,6 +176,12 @@ function vindicateField($element,$form, formId, options) {
     this.minLength = false;
     this.matchValue = false;
     this.matchField = false;
+    this.setMask = function(){
+        var maskOptions = options.formats[this.format].mask;
+        if(maskOptions){
+            this.element.mask(maskOptions.mask,maskOptions);
+        }
+    };
     // Determine type of input field
     if (this.element.is(":text") || this.element.is("textarea") || this.element.is("[type=email]") 
         || this.element.is("[type=date]")|| this.element.is("[type=password]")) {
@@ -182,6 +228,7 @@ function vindicateField($element,$form, formId, options) {
                 this.format = input_option.substring(7, input_option.length);
                 this.options["formatRegex"] = options.formats[this.format].regex;
                 this.options["formatMessage"] = options.formats[this.format].message;
+                this.setMask();
             } else if (input_option.substring(0, 6) === "group:") {
                 this.group = input_option.substring(6, input_option.length);
                 this.element.data("vindicate-group", this.group);
@@ -302,14 +349,11 @@ function vindicateField($element,$form, formId, options) {
     };
 
     this.validateFormat = function (options) {
-        strict_validation = ["alpha", "alphanumeric", "creditcard", "date", "decimal", "email", "numeric", "phone", "cellphone", "time", "url"];
-        for (var index in strict_validation) {
-            format = strict_validation[index];
-            if (this.format === format && this.element.val() !== "") {
-                if (!this.element.val().match(options.formats[format].regex)) {
-                    this.validationHardFail = true;
-                    this.validationMessage = options.formats[format].message;
-                }
+        format = options.formats[this.format];
+        if (format && this.element.val() !== "") {
+            if (!this.element.val().match(format.regex)) {
+                this.validationHardFail = true;
+                this.validationMessage = format.message;
             }
         }
         if (this.format === "custom") { // THIS IS NOT YET IMPLEMENTED

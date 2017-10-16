@@ -3,7 +3,7 @@ Form::formGroup([
     Form::hidden('iditemdepesa[]',$item ? $item->iditemdepesa : ''),
     Html::col(
         Form::validate(
-            Form::inputConsulta('cadastros','produto',['value-id'=> $item ? $item->produto->idproduto : '','value'=>$item ? $item->produto->prddescricao : ''])
+            Form::inputConsulta('cadastros','produto',['value-id'=> $item ? $item->produto->idproduto : '','value'=>$item ? $item->produto->prddescricao : '','class'=>'produto','data-main'=>'.form-group'],['visible'=>'idproduto[],prddescricao[],unmsigla,itdvalorunitario[]','id'=>'idproduto[]'])
         )
     ,'6'),
     Html::col(
@@ -23,7 +23,7 @@ Form::formGroup([
         Html::tag('div',
             Form::buttonGroup([
                 Form::button('',['icon'=>'fa fa-minus','color'=>'info','title'=>'Remover','data-action'=>'remover','class'=>$item ? 'sr-only' : '']),
-                Form::button('',['icon'=>'fa fa-plus','color'=>'info','title'=>'Adicionar','data-action'=>'replicar','data-from'=>'.itemdespesa-pattern','data-append'=>'#itens'])
+                Form::button('',['icon'=>'fa fa-plus','color'=>'info','title'=>'Adicionar','data-action'=>'replicar','data-from'=>'.itemdespesa-pattern','data-append'=>'#itens','datalist'=>'true'])
             ])
         ,['class'=>'text-center'])
     ,'2')

@@ -8,7 +8,7 @@ class Model extends \Illuminate\Database\Eloquent\Model{
     
     public function __construct(array $attributes = array()) {
         parent::__construct($attributes);
-        $this->incrementing = false;
+        $this->incrementing = true;
         $this->timestamps = false;
         
         $class = explode('\\', strtolower(get_class($this)));
@@ -52,4 +52,17 @@ class Model extends \Illuminate\Database\Eloquent\Model{
         }
         throw new \Exception('Campo ativo não determinado.');
     }
+
+    public static function updateOrCreate($attributes){
+        $class = self::class;
+        $model = new $class($attributes);
+        $keyName = $model->getKeyName(); 
+        if($model->getKey()){
+            $model = $model->find($model->getKey())->update($attributes);
+        } else {
+            $model = $model->create($attributes);
+        }
+        return $model;
+    }
+
 }

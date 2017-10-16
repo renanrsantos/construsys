@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Models\Cadastros\Pessoa;
 use App\Http\Models\Cadastros\Pessoacontato;
 use App\Http\Models\Cadastros\Pessoaendereco;
+use App\Http\Models\Cadastros\Cliente;
+use App\Http\Models\Cadastros\Fornecedor;
 
 class PessoaController extends Controller{
     
@@ -42,11 +44,25 @@ class PessoaController extends Controller{
             $arr = array_merge(['idpessoa'=>$idpessoa],$this->request->toArray());
             Pessoaendereco::create($arr);
         }
+        if($this->request->cliente){
+            Cliente::create(['idpessoa'=>$idpessoa]);
+        }
+        if($this->request->fornecedor){
+            // Fornecedor::create(['idpessoa'=>$idpessoa]);
+        }
+        if($this->request->funcionario){
+            // Fornecedor::create(['idpessoa'=>$idpessoa]);
+        }
     }
     
     protected function processaAlterarRelacao() {
         $this->processaAlterarContato();
         $this->processaAlterarEndereco();
+
+        if($this->request->cliente && !Cliente::find($this->request->idpessoa)){
+            Cliente::create(['idpessoa'=>$this->request->idpessoa]);
+        } 
+
     }
     
     protected function excluirRelacao() {

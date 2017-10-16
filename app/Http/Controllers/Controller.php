@@ -26,7 +26,9 @@ abstract class Controller extends BaseController
 //    public $acao;
     
     /** @var Model */
-    private $model;
+    protected $model;
+
+    protected $id;
 
     public function __construct() {
         $this->entidade = self::getEntidade();
@@ -273,17 +275,18 @@ abstract class Controller extends BaseController
         try{
             DB::beginTransaction();
             $this->model = $this->getModel()->create($this->request->toArray());
+            $this->id = $this->model->getKey();
             try{
                 $this->processaNovoRelacao();
             } catch (\Exception $ex1) {
                 $msgRelacao = "\n".'[Problema ao inserir o(s) registro(s) vinculado(s)]';
-                throw new Exception($ex1->getMessage());
+                throw new \Exception($ex1->getMessage());
             }
             $response = $this->getResponseAsSuccess('Registro inserido com sucesso.');
             DB::commit();
         } catch (\Exception $ex2){
             DB::rollBack();
-            $response = $this->getResponseAsError('[Problema ao inserir o registro]'.$msgRelacao.$this->getModel(), $ex2->getMessage());
+            $response = $this->getResponseAsError('[Problema ao inserir o registro]'.$msgRelacao, $ex2->getMessage());
         }
         return $response;
     }

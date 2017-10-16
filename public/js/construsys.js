@@ -64,6 +64,20 @@ function atualizaBotoes(table = null) {
     }
 }
 
+function formataCampoCpfCnpj(select){
+    var form = select.closest('form').vindicate('get'),
+        field = form.findById('pescpfcnpj');
+    switch(select.val()){
+        case '1' :
+            field.format = 'cpf';
+            break;
+        case '2':
+            field.format = 'cnpj';
+            break;
+    }
+    field.setMask();
+}
+
 function montaDataTable(table,data = '') {
     var url = table.attr('url');
     $.getJSON(url + '?columns=true', function (result) {
@@ -81,6 +95,7 @@ function carregaDados(table, data = '') {
         ajax: url,
         scrollY: table.attr("scrollY")
     });
+    atualizaBotoes(table);
 }
 
 function formataValorCampo(valor, tipo) {
@@ -297,7 +312,7 @@ $(document).ready(function () {
         });
     });
 
-    $('.btn-excluir').on('click', function () {
+    $('body').on('click', '.btn-excluir',function (e) {
         if (botaoHabilitado($(this))) {
             if (confirm('Deseja realmente excluir o(s) registro(s) selecionado(s)?')) {
                 var form = $($(this).data('form'));
@@ -307,10 +322,16 @@ $(document).ready(function () {
                             $('#msg-global').html(data.msg);
                             break;
                         case 'OK' :
-                            window.location.href = data.redirect;
+                            var table = form.find('table');
+                            if(table.length > 0){
+                                carregaDados(table,form.serialize());
+                            }
                             break;
                     }
                 });
+            } else {
+                e.preventDefault();
+                e.stopPropagation();
             }
         }
     });
@@ -324,7 +345,7 @@ $(document).ready(function () {
     //     montaDataTable(table);
     // });
 
-    $('#btn-filtrar').on('click', function () {
+    $('body').on('click', '#btn-filtrar',function () {
         var btn = setBtnLoading($(this), true);
         var sTable = $(this).attr('aria-controls');
         var table = $('#' + sTable);
@@ -341,7 +362,8 @@ $(document).ready(function () {
     $('body').on('select:flexdatalist', '.flexdatalist', function (item, options) {
         var props = $(this).data('visible-properties');
         var propsAlt = $(this).data('visible-properties-alt');
-        var divMain = $(this).closest('.row'); 
+        var divMain = $(this).closest($(this).data('main')); 
+        console.log(divMain);
         props = props.slice(0, props.length);
         propsAlt = propsAlt.slice(0, propsAlt.length);
         for (i = 0; i < props.length; i++) {
@@ -358,7 +380,7 @@ $(document).ready(function () {
     });
 
     $('body').on('blur', '.flexdatalist-id', function () {
-        var divMain = $(this).closest('.row');
+        var divMain = $(this).closest($(this).data('main'));
         var idFlex = $(this).data('target');
         var flex = divMain.find(idFlex);
         var campoId = $(this).attr('campoid');
@@ -459,14 +481,10 @@ $(document).ready(function () {
         var from = $($(this).data('from')).clone(),
             appendTo = $($(this).data('append'));
         from.removeClass('sr-only');
-        from.find('.flexdatalist').each(function () {
-            console.log($(this));
-            var readonly = $(this).prop('readonly');
-            if (!readonly) {
-                $(this).flexdatalist();
-            }
-        });
         appendTo.append(from.prop('outerHTML'));
+        if($(this).attr('datalist')){
+            appendTo.find('.flexdatalist').last().flexdatalist();
+        }
     });
 
     $('body').on('click','[data-action="remover"]',function(){
@@ -514,6 +532,50 @@ $(document).ready(function () {
                     $(this).remove();
                 }
             })
+        }
+    });
+
+    $('body').on('change','[name="pestipo"]',function(){
+        formataCampoCpfCnpj($(this));
+    });
+
+    $('body').on('click','[data-toggle="submit"]' ,function () {
+        var form = $(this).closest('form');
+        var validado = form.vindicate("validate");
+        form.prop('submited',true);
+        if (validado) {
+            var url = form.prop('action');
+            var data = form.serialize();
+            $.post(url, data, function (data) {
+                switch (data.status) {
+                    case 'ERRO':
+                        form.find('#msg-fr-modal').html(data.msg);
+                        break;
+                    case 'OK' :
+                        form.closest('.modal').modal('hide');
+                        table = $('#'+form.attr('id').replace('fr-',''));
+                        formData = $('#'+form.attr('id').replace('fr-','fr-registros-'));
+                        carregaDados(table,formData.serialize());
+                        break;
+                }
+            });
+        } else {
+            var firstInvalid = form.vindicate('get').firstInvalid.element;
+            var closest = firstInvalid.closest('.tab-pane');
+            if(closest){
+                $('.nav a[href="#' + closest.attr('id') + '"]').tab('show');
+            }
+            firstInvalid.focus();
+        }
+    });
+
+    $('body').on('input','[data-function="vindicate"]',function(){
+        var form = $(this).closest('form');
+        if(form.prop('submited')){
+            form = form.vindicate("get");
+            var id = $(this).attr("id");
+            var field = form.findById(id);
+            field.validate(form.options);
         }
     });
 });

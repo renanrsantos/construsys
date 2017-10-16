@@ -55,4 +55,12 @@ class Pessoa extends Model{
         }
         return new Pessoaendereco(); 
     }
+
+    public function cliente(){
+        return $this->hasOne(Cliente::class,'idpessoa');
+    }
+
+    public function fornecedor(){
+        return $this->hasOne(Fornecedor::class,'idpessoa');
+    }
 }

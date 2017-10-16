@@ -64,7 +64,7 @@ class ObraController extends Controller{
         foreach ($this->getModel()->comodos as $comodo){
             $comodo->delete();
         }
-        foreach ($this->getModel()->fases as $fase){
+        foreach ($this->getModel()->fasesObra as $fase){
             $fase->delete();
         }
     }
@@ -76,12 +76,13 @@ class ObraController extends Controller{
         $comtamanho = $this->request->get('comtamanho');
         $comodos = [];
         for($i = 0; $i < count($idcomodo); $i++){
-            $comodo = ['idcomodo'=>$idcomodo[$i],'idtipocomodo'=>$idtipocomodo[$i],'comdescricao'=>$comdescricao[$i],'comtamanho'=>$comtamanho[$i],'idobra'=>$this->getModel()->idobra];
-            if($comodo['idcomodo']){
-                $altcomodo = Comodo::find($comodo['idcomodo']);
-                $altcomodo->update($comodo);
-            } else if($comodo['idtipocomodo']){
-                Comodo::create($comodo);
+            $comodo = ['idcomodo'=>$idcomodo[$i],'idtipocomodo'=>$idtipocomodo[$i],'comdescricao'=>$comdescricao[$i],'comtamanho'=>$comtamanho[$i],'idobra'=>$this->model->idobra];
+            if($comodo['idtipocomodo']){
+                if($comodo['idcomodo']){
+                    Comodo::find($comodo['idcomodo'])->update($comodo);
+                } else {
+                    Comodo::create($comodo);
+                }
             }
         }
     }
@@ -91,12 +92,17 @@ class ObraController extends Controller{
         $idfase = $this->request->get('idfase');
         $fsoobservacao = $this->request->get('fsoobservacao');
         $fsodatainicio = $this->request->get('fsodatainicio');
+        $fsodataprevistafim = $this->request->get('fsodataprevistafim');
         $fsoporcentagem = $this->request->get('fsoporcentagem');
         $fsostatus = $this->request->get('fsostatus');
         for($i = 0; $i < count($idfaseobra); $i++){
-            $faseobra = ['idfaseobra'=>$idfaseobra[$i],'idfase'=>$idfase[$i],'fsoobservacao'=>$fsoobservacao[$i],'fsodatainicio'=>$fsodatainicio[$i],'fsoporcentagem'=>$fsoporcentagem[$i],'fsostatus'=>$fsostatus[$i],'idobra'=>$this->getModel()->idobra];
+            $faseobra = ['idfaseobra'=>$idfaseobra[$i],'idfase'=>$idfase[$i],'fsoobservacao'=>$fsoobservacao[$i],'fsodataprevistafim'=>$fsodataprevistafim[$i],'fsodatainicio'=>$fsodatainicio[$i],'fsostatus'=>$fsostatus[$i],'idobra'=>$this->model->idobra];
             if($faseobra['idfase']){
-                Faseobra::updateOrCreate($faseobra);
+                if($faseobra['idfaseobra']){
+                    Faseobra::find($faseobra['idfaseobra'])->update($faseobra);
+                } else {
+                    Faseobra::create($faseobra);
+                }
             }
         }
     }

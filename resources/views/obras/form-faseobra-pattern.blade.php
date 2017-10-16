@@ -30,7 +30,7 @@ Form::formGroup([
     		Form::text('fsoporcentagem[]',$fase ? $fase->fsoporcentagem : ''),
     		Html::tag('small',Form::label('fsoporcentagem[]','% da Obra'))
     	)
-    ,'1'),
+    ,'1 sr-only'),
     Html::col(
     	Form::validate(
     		Form::select('fsostatus[]',$record->getStatusFase(),$fase ? $fase->fsostatus : ''),

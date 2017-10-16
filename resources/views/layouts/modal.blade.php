@@ -23,4 +23,7 @@
     </div>
 </div>
 {{Form::close()}}
-@include('scripts.modal')
+
+@section('scripts')
+    @include('scripts.modal')
+@show

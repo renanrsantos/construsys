@@ -29,8 +29,19 @@
                     Form::text('pesrgie',$record->pesrgie,['data-vindicate'=>'required']),
                     Form::label('pesrgie','RG / IE')
                 )
-            ,'5')            
-        ])
+            ,'4')
+        ]) .
+        Form::formGroup([
+            Html::col(
+                Form::checkbox('cliente',1,$record->cliente,['label'=>'Cliente'])
+            ,'4'),
+            Html::col(
+                Form::checkbox('fornecedor',1,false,['label'=>'Fornecedor'])
+            ,'4'),
+            Html::col(
+                Form::checkbox('funcionario',1,false,['label'=>'Funcionário'])
+            ,'4')          
+        ])            
     ],
     ['label'=>'Endereço',
      'link'=>'tab-endereco',
@@ -45,7 +56,7 @@
             ,'auto'),
             Html::col(
                 Form::validate(
-                    Form::text('peecep',$record->endereco()->peecep),
+                    Form::text('peecep',$record->endereco()->peecep,['data-vindicate'=>'format:cep']),
                     Form::label('peecep','CEP')
                 )
             ,'3'),
@@ -100,19 +111,19 @@
         Form::formGroup([
             Html::col(
                 Form::validate(
-                    Form::text('pectelefone',$record->contato(1)->peccontato),
+                    Form::text('pectelefone',$record->contato(1)->peccontato,['data-vindicate'=>'format:phone']),
                     Form::label('pectelefone','Telefone')
                 )
             ,'3'),
             Html::col(
                 Form::validate(
-                    Form::text('peccelular',$record->contato(2)->peccontato),
+                    Form::text('peccelular',$record->contato(2)->peccontato,['data-vindicate'=>'format:cellphone']),
                     Form::label('peccelular','Celular')
                 )
             ,'3'),
             Html::col(
                 Form::validate(
-                    Form::text('pecemail',$record->contato(3)->peccontato),
+                    Form::text('pecemail',$record->contato(3)->peccontato,['data-vindicate'=>'format:email']),
                     Form::label('pecemail','E-mail')
                 )
             ,'6')

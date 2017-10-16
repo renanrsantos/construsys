@@ -11,10 +11,10 @@ use App\Http\Models\Model;
 class Produto extends Model{
     protected $fillable = [
         'idproduto','prddescricao','prddescdet','prdcodigobarras','idunidademedida',
-        'idcategoriaproduto','idsubcategoriaproduto'
+        'idcategoriaproduto','idsubcategoriaproduto','prdvalorunitario'
     ];
     
-    public $consulta = ['visible'=>'idproduto,prddescricao,unmsigla',
+    public $consulta = ['visible'=>'idproduto,prddescricao,unmsigla,prdvalorunitario',
         'search'=>'prddescricao,prddescdet',
         'text'=>'prddescricao',
         'label'=>'Produto',

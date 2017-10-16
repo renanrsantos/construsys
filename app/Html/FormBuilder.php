@@ -164,7 +164,7 @@ class FormBuilder extends \Collective\Html\FormBuilder {
         $campos = explode(',', $campos);
         $retorno = [];
         foreach ($campos as $campo) {
-            $retorno[] = '"' . $campo . '"';
+            $retorno[] = '"' . str_replace('[]','\\\[\\\]', $campo) . '"';
         }
         return implode(',', $retorno);
     }
@@ -209,6 +209,9 @@ class FormBuilder extends \Collective\Html\FormBuilder {
             $attributesId['data-vindicate'] = $attributes['data-vindicate']. '|format:numeric';
             unset($attributes['data-vindicate']);
         } 
+        if(!isset($attributes['data-main'])){
+            $attributes['data-main'] = '.row';
+        }
         $colId = isset($attributes['colid']) ? $attributes['colid'] : '3';
         $colText = isset($attributes['coltext']) ? $attributes['coltext'] : '9';
         $inputId = $this->html->tag('div',$this->validate($this->input('text', $id, $attributes['value-id'], $attributesId),$labelId),['class'=>'col-'.$colId]);

@@ -11,7 +11,7 @@ use App\Http\Models\Cadastros\Cliente;
  */
 class Obra extends Model{
     protected $fillable = [
-        'idobra','idcliente','idorcamento','obrtamanho','obrdescricao','obrdatainicio',
+        'idobra','idcliente','idorcamento','obrtamanho','obrtipo','obrdescricao','obrdatainicio',
         'obrprevisao','obrvalororcado','obrtipoprevisao'
     ];
     
@@ -53,6 +53,13 @@ class Obra extends Model{
             1=>'Dia(s)',
             2=>'Mês(es)',
             3=>'Ano(s)'
+        ];
+    }
+    public function getTiposObra(){
+        return [
+            ''=>'',
+            1=>'Construção',
+            2=>'Reforma'
         ];
     }
 
