@@ -21,4 +21,12 @@ class Despesaobra extends Model{
     public function itens(){
     	return $this->hasMany(Itemdespesa::class,'iddespesaobra');
     }
+    
+    public function getTipoDespesa(){
+        return $this->getTiposDespesa()[$this->dsotipo];
+    }
+    
+    public function getTiposDespesa(){
+        return [''=>'',1=>'Manual',2=>'Por Item'];
+    }
 }

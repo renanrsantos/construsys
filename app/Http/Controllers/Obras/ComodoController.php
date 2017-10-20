@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Obras;
 
-use App\Http\Controllers\Controller;
 /**
  * Description of ComodoController
  *
  * @author Renan Rodrigues
  */
-class ComodoController extends Controller{
+class ComodoController extends DependenciaObraController{
     
     protected function getColumns() {
         return [
@@ -30,8 +29,8 @@ class ComodoController extends Controller{
         return 'Cômodos';
     }
     
-    protected function getRecords() {
-        return parent::getRecords()->where('idobra',$this->request->idobra);
+    protected function getModalSize() {
+        return 'modal-lg';
     }
 
 }

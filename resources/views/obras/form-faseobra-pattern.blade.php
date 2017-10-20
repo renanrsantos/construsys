@@ -3,7 +3,7 @@ Form::formGroup([
     Form::hidden('idfaseobra[]',$fase ? $fase->idfaseobra : ''),
     Html::col(
     	Form::validate(
-    		Form::select('idfase[]',$record->getFases(),$fase ? $fase->idfase : ''),
+    		Form::select('idfase[]',App\Http\Models\Obras\Fase::getFases(),$fase ? $fase->idfase : ''),
     		Form::label('idfase[]','Fase')
     	)
     ,'auto'),
@@ -33,7 +33,7 @@ Form::formGroup([
     ,'1 sr-only'),
     Html::col(
     	Form::validate(
-    		Form::select('fsostatus[]',$record->getStatusFase(),$fase ? $fase->fsostatus : ''),
+    		Form::select('fsostatus[]',App\Http\Models\Obras\Faseobra::getStatusFase(),$fase ? $fase->fsostatus : ''),
     		Form::label('fsostatus[]','Status')
     	)
     ,'auto'),

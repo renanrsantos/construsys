@@ -178,18 +178,17 @@ $.extend(true, $.fn.dataTable.defaults, {
             "<'row'<'col-9'<'float-left'p>><'col-auto'l><'col-auto'i>>",
     "destroy": true,
     "columnDefs": [
-        {"targets": 0,
+        {
+            "targets": 0,
             "sorting": false,
             "width": "1%",
-            "orderable": false}
+            "orderable": false
+        }
     ],
     "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Todos"]],
     "order": [],
     "searching": false,
     "sPaginationType": "full_numbers",
-    "initComplete": function (settings, json) {
-//            formataCampoTotalRegistros();
-    },
     "language": {
         "sEmptyTable": "Não há registros",
         "sInfo": "Total <b>_TOTAL_</b>",
@@ -223,6 +222,7 @@ $(document).ready(function () {
     $(document).keydown(function (event) {
         ctrl = event.keyCode === 17;
     });
+    
     $(document).keyup(function (event) {
         ctrl = false;
     });
@@ -233,7 +233,7 @@ $(document).ready(function () {
     });
 
     $('body').on('click', 'tr[role="row"]', function (e) {
-        var td = $(this).children()[0];
+        var td = $(this).find('td').eq(0);
         var check = $(td).children();
         if(check.prop('id') !== 'chk-all'){
             var checked = (clickChk) ? !check.prop('checked') : check.prop('checked');
@@ -293,7 +293,6 @@ $(document).ready(function () {
     $('body').on('click', '#btn-validacep', function () {
         var cep = document.getElementById('pencep[]').value;
         var sUrl = 'https://viacep.com.br/ws/' + cep + '/json/';
-        console.log(sUrl);
         $.ajax({
             url: sUrl,
             success: function (data) {
@@ -340,11 +339,6 @@ $(document).ready(function () {
         $(this).attr('value', ($(this).prop('checked') ? 1 : 0));
     });
 
-    // $('table').each(function () {
-    //     var table = $(this);
-    //     montaDataTable(table);
-    // });
-
     $('body').on('click', '#btn-filtrar',function () {
         var btn = setBtnLoading($(this), true);
         var sTable = $(this).attr('aria-controls');
@@ -363,7 +357,6 @@ $(document).ready(function () {
         var props = $(this).data('visible-properties');
         var propsAlt = $(this).data('visible-properties-alt');
         var divMain = $(this).closest($(this).data('main')); 
-        console.log(divMain);
         props = props.slice(0, props.length);
         propsAlt = propsAlt.slice(0, propsAlt.length);
         for (i = 0; i < props.length; i++) {
@@ -377,14 +370,17 @@ $(document).ready(function () {
     $('body').on('input', '.flexdatalist-id', function () {
         $(this).attr('validado', false);
         $(this).tooltip('dispose');
+        var divMain = $($(this).data('main'));
+        divMain.find($(this).data('target')).attr('tabindex', -1);
+        divMain.find($(this).data('target')+'-flexdatalist').attr('tabindex', -1);
     });
 
     $('body').on('blur', '.flexdatalist-id', function () {
         var divMain = $(this).closest($(this).data('main'));
         var idFlex = $(this).data('target');
         var flex = divMain.find(idFlex);
-        var campoId = $(this).attr('campoid');
-        var id = $(this).prop('id');
+        var campoId = $(this).attr('campoid').replace('[]','\\[\\]');
+        var id = $(this).prop('id').replace('[]','\\[\\]');
         var valId = $(this).val();
         var validado = $(this).attr('validado');
         if (valId !== "" && (validado !== true && validado !== 'true')) {
@@ -407,14 +403,14 @@ $(document).ready(function () {
                             var prop = props[i];
                             var propAlt = propsAlt[i];
                             if (propAlt === $(flex).attr('id')) {
-                                divMain.find('#' + propAlt + '-flexdatalist').val(result[0][prop]);
+                                divMain.find('.flexdatalist').flexdatalist('value',result[0][prop]);
                                 divMain.find('#' + propAlt).attr('validado', true);
                             } else {
                                 divMain.find('#' + propAlt).val(result[0][prop]);
                                 divMain.find('#' + propAlt).attr('validado', true);
                             }
                         }
-                        divMain.find(idFlex + '-flexdatalist').focus();
+                        // divMain.find(idFlex + '-flexdatalist').focus();
                     } else {
                         for (i = 0; i < props.length; i++) {
                             var propAlt = propsAlt[i];
@@ -459,14 +455,14 @@ $(document).ready(function () {
 
     $('body').on('hidden.bs.modal', '.modal', function () {
         $(this).find('.modal-dialog').html('');
+        if($(this).hasClass('main')){
+            $('table').each(function(){
+                if($(this).prop('id')){
+                   carregaDados($(this));
+                }
+            });
+        }
     });
-
-//    $('body').on('hide.bs.modal','.modal', function(e) {
-//        if(!confirm('Existem informações que ainda não foram salvas, deseja realmente cancelar?')){
-//            e.preventDefault();
-//        }
-//    });
-
 
     $('body').on('keydown', 'input[name="valor-filtro"]', function (e) {
         if (e.which === 13) {
@@ -525,13 +521,13 @@ $(document).ready(function () {
         }
     });
 
-    $('body').on('hidden.bs.modal','.modal',function(e){
+    $('body').on('hidden.bs.modal','.modal',function(){
         if($(this).hasClass('main')){
             $('.modal').each(function(){
                 if(!$(this).hasClass('main')){
                     $(this).remove();
                 }
-            })
+            });
         }
     });
 
@@ -569,7 +565,7 @@ $(document).ready(function () {
         }
     });
 
-    $('body').on('input','[data-function="vindicate"]',function(){
+    $('body').on('input change','[data-function="vindicate"]',function(){
         var form = $(this).closest('form');
         if(form.prop('submited')){
             form = form.vindicate("get");

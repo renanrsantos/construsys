@@ -68,12 +68,12 @@
         [
           'link'=>'fases',
           'label'=>'Fases da Obra',
-          'tab'=>View::make('obras.form-faseobra',['record'=>$record])->render()
+          'tab'=>View::make('obras.form-faseobra-alt',['record'=>$record])->render()
         ],
         [
           'link'=>'comodos',
           'label'=>'Divisões da Obra',
-          'tab'=> View::make('obras.form-comodo',['record'=>$record])->render()
+          'tab'=> View::make('obras.form-comodo-alt',['record'=>$record])->render()
         ]
       ])   
     }}

@@ -106,7 +106,7 @@ class PessoaController extends Controller{
         if($this->request->idpessoaendereco){
             $endereco = Pessoaendereco::find($this->request->idpessoaendereco);
             $endereco->update($this->request->toArray());
-        } else {
+        } else if($this->request->peetipo){
             Pessoaendereco::create($this->request->toArray());
         }
     }

@@ -3,9 +3,9 @@
 @section('header')
 	{{$titulo}}
 @endsection
-
 @section('body')
-	@include('layouts.table')
+    {{Html::tag('div',$headerPai)}}
+    @include('layouts.table')
 @endsection
 
 @section('footer')

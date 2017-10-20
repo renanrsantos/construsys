@@ -111,9 +111,28 @@ class FormBuilder extends \Collective\Html\FormBuilder {
 
     public function select($name, $list = [], $selected = null, array $selectAttributes = [], array $optionsAttributes = []) {
         $this->html->addClassAttributes($selectAttributes, 'form-control form-control-sm');
+        if(isset($selectAttributes['data-vindicate'])){
+            $selectAttributes['data-function'] = 'vindicate';
+            if(strpos($selectAttributes['data-vindicate'], 'required') >= 0){
+                $optionsAttributes[''] = ['selected','disabled'];
+            }
+        }
+        if(!isset($selectAttributes['id'])){
+            $selectAttributes['id'] = $name;
+        }
         return parent::select($name, $list, $selected, $selectAttributes, $optionsAttributes);
     }
-
+    
+    public function textarea($name, $value = null, $options = array()) {
+        $this->html->addClassAttributes($options,'form-control');  
+        if(isset($options['data-vindicate'])){
+            $options['data-function'] = 'vindicate';
+        } 
+        if(!isset($options['id'])){
+            $options['id'] = $name;
+        }
+        return parent::textarea($name, $value, $options);
+    }
     public function getOperadoresFiltro() {
         return [
             '=' => 'Igual',
@@ -179,8 +198,6 @@ class FormBuilder extends \Collective\Html\FormBuilder {
             'data-visible-properties-alt' => '[' . $visibleAlt . ']',
             'data-text-property' => '{' . $text . '}',
             'data-request-type' => 'get',
-            'size' => 'md',
-            'label' => '',
             'id' => $textAlt,
             'placeholder' => $placeholder,
             'class' => 'flexdatalist']);
@@ -196,7 +213,6 @@ class FormBuilder extends \Collective\Html\FormBuilder {
         $placeholder = isset($consulta['placeholder']) ? $consulta['placeholder'] : isset($model->consulta['placeholder']) ? $model->consulta['placeholder'] : 'Digite para pesquisar...';
         $id = isset($consulta['id']) ? $consulta['id'] : $model->getKeyName();
         $label = isset($consulta['label']) ? $consulta['label'] : $model->consulta['label'];
-        $labelId = $this->label($id,'Id.');
         $labelText = $this->label($text,$label);
         $url = Request::segment(1) . '/modulo/' . $modulo . '/rotina/' . $rotina . '/data?datalist=true&campos=' . $model->consulta['visible']; //.'&_token='.csrf_token();
         if (!isset($attributes['readonly'])) {
@@ -204,24 +220,22 @@ class FormBuilder extends \Collective\Html\FormBuilder {
         }
         $readonly = in_array('readonly', $attributes) ? 'readonly' : '';
         $validado = in_array('readonly', $attributes) ? 'true' : 'false';
-        $attributesId = ['campoId' => $model->getKeyName(), 'class' => 'flexdatalist-id', 'validado' => $validado, 'data-target' => '#' . $textAlt, $readonly];
+        if(!isset($attributes['data-main'])){
+            $attributes['data-main'] = '.input-consulta';
+            $attributesId['data-main'] = '.input-consulta';
+        }
+        $attributesId = ['campoId' => $model->getKeyName(), 'class' => 'flexdatalist-id', 'validado' => $validado, 'data-target' => '#' . $textAlt, $readonly,'data-main'=>$attributes['data-main']];
         if(isset($attributes['data-vindicate'])){
             $attributesId['data-vindicate'] = $attributes['data-vindicate']. '|format:numeric';
             unset($attributes['data-vindicate']);
         } 
-        if(!isset($attributes['data-main'])){
-            $attributes['data-main'] = '.row';
-        }
-        $colId = isset($attributes['colid']) ? $attributes['colid'] : '3';
-        $colText = isset($attributes['coltext']) ? $attributes['coltext'] : '9';
-        $inputId = $this->html->tag('div',$this->validate($this->input('text', $id, $attributes['value-id'], $attributesId),$labelId),['class'=>'col-'.$colId]);
-        $inputText = $this->html->tag('div',$this->validate($this->input('text', $textAlt, $attributes['value'], $attributes),$labelText),['class'=>'col-'.$colText]);
-        return $this->html->tag('div',$inputId . $inputText,['class'=>'row']);
-    }
-
-    public function textarea($name, $value = null, $options = array()) {
-        $this->html->addClassAttributes($options,'form-control');   
-        return parent::textarea($name, $value, $options);
+        $colId = isset($attributes['colid']) ? $attributes['colid'] : '2';
+        $colText = isset($attributes['coltext']) ? $attributes['coltext'] : '10';
+        $this->html->addClassAttributes($attributesId,'col-'.$colId);
+        $this->html->addClassAttributes($attributes,'col-'.$colText);
+        $inputId = $this->input('text', $id, $attributes['value-id'], $attributesId);
+        $btnSearch = $this->button('',['color'=>'info','icon'=>'fa fa-search','tabindex'=>'-1']);
+        return $this->validate($this->inputAddon($inputId . $this->input('text', $textAlt, $attributes['value'], $attributes),$btnSearch,true,true),$labelText,['class'=>'input-consulta']);
     }
 
     public function dropdownButton($value, $items,$attributes = []){
@@ -235,6 +249,13 @@ class FormBuilder extends \Collective\Html\FormBuilder {
         }
 
         return $this->html->tag('div',$button . $this->html->tag('div',$dropdownButtons,['class'=>'dropdown-menu']),['class'=>'dropdown']);
+    }
+
+    public function inputAddon($input,$addon,$direita = true,$btn = false){
+        $addon = $this->html->tag('span',$addon,['class'=>$btn ? 'input-group-btn' : 'input-group-addon']);
+        $input = $direita ? $input . $addon : $addon . $input;
+
+        return $this->html->tag('div',$input,['class'=>'input-group input-group-sm']);
     }
 
 }

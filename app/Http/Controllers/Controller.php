@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Http\Models\Cadastros\Entidade;
 use App\Http\Models\Estrutura\Moduloinstalado;
 use App\Http\Models\Estrutura\Modulo;
+use App\Http\Models\Estrutura\Rotina;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\DB;
@@ -54,6 +55,35 @@ abstract class Controller extends BaseController
         return new Modulo();
     }
     
+    public static function getRotina(){
+        $rotina = Request::segment(5);
+        if($rotina){
+            $subrotina = self::getSubrotina();
+            if($subrotina){
+                return $subrotina->rotina;
+            }
+            $rotina = Rotina::where('rotpath','/'.$rotina)
+                        ->where('idmodulo',self::getModuloSelecionado()->idmodulo)->first();
+            return $rotina;
+        }
+        return new Rotina();
+    }
+    
+    public static function getSubrotina(){
+        $subrotina = Request::segment(5);
+        if($subrotina){
+            $rotinas = Rotina::where('idmodulo',self::getModuloSelecionado()->idmodulo)->get();
+            foreach($rotinas as $rotina){
+                foreach($rotina->subrotinas as $subrotinaAlt){
+                    if($subrotinaAlt->sbrpath === '/'.$subrotina){
+                        return $subrotinaAlt;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    
     public static function getEntidadePrincipal(){
         return 1;
     }
@@ -85,8 +115,10 @@ abstract class Controller extends BaseController
         return $this->model;
     }
     
-    protected function getUrl(){
-        return $this->entidade.'/modulo/'.$this->modulo.'/rotina/'.$this->rotina;
+    protected function getUrl($modulo = '',$rotina = ''){
+        $modulo = $modulo ? $modulo : $this->modulo;
+        $rotina = $rotina ? $rotina : $this->rotina;
+        return $this->entidade.'/modulo/'.$modulo.'/rotina/'.$rotina;
     }
     
     private function formatFilters($filters){
@@ -130,6 +162,10 @@ abstract class Controller extends BaseController
         }
         if ($record->getCampoAtivo() === $column){
             return $record->ativo();
+        }
+        if (strpos($column,'()')){
+            $column = str_replace('()', '', $column);
+            return $record->$column();
         }
         return $record->$column;
     }
@@ -193,7 +229,10 @@ abstract class Controller extends BaseController
         return $columns;
     }
 
-
+    protected function getDataGantt(){
+        return [];
+    }
+    
     protected function getBtns(){
         return [];
     }
@@ -201,7 +240,7 @@ abstract class Controller extends BaseController
     protected function getModalSize(){
         return '';
     }
-    
+
     protected abstract function getTitulo();
     
     protected function getPropExtra($acao){
@@ -210,6 +249,10 @@ abstract class Controller extends BaseController
 
     protected function getInputIdPai(){
         return null;
+    }
+    
+    protected function getHeaderPai(){
+        return '';
     }
 
     public function index(){
@@ -227,10 +270,12 @@ abstract class Controller extends BaseController
         $view = $this->indexAsModal() ? 'layouts.table-modal' : 'layouts.table-index';
         $acao = '';
         $inputId = null;
+        $headerPai = '';
         if(!$main){
             $inputId = $this->getInputIdPai();
+            $headerPai = $this->getHeaderPai();
         }
-        return self::view($view,array_merge(compact('filters','btns','ajax','section','scrollY','titulo','modalSize','acao','main','inputId'),$this->getPropExtra('index')));
+        return self::view($view,array_merge(compact('filters','btns','ajax','section','scrollY','titulo','modalSize','acao','main','inputId','headerPai'),$this->getPropExtra('index')));
     }
     
     public function novo(){
@@ -266,6 +311,9 @@ abstract class Controller extends BaseController
             $campos = $this->request->get('campos');
             $id = $this->request->get($this->getModel()->getKeyName());
             $arr = $this->getRecordsDataList($campos,$id);
+        }
+        if($this->request->get('gantt')){
+            $arr = $this->getDataGantt();
         }
         return Response::json($arr);
     }
@@ -351,6 +399,8 @@ abstract class Controller extends BaseController
         $entidade = self::getEntidade();
         $data['modulosEntidade'] = self::getModulosEntidade($entidade)->get();
         $data['moduloSelecionado'] = self::getModuloSelecionado();
+        $data['rotina'] = self::getRotina();
+        $data['subrotina'] = self::getSubrotina();
         $data['entidadeSelecionada'] = Entidade::find($entidade);
         $data['entidades'] = Entidade::where('identidade','<>',$entidade)->get();
         $data['auth'] = true;

@@ -11,11 +11,23 @@ use App\Http\Models\Model;
  */
 class Faseobra extends Model{
     protected $fillable = [
-        'idfaseobra','idobra','fsoporcentagem','fsodatainicio','fsodataprevistafim','fsoobservacao','fsostatus','idfase'
+        'idfaseobra','idobra','fsodatainicio','fsodataprevistafim','fsoobservacao','fsostatus','idfase'
     ];
+    
+    public function obra(){
+        return $this->belongsTo(Obra::class,'idobra');
+    }
     
     public function fase(){
         return $this->belongsTo(Fase::class,'idfase');
+    }
+    
+    public function status(){
+        return self::getStatusFase()[$this->fsostatus];
+    }
+    
+    public static function getStatusFase(){
+        return [1=>'Não iniciada',2=>'Iniciada',3=>'Parada',4=>'Finalizada'];
     }
     
 }

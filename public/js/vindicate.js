@@ -151,7 +151,7 @@ function vindicateField($element,$form, formId, options) {
     this.formGroup = this.element.closest("." + options.parent);
     this.formFeedback = this.formGroup.find(".form-control-feedback");
     this.label = this.formGroup.find('.control-label');
-    this.id = this.element.attr("id");
+    this.id = this.element.attr("id").replace('[]','\\[\\]');
     this.data = this.element.data("vindicate").split("|");
     this.validationSoftFail = false;
     this.validationHardFail = false;
@@ -179,6 +179,9 @@ function vindicateField($element,$form, formId, options) {
     this.setMask = function(){
         var maskOptions = options.formats[this.format].mask;
         if(maskOptions){
+            if(this.format === 'decimal'){
+                this.element.val(parseFloat(this.element.val()).toFixed(2));
+            }
             this.element.mask(maskOptions.mask,maskOptions);
         }
     };

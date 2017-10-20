@@ -17,5 +17,9 @@ class Comodo extends Model{
     public function tipoComodo(){
         return $this->belongsTo(Tipocomodo::class,'idtipocomodo');
     }
+    
+    public function obra(){
+        return $this->belongsTo(Obra::class,'idobra');
+    }
 
 }

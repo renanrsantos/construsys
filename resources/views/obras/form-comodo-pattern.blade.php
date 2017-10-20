@@ -2,7 +2,7 @@
     Form::hidden('idcomodo[]',$comodo ? $comodo->idcomodo : ''),
     Html::col(
         Form::validate(
-            Form::select('idtipocomodo[]',$record->getTiposComodo(),$comodo ? $comodo->idtipocomodo : ''),
+            Form::select('idtipocomodo[]',App\Http\Models\Obras\Tipocomodo::getTiposComodo(),$comodo ? $comodo->idtipocomodo : ''),
             Form::label('idtipocomodo[]','Tipo')
         )
     ,'auto'),

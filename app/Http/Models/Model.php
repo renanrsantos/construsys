@@ -53,16 +53,4 @@ class Model extends \Illuminate\Database\Eloquent\Model{
         throw new \Exception('Campo ativo não determinado.');
     }
 
-    public static function updateOrCreate($attributes){
-        $class = self::class;
-        $model = new $class($attributes);
-        $keyName = $model->getKeyName(); 
-        if($model->getKey()){
-            $model = $model->find($model->getKey())->update($attributes);
-        } else {
-            $model = $model->create($attributes);
-        }
-        return $model;
-    }
-
 }

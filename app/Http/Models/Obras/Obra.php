@@ -23,6 +23,18 @@ class Obra extends Model{
         return $this->hasMany(Faseobra::class,'idobra');
     }
     
+    public function cliente(){
+        return $this->belongsTo(Cliente::class,'idcliente');
+    }
+    
+    public function despesas(){
+        return $this->hasMany(Despesaobra::class,'idobra');
+    }
+    
+    public function pagamentos(){
+        return $this->hasMany(Pagamento::class,'idobra');
+    }
+
     public function comodosAsArray(){
         $comodos = [''=>''];
         foreach ($this->comodos as $comodo) {
@@ -38,40 +50,31 @@ class Obra extends Model{
         }
         return $fases;        
     }
-
-    public function cliente(){
-        return $this->belongsTo(Cliente::class,'idcliente');
-    }
     
     public function endereco(){
         return "";
     }
     
     public function getTiposPrevisao(){
-        return [
-            ''=>'',
-            1=>'Dia(s)',
-            2=>'Mês(es)',
-            3=>'Ano(s)'
-        ];
+        return [''=>'', 1=>'Dia(s)', 2=>'Mês(es)', 3=>'Ano(s)'];
     }
     public function getTiposObra(){
-        return [
-            ''=>'',
-            1=>'Construção',
-            2=>'Reforma'
-        ];
+        return [''=>'', 1=>'Construção', 2=>'Reforma'];
     }
-
-    public function getTiposComodo(){
-        return Tipocomodo::getTiposComodo();
+    
+    public function custo(){
+        return number_format($this->despesas->sum('dsovalortotal'),2,',','.');
     }
-
-    public function getFases(){
-        return Fase::getFases();
+    
+    public function totalPago(){
+        return number_format($this->pagamentos->sum('pagvalor'),2,',','.');
     }
-
-    public function getStatusFase(){
-        return [1=>'Não iniciada',2=>'Iniciada',3=>'Parada',4=>'Finalizada'];
+    
+    public function getObrvalororcadoAttribute($value){
+        return number_format($value,2,',','.');
+    }
+    
+    public function getObrtamanhoAttribute($value){
+        return number_format($value,2,',','.');
     }
 }

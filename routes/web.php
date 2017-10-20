@@ -74,9 +74,9 @@ Route::get('{entidade}/home' , array('uses' => 'HomeController@home'));
 
 Route::get('{entidade}/modulo/{modulo}/rotina/{rotina}/{acao?}', 
     function(Request $request,$entidade,$modulo,$rotina,$acao = 'index'){
-        if(!in_array($acao, ['index','novo','data','alterar','visualizar'])){
-            return Controller::view('home')->withErrors(['Não editar url, utilize as rotinas do sistema.']);
-        }
+//        if(!in_array($acao, ['index','novo','data','alterar','visualizar'])){
+//            return Controller::view('home')->withErrors(['Não editar url, utilize as rotinas do sistema.']);
+//        }
         return processa($request,$entidade,$modulo,$rotina,$acao,'');
     });
     

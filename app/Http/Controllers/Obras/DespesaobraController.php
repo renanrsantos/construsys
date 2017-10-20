@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers\Obras;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Redirect;
-use App\Http\Models\Obras\Obra;
+use App\Http\Models\Obras\Itemdespesa;
 
 
-class DespesaobraController extends Controller{
+class DespesaobraController extends DependenciaObraController{
     
     protected function getColumns() {
         return [
             ['name'=>'iddespesaobra','label'=>'Código','width'=>'5'],
             ['name'=>'dsoobs','label'=>'Descrição','width'=>'20'],
+            ['name'=>'getTipoDespesa()','label'=>'Tipo','width'=>'10'],
             ['name'=>'dsovalortotal','label'=>'Valor Total','width'=>'10'],
         ];
     }
@@ -30,28 +29,40 @@ class DespesaobraController extends Controller{
         return 'modal-lg';
     }
 
-    protected function getPropExtra($acao){
-        switch ($acao) {
-            case 'index':
-            case 'novo':
-                $id = $this->request->idobra ? $this->request->idobra : $this->request->id[0];
-                $obra = Obra::find($id);
-                $disableAll = false;
-                return compact('obra','disableAll');
-            default:
-                return array_merge(['obra'=>null],parent::getPropExtra($acao));
+    protected function processaNovoRelacao(){
+        $this->processaItensDespesa();
+    }
+
+    protected function processaAlterarRelacao(){
+        $this->processaItensDespesa();
+    }
+
+    protected function excluirRelacao(){
+        foreach ($this->model->itens as $item) {
+            $item->delete();
         }
     }
 
-    protected function getRecords(){
-        return parent::getRecords()->where('idobra',$this->request->idobra);
-    }
+    private function processaItensDespesa(){
+        // despesa por item
+        if($this->request->dsotipo == 2){
+            $iddespesaobra = $this->model->iddespesaobra;
+            $iditemdespesa = $this->request->get('iditemdespesa');
+            $idproduto = $this->request->get('idproduto');
+            $itdquantidade = $this->request->get('itdquantidade');
+            $itdvalorunitario = $this->request->get('itdvalorunitario');
+            $itdcomplemento = $this->request->get('itdcomplemento');
 
-    protected function indexAsModal(){
-        return true;
-    }
-
-    protected function getInputIdPai(){
-        return app('form')->hidden('idobra',$this->request->id[0]);
+            for ($i=0; $i < count($iditemdespesa); $i++) {
+                if($idproduto[$i]){
+                    $itemdespesa = ['iditemdespesa'=>$iditemdespesa[$i],'iddespesaobra'=>$iddespesaobra,'idproduto'=>$idproduto[$i],'itdquantidade'=>$itdquantidade[$i],'itdvalorunitario'=>$itdvalorunitario[$i],'itdcomplemento'=>$itdcomplemento[$i]]    ;
+                    if($itemdespesa['iditemdespesa']){
+                        Itemdespesa::find($itemdespesa['iditemdespesa'])->update($itemdespesa);
+                    } else {
+                        Itemdespesa::create($itemdespesa);
+                    }
+                }
+            }
+        }
     }
 }
