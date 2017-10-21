@@ -121,7 +121,6 @@ function setFiltro(table, botaoFiltrar) {
         });
     }
     table.DataTable().draw();
-//    formataCampoTotalRegistros();
 }
 
 function registroEncontrado(data) {
@@ -167,15 +166,15 @@ $.fn.dataTable.ext.errMode = function (settings, helpPage, message) {
 };
 
 $.fn.dataTable.ext.search.push(
-        function (settings, data, dataIndex) {
-            return registroEncontrado(data);
-        }
+    function (settings, data, dataIndex) {
+        return registroEncontrado(data);
+    }
 );
 
 $.extend(true, $.fn.dataTable.defaults, {
     "dom": "<'row'<'col-8 btn-group-to'><'col-4'f>>" +
             "<'row'<'col-12'tr>>" +
-            "<'row'<'col-9'<'float-left'p>><'col-auto'l><'col-auto'i>>",
+            "<'row'<'col-9'<'float-left'p>><'col-3'<'row'<'col-7'l><'col-5'i>>>>",
     "destroy": true,
     "columnDefs": [
         {
@@ -213,8 +212,7 @@ $.extend(true, $.fn.dataTable.defaults, {
             "sSortDescending": ""
         }
     }
-}
-);
+});
 
 $(document).ready(function () {
     var ctrl = false;
@@ -549,9 +547,11 @@ $(document).ready(function () {
                         break;
                     case 'OK' :
                         form.closest('.modal').modal('hide');
-                        table = $('#'+form.attr('id').replace('fr-',''));
-                        formData = $('#'+form.attr('id').replace('fr-','fr-registros-'));
-                        carregaDados(table,formData.serialize());
+                        if(form.attr('action').indexOf(window.location.href) < 0){
+                            table = $('#'+form.attr('id').replace('fr-',''));
+                            formData = $('#'+form.attr('id').replace('fr-','fr-registros-'));
+                            carregaDados(table,formData.serialize());
+                        }
                         break;
                 }
             });

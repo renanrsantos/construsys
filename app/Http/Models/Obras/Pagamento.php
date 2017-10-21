@@ -27,4 +27,12 @@ class Pagamento extends Model{
                 return array_merge(['obra'=>null],parent::getPropExtra($acao));
         }
     }
+    
+    public function getPagdataAttribute($value){
+        return $this->getDateValue($value);
+    }
+    
+    public function getPagvalorAttribute($value){
+        return $this->getFloatValue($value);
+    }
 }

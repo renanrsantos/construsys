@@ -23,7 +23,7 @@ abstract class DependenciaObraController extends Controller{
     protected function getObra(){
         if(is_null($this->obra)){
             $id = $this->request->idobra ? $this->request->idobra : $this->request->id[0];
-            $this->obra = Obra::find($id);
+            $this->obra = $this->getModel()->obra ? $this->getModel()->obra : Obra::find($id);
         }
         return $this->obra;
     }

@@ -44,7 +44,7 @@ class FormBuilder extends \Collective\Html\FormBuilder {
     }
 
     public function password($name, $value = null, $options = array()) {
-        return parent::password($name, $value, $options);
+        return $this->input('password',$name, $value, $options);
     }
 
     public function checkbox($name, $value = 1, $checked = null, $options = []) {
@@ -57,6 +57,17 @@ class FormBuilder extends \Collective\Html\FormBuilder {
                     ['class'=>'custom-control custom-checkbox']);
     }
 
+    public function date($name, $value = null, $options = array()) {
+        if(isset($options['data-vindicate'])){
+            if(strpos($options['data-vindicate'],'format') < 0){
+                $options['data-vindicate'] .= '|format:date';
+            }
+        } else {
+            $options['data-vindicate'] = 'format:date';
+        }
+        return parent::date($name, $value, $options);
+    }
+    
     public function checkboxSimple($name, $value = 1, $checked = null, $options = []) {
         return parent::checkbox($name, $value, $checked, $options);
     }
@@ -96,6 +107,9 @@ class FormBuilder extends \Collective\Html\FormBuilder {
     public function validate($input,$label = '',$attributes = []){
         $this->html->addClassAttributes($attributes, 'input-validate');
         $feedback = $this->html->tag('small','',['class'=>'form-control-feedback']);
+        if($label !== '' && strpos($input,'required') > 0){
+            $label = str_replace('</label>', ' <span class="text-danger"><b>*</b></span></label>', $label);
+        }
         return $this->html->tag('div',$label.$input.$feedback,$attributes);
     }
     
@@ -162,7 +176,7 @@ class FormBuilder extends \Collective\Html\FormBuilder {
         return $this->toHtmlString($form);
     }
 
-    public function splitButton(array $button, array $elements, string $color = 'primary') {
+    public function splitButton(array $button, array $elements, $color = 'primary') {
         $this->html->addClassAttributes($button[1], 'btn-' . $color . ' btn-sm');
         $attributes = array_merge($button[1], ['icon' => 'fa fa-search']);
         $btn = $this->button($button[0], $attributes);

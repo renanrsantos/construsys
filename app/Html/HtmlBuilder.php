@@ -59,7 +59,7 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder{
         return $this->tag('div', $divHeader . $divBody . $divFooter,$attributes);
     }
     
-    public function listGroup($list = array() , $type = 'default',$attributes = []){
+    public function listGroup($list = [] , $type = 'default',$attributes = []){
         if(count($list) == 0){
             return '';
         }

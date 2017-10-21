@@ -8,7 +8,7 @@
                 Form::text('usulogin',null,['label' => 'Usuário','required'])
             ]),
             Form::formGroup([
-                Form::password('ususenha', ['label'=>'Senha','required'])
+                Form::password('ususenha', null,['label'=>'Senha','required'])
             ]),
             Html::tag('div',
                 Form::formGroup([
@@ -23,5 +23,5 @@
         ],
         Html::icon('fa fa-copyright').date('Y').' '.Html::link('http://construsys.com.br','Construsys').'. Todos os direitos reservados',
         ['color'=>'primary']),
-    ['class'=>'col-md-4 col-md-offset-4','style'=>'margin-top: 40px;'])
+    ['class'=>'col-md-4 col-md-offset-4'])
 }}

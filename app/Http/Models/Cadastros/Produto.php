@@ -32,4 +32,8 @@ class Produto extends Model{
     public function subcategoria(){
         return $this->belongsTo(Subcategoriaproduto::class,'idsubcategoriaproduto');
     }
+    
+    public function getPrdvalorunitarioAttribute($value){
+        return $this->getFloatValue($value);
+    }
 }

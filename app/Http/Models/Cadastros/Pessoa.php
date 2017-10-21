@@ -14,6 +14,13 @@ class Pessoa extends Model{
     protected $fillable = [
         'idpessoa','pestipo','pesnome','pescpfcnpj','pesrgie'
     ];
+    
+    public $consulta = [
+        'visible'=>'idpessoa,pesnome,pescpfcnpj',
+        'search'=>'pesnome,pescpfcnpj',
+        'text'=>'pesnome',
+        'label'=>'Pessoa'
+    ];
 
     public function tiposPessoa(){
     	return [

@@ -21,5 +21,9 @@ class Comodo extends Model{
     public function obra(){
         return $this->belongsTo(Obra::class,'idobra');
     }
+    
+    public function getComtamanhoAttribute($value){
+        return $this->getFloatValue($value);
+    }
 
 }

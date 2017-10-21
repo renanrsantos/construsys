@@ -59,3 +59,11 @@ li.active{
    max-width:1200px;
   }
 }
+
+.page-link{
+    width: 35px;
+    text-align: center;
+    padding: 3px;
+    font-size: 15px;
+    height: 30px;
+}

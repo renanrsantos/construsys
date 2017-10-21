@@ -179,9 +179,12 @@ function vindicateField($element,$form, formId, options) {
     this.setMask = function(){
         var maskOptions = options.formats[this.format].mask;
         if(maskOptions){
-            if(this.format === 'decimal'){
-                this.element.val(parseFloat(this.element.val()).toFixed(2));
-            }
+            switch(this.format){ 
+                case 'decimal':
+                    var valor = this.element.val();//.replace('.','').replace(',','.');
+                    this.element.val(parseFloat(valor).toFixed(2));
+                    break;
+            }            
             this.element.mask(maskOptions.mask,maskOptions);
         }
     };

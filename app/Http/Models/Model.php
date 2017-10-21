@@ -52,5 +52,18 @@ class Model extends \Illuminate\Database\Eloquent\Model{
         }
         throw new \Exception('Campo ativo não determinado.');
     }
+    
+    public function getFloatValue($value){
+       return number_format($value,2,'.',''); 
+    }
+    
+    public function getDateValue($value){
+//        return date('d/m/Y', strtotime($value));
+        return $value;
+    }
+    
+    public function getLongStringValue($value){
+        return $value;
+    }
 
 }

@@ -25,12 +25,12 @@ Sub Rotina
                 Form::text('sbrpath',$record->sbrpath,['data-vindicate'=>'required']),
                 Form::label('sbrpath','Caminho Execução')
             )
-        ,'4'),
+        ,'5'),
         Html::col(
             Form::validate(    
                 Form::text('sbricone',$record->sbricone),
                 Form::label('sbricone','Ícone')
             )
-        ,'4')
+        ,'3')
     ])}}
 @endsection

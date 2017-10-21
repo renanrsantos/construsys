@@ -39,7 +39,7 @@ class ObraController extends Controller{
             app('form')->button('Fases da Obra',array_merge($arrProp,['data-url'=>url($this->getUrl('','faseobra')),'icon'=>'fa fa-code-fork'])),
             app('form')->button('Cômodos',array_merge($arrProp,['data-url'=>url($this->getUrl('','comodo')), 'icon'=>'fa fa-bed'])),
             app('form')->button('Despesas',array_merge($arrProp,['data-url'=>url($this->getUrl('','despesaobra')), 'icon'=>'fa fa-shopping-cart'])),
-            app('form')->button('Funcionários',array_merge($arrProp,['icon'=>'fa fa-users','data-toggle'=>'a','onclick'=>'alert("Em desenvolvimento"); return false;'])),
+            app('form')->button('Funcionários',array_merge($arrProp,['data-url'=>url($this->getUrl('','funcionarioobra')),'icon'=>'fa fa-users'])),
             app('form')->button('Cronograma',array_merge($arrProp,['data-url'=>url($this->getUrl('','faseobra/cronograma')),'icon'=>'fa fa-calendar'])),
             app('form')->button('Pagamentos', array_merge($arrProp,['data-url'=>url($this->getUrl('','pagamento')),'icon'=>'fa fa-usd'])),
         ];

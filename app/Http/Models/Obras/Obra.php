@@ -63,18 +63,22 @@ class Obra extends Model{
     }
     
     public function custo(){
-        return number_format($this->despesas->sum('dsovalortotal'),2,',','.');
+        return $this->getFloatValue($this->despesas->sum('dsovalortotal'));
     }
     
     public function totalPago(){
-        return number_format($this->pagamentos->sum('pagvalor'),2,',','.');
+        return $this->getFloatValue($this->pagamentos->sum('pagvalor'));
     }
     
     public function getObrvalororcadoAttribute($value){
-        return number_format($value,2,',','.');
+        return $this->getFloatValue($value);
     }
     
     public function getObrtamanhoAttribute($value){
-        return number_format($value,2,',','.');
+        return $this->getFloatValue($value);
+    }
+    
+    public function getObrdatainicioAttribute($value){
+        return $this->getDateValue($value);
     }
 }

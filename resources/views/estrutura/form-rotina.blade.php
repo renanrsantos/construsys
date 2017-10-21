@@ -19,12 +19,12 @@ Rotina
                 Form::label('rotnome','Nome'))
         ,'4'),
         Html::col(
-            Form::validate(Form::text('rotpath',$record->rotpath,["data-vindicate"=>"required"]),
+            Form::validate(Form::text('rotpath',$record->rotpath,[]),
                 Form::label('rotpath','Caminho Execução'))
-        ,'4'),
+        ,'5'),
         Html::col(
             Form::validate(Form::text('roticone',$record->roticone),
                 Form::label('roticone','Ícone'))
-        ,'4')
+        ,'3')
     ])}}
 @endsection

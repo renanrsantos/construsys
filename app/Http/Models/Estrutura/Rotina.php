@@ -15,10 +15,11 @@ class Rotina extends Model{
         'idrotina','idmodulo', 'rotnome', 'rotpath', 'roticone'
     ];
     
-    public $consulta = ['visible'=>'idrotina,rotnome',
+    public $consulta = ['visible'=>'idrotina,rotnome,modnome',
         'search'=>'rotnome',
         'text'=>'rotnome',
-        'label'=>'Rotina'
+        'label'=>'Rotina',
+        'objetos'=>['modnome'=>'modulo']
     ];    
     
     public function modulo(){
