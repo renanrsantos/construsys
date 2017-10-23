@@ -17,7 +17,7 @@
         ,'6'),
         Html::col(
             Form::validate(
-                Form::date('pefdatafim',$record->pefdatainicio,['data-vindicate'=>'format:date']),
+                Form::date('pefdatafim',$record->pefdatafim,['data-vindicate'=>'format:date']),
                 Form::label('pefdatafim','Data fim')
             )
         ,'6')        

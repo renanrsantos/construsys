@@ -29,4 +29,14 @@ class Funcionarioobra extends Model{
     public function faseObra(){
         return $this->belongsTo(Faseobra::class,'idfaseobra');
     }
+    
+    public function periodos(){
+        return $this->hasMany(Periodofuncionario::class,'idfuncionarioobra');
+    }
+    
+    public function ultimoPeriodo(){
+        $periodoAtual = $this->periodos()->orderBy('idperiodofuncionario','desc')->first();
+        $dataFim = $periodoAtual->pefdatafim ? $periodoAtual->pefdatafim : '(Atual)';
+        return $periodoAtual->pefdatainicio.' à '. $dataFim;
+    }
 }

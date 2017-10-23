@@ -5,7 +5,8 @@
 {{Html::tag('div','',['id'=>'msg-global'])}}
 <div class="row col-12">
     {{Form::tableFilter($filters,$table)}}
-</div><br>
+</div>
+<br>
 <div class="form-row">
     {{Form::open(array('url'=>Request::url(),'class'=>'col-12 form-horizontal','id'=>'fr-registros-'.$table))}}
         @if(!$main)

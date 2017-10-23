@@ -55,14 +55,14 @@ class PeriodofuncionarioController extends \App\Http\Controllers\Controller{
     }
     
     protected function getPropExtra($acao){
+        $funcionarioObra = $this->getFuncionarioObra();
         switch ($acao) {
             case 'index':
             case 'novo':
-                $funcionarioObra = $this->getFuncionarioObra();
                 $disableAll = false;
                 return compact('funcionarioObra','disableAll');
             default:
-                return array_merge(['funcionarioObra'=>null],parent::getPropExtra($acao));
+                return array_merge(['funcionarioObra'=>$funcionarioObra],parent::getPropExtra($acao));
         }
     }
     
