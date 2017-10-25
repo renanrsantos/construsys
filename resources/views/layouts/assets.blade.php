@@ -4,6 +4,7 @@
 <!--<link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">-->
 
 <link rel="stylesheet" href="{{URL::asset('css/bootstrap.min.css')}}"/>
+<link rel="stylesheet" href="css/bootstrap.min.css"/>
 <link rel="stylesheet" href="{{URL::asset('css/font-awesome.min.css')}}">
 <link rel="stylesheet" href="{{URL::asset('css/jquery.flexdatalist.min.css')}}"/>
 <link rel="stylesheet" href="{{URL::asset('css/datatables.bootstrap.css')}}"/>
