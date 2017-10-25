@@ -1,1 +1,1 @@
-web: vendor/bin/construsys public/
+web: public/
