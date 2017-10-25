@@ -29,5 +29,9 @@ class RotinaController extends Controller{
     protected function getTitulo() {
         return 'Rotinas';
     }
+    
+    protected function getModalSize() {
+        return 'modal-lg';
+    }
 
 }

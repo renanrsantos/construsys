@@ -20,9 +20,9 @@ abstract class DependenciaObraController extends Controller{
     
     private $obra;
     
-    protected function getObra(){
+    protected function getObra($acao = ''){
         if(is_null($this->obra)){
-            $id = $this->request->idobra ? $this->request->idobra : $this->request->id[0];
+            $id = $acao === 'index' ? $this->request->id[0] : $this->request->idobra;
             $this->obra = $this->getModel()->obra ? $this->getModel()->obra : Obra::find($id);
         }
         return $this->obra;
@@ -45,14 +45,14 @@ abstract class DependenciaObraController extends Controller{
     }
     
     protected function getPropExtra($acao){
+        $obra = $this->getObra($acao);
         switch ($acao) {
             case 'index':
             case 'novo':
-                $obra = $this->getObra();
                 $disableAll = false;
                 return compact('obra','disableAll');
             default:
-                return array_merge(['obra'=>null],parent::getPropExtra($acao));
+                return array_merge(['obra'=>$obra],parent::getPropExtra($acao));
         }
     }
     

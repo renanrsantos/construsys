@@ -25,12 +25,31 @@ function alteraBotao(botao, habilitado) {
     } else {
         botao.addClass('disabled');
     }
-    botao.attr('enabled', habilitado);
-    botao.attr('disabled', !habilitado);
+//    botao.attr('enabled', habilitado);
+//    botao.attr('disabled', !habilitado);
+}
+
+function validaControllers(dataValida,checked){
+    if(dataValida){
+        for(i=0; i < dataValida.length; i++){
+            for(j=0; j < dataValida[i].btns.length;j++){
+                var btn = $(dataValida[i].btns[j]);
+                alteraBotao(btn,dataValida[i].value && checked);
+                btn.tooltip('dispose');
+                if(dataValida[i].hint && !dataValida[i].value){
+                    btn.tooltip({
+                       title : dataValida[i].hint,
+                       placement : 'bottom'
+                    });
+                }
+            }
+        }
+    }
 }
 
 function botaoHabilitado(botao) {
-    return botao.attr('enabled') === 'true' || botao.attr('enabled') === true;
+//    return botao.attr('enabled') === 'true' || botao.attr('enabled') === true;
+    return !botao.hasClass('disabled');
 }
 
 function atualizaBotoes(table = null) {
@@ -90,9 +109,9 @@ function montaDataTable(table,data = '') {
 
 function carregaDados(table, data = '') {
     data = (data !== '') ? '?data=true&' + data : '?data=true';
-    url = $(table).attr('url') + data;
-    dt = $(table).DataTable({
-        ajax: url,
+    var url = $(table).attr('url') + data;
+    $(table).DataTable({
+        ajax : url,
         scrollY: table.attr("scrollY")
     });
     atualizaBotoes(table);
@@ -163,13 +182,8 @@ function registroEncontrado(data) {
 
 $.fn.dataTable.ext.errMode = function (settings, helpPage, message) {
     $(settings.nTable).dataTable().fnClearTable();
+//    $('#msg-global').html(message);
 };
-
-$.fn.dataTable.ext.search.push(
-    function (settings, data, dataIndex) {
-        return registroEncontrado(data);
-    }
-);
 
 $.extend(true, $.fn.dataTable.defaults, {
     "dom": "<'row'<'col-8 btn-group-to'><'col-4'f>>" +
@@ -224,7 +238,7 @@ $(document).ready(function () {
     $(document).keyup(function (event) {
         ctrl = false;
     });
-
+    
     $('table').on('click', '.chk-acao', function () {
         atualizaBotoes($(this).closest('table'));
         clickChk = true;
@@ -243,6 +257,7 @@ $(document).ready(function () {
             }
             check.prop('checked', !checked);
             atualizaBotoes($(this).closest('table'));
+            validaControllers(check.data('valida-controller'),!checked);
             clickChk = false;            
         } 
     });
@@ -402,11 +417,10 @@ $(document).ready(function () {
                             var propAlt = propsAlt[i];
                             if (propAlt === $(flex).attr('id')) {
                                 divMain.find('.flexdatalist').flexdatalist('value',result[0][prop]);
-                                divMain.find('#' + propAlt).attr('validado', true);
                             } else {
                                 divMain.find('#' + propAlt).val(result[0][prop]);
-                                divMain.find('#' + propAlt).attr('validado', true);
                             }
+                            divMain.find('#' + propAlt).attr('validado', true);    
                         }
                         // divMain.find(idFlex + '-flexdatalist').focus();
                     } else {
@@ -426,39 +440,87 @@ $(document).ready(function () {
         }
     });
 
-    $('body').on('click', '[data-toggle="modal"]', function () {
-        var modal = $($(this).data('target') + ' .modal-dialog');
-        var form = $($(this).data('form'));
-        var url = $(this).data('url');
-        var action = $(this).data('action');
-        var data = null;
-        var arr = ['alterar', 'visualizar'];
-
-        if ((arr.indexOf(action) > -1) || (url !== "")) {
-            data = form.serialize();
-        }
-        url = url !== undefined ? url : form.prop('action') + '/' + action;
-        modal.load(url, data,function (responseText, textStatus, XMLHttpRequest){
-            if(textStatus === "error"){
-                var title = $('<h5></h5>').addClass('modal-title').html('Erro');
-                var buttonClose = $('<button></button>').addClass('close').attr('data-dismiss','modal').html('<span>&times;</span>');
-                var header = $('<div></div>').addClass('modal-header').append(title).append(buttonClose);
-                var body = $('<div></div>').addClass('modal-body').html(responseText);
-                var content = $('<div></div>').addClass('modal-content').addClass('modal-xl').append(header).append(body);
-                modal.html('');
-                modal.append(content);
+    $('body').on('click', '[data-toggle="modal"]', function (e) {
+        if(botaoHabilitado($(this))){
+            var modal = $($(this).data('target') + ' .modal-dialog');
+            var form = $($(this).data('form'));
+            var url = $(this).data('url');
+            var action = $(this).data('action');
+            var data = null;
+            var arr = ['alterar', 'visualizar'];
+            if ((arr.indexOf(action) > -1) || (url !== "")) {
+                data = form.serialize();
             }
-        });
+            if($(this).data('data')){
+                data = data ? data + '&' + $(this).data('data') : $(this).data('data');
+            }
+            url = url !== undefined ? url : form.prop('action') + '/' + action;
+            modal.load(url, data,function (responseText, textStatus, XMLHttpRequest){
+                var size = 'modal-xl';
+                if(textStatus === "error"){
+                    var title = $('<h5></h5>').addClass('modal-title').html('Erro');
+                    var buttonClose = $('<button></button>').addClass('close').attr('data-dismiss','modal').html('<span>&times;</span>');
+                    var header = $('<div></div>').addClass('modal-header').append(title).append(buttonClose);
+                    var body = $('<div></div>').addClass('modal-body').html(responseText);
+                    var content = $('<div></div>').addClass('modal-content').addClass('modal-xl').append(header).append(body);
+                    modal.html('');
+                    modal.append(content);
+                } else {
+                    size = modal.find('#modal-size').html() ? modal.find('#modal-size').html() : size;;
+                }
+                modal.removeClass('modal-xl')
+                    .removeClass('modal-lg')
+                    .removeClass('modal-md')
+                    .removeClass('modal-sm')
+                    .addClass(size);
+                eval(modal.find('#table-scripts').html());
+            });
+            if($(this).hasClass('btn-input-consulta')){
+                $(this).closest('.input-consulta').find('.flexdatalist-id').addClass('wait-response');
+            }
+        } else {
+            e.preventDefault();
+            e.stopPropagation();
+        }
     });
 
     $('body').on('hidden.bs.modal', '.modal', function () {
-        $(this).find('.modal-dialog').html('');
-        if($(this).hasClass('main')){
-            $('table').each(function(){
-                if($(this).prop('id')){
-                   carregaDados($(this));
+        var modal = $(this);
+        if(!modal.hasClass('modal-consulta')){
+            var table = $('#'+modal.attr('id').replace('modal-fr-','')),
+                formData = $('#'+modal.attr('id').replace('modal-fr-','fr-registros-'));
+            carregaDados(table,formData.serialize());  
+        }
+        $('[modal-parent="'+modal.attr('id')+'"]').each(function(){
+            $(this).remove();
+        });
+        $(this).find('.modal-dialog').each(function(){
+            var table = $(this).find('table'),
+                btnSeleciona = $(this).find('.btn-seleciona');
+            if(table){
+                table.DataTable().destroy();
+            }
+            if(btnSeleciona.length > 0){
+                $(btnSeleciona.data('camporetorno').replace('[]','\\[\\]')).removeClass('wait-response');
+            }
+            $(this).html('');
+        });
+    });
+    
+    $('body').on('show.bs.modal','.modal',function(e){
+        var parent = $(this).parent().closest('.modal'); 
+        if(parent.length > 0){
+            $(this).attr('modal-parent',parent.attr('id'));
+            var aux = parent;
+            while(aux.length > 0){
+                aux = aux.parent().closest('.modal');
+                if(aux.length > 0){
+                    parent = aux;
+                } else {
+                    break;
                 }
-            });
+            }
+            $(this).appendTo(parent.parent());
         }
     });
 
@@ -472,8 +534,9 @@ $(document).ready(function () {
     });
 
     $('body').on('click','[data-action="replicar"]',function(){
-        var from = $($(this).data('from')).clone(),
+        var from = $($(this).data('from')).eq(0).clone(),
             appendTo = $($(this).data('append'));
+        from.find('.modal').remove();
         from.removeClass('sr-only');
         appendTo.append(from.prop('outerHTML'));
         if($(this).attr('datalist')){
@@ -512,23 +575,6 @@ $(document).ready(function () {
         }
     });
 
-    $('body').on('show.bs.modal','.modal',function(e){
-        parent = $(this).parent().closest('.modal');                
-        if(parent.length > 0){
-            $(this).appendTo(parent.parent());
-        }
-    });
-
-    $('body').on('hidden.bs.modal','.modal',function(){
-        if($(this).hasClass('main')){
-            $('.modal').each(function(){
-                if(!$(this).hasClass('main')){
-                    $(this).remove();
-                }
-            });
-        }
-    });
-
     $('body').on('change','[name="pestipo"]',function(){
         formataCampoCpfCnpj($(this));
     });
@@ -547,11 +593,6 @@ $(document).ready(function () {
                         break;
                     case 'OK' :
                         form.closest('.modal').modal('hide');
-                        if(form.attr('action').indexOf(window.location.href) < 0){
-                            table = $('#'+form.attr('id').replace('fr-',''));
-                            formData = $('#'+form.attr('id').replace('fr-','fr-registros-'));
-                            carregaDados(table,formData.serialize());
-                        }
                         break;
                 }
             });
@@ -573,5 +614,16 @@ $(document).ready(function () {
             var field = form.findById(id);
             field.validate(form.options);
         }
+    });
+    
+    $('body').on('click','.btn-seleciona',function(){
+       var val = $(this).closest('form').find('input[type="checkbox"]:checked').val();
+       var campoRetorno = $(this).data('camporetorno').replace('[]','\\[\\]');
+       $(campoRetorno).each(function(){
+            if($(this).hasClass('wait-response')){
+                $(this).trigger('input').val(val).trigger('blur');
+            } 
+       });
+       $(this).closest('.modal').modal('hide');
     });
 });

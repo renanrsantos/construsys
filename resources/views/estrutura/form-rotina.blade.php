@@ -15,7 +15,7 @@ Rotina
     ])}}
     {{Form::formGroup([
         Html::col(
-            Form::validate(Form::text('rotnome',$record->modnome,["data-vindicate"=>"required|format:alpha"]),
+            Form::validate(Form::text('rotnome',$record->rotnome,["data-vindicate"=>"required|format:alpha"]),
                 Form::label('rotnome','Nome'))
         ,'4'),
         Html::col(

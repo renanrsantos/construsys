@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Obras;
 
 use App\Http\Models\Obras\Funcionarioobra;
+use Illuminate\Support\Facades\Redirect;
 
 /**
  * Description of PeriodofuncionarioController
@@ -30,9 +31,9 @@ class PeriodofuncionarioController extends \App\Http\Controllers\Controller{
         return 'Período';
     }    
     
-    protected function getFuncionarioObra(){
+    protected function getFuncionarioObra($acao){
         if(is_null($this->funcionarioObra)){
-            $id = $this->request->idfuncionarioobra ? $this->request->idfuncionarioobra : $this->request->id[0];
+            $id = $acao === 'index' ? $this->request->id[0] : $this->request->idfuncionarioobra;
             $this->funcionarioObra = $this->getModel()->funcionarioObra ? $this->getModel()->funcionarioObra : Funcionarioobra::find($id);
         }
         return $this->funcionarioObra;
@@ -55,7 +56,7 @@ class PeriodofuncionarioController extends \App\Http\Controllers\Controller{
     }
     
     protected function getPropExtra($acao){
-        $funcionarioObra = $this->getFuncionarioObra();
+        $funcionarioObra = $this->getFuncionarioObra($acao);
         switch ($acao) {
             case 'index':
             case 'novo':
@@ -67,7 +68,15 @@ class PeriodofuncionarioController extends \App\Http\Controllers\Controller{
     }
     
     protected function getModalSize() {
-        return 'modal-lg';
+        return 'modal-md';
     }
 
+    public function entrada(){
+        return $this->novo()->with(['acaoAlt'=>'entrada','funcionarioObra'=>$this->getFuncionarioObra('index'),'urlAlt'=>url($this->getUrl().'/novo')]);
+    }
+    
+    public function saida(){
+        $funcionarioObra = $this->getFuncionarioObra('index');
+        return $this->alterar()->with(['acaoAlt'=>'saida','funcionarioObra'=>$funcionarioObra,'record'=>$funcionarioObra->ultimoPeriodo(),'urlAlt'=>url($this->getUrl().'/alterar')]);
+    }
 }

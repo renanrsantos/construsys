@@ -1,6 +1,11 @@
 a.dropdown-toggle, .dropdown-menu > a, .dataTables_empty{
     cursor:pointer;
 }
+
+a.dropdown-item{
+    cursor: context-menu;
+}
+
 .dt-bootstrap{
     /*border: 1px solid gray;*/
     padding: 5px;
@@ -66,4 +71,15 @@ li.active{
     padding: 3px;
     font-size: 15px;
     height: 30px;
+}
+
+.disabled{
+    cursor: not-allowed;
+}
+
+ol.breadcrumb{
+    height: 30px;
+    margin-top: 0px;
+    padding-top: 5px;
+    font-size: 15px;
 }

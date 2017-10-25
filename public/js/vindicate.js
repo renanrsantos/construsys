@@ -224,7 +224,6 @@ function vindicateField($element,$form, formId, options) {
                             "value": requiredString.slice(requiredString.indexOf("[") + 1, requiredString.indexOf("]"))
                         });
                     } else {
-
                         //console.log(requiredString, $("#" + requiredString).data("vindicate-id"));
                         requiredFields.push({"id": window.vindicate[this.formId].findById(requiredString).fieldId, "value": false});
                     }
@@ -452,7 +451,7 @@ function vindicateField($element,$form, formId, options) {
             // form_index = (window.vindicate.length-1); // Minus 1 because array is 0 based
             //$form_this.data("vindicate-index", form_index);
             // }
-            // console.log("Vindicate - Form Initialized", vin);
+//             console.log("Vindicate - Form Initialized", form_id);
         } 
         if (action === "validate") {
             var vin = window.vindicate[form_id];

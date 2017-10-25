@@ -36,15 +36,21 @@ class ObraController extends Controller{
     protected function getBtns() {
         $arrProp = ['data-toggle'=>'modal','data-target'=>'#modal-fr-obras-obra','color'=>'primary','class'=>'btn-single','data-form'=>'#fr-registros-obras-obra'];
         return [
-            app('form')->button('Fases da Obra',array_merge($arrProp,['data-url'=>url($this->getUrl('','faseobra')),'icon'=>'fa fa-code-fork'])),
-            app('form')->button('Cômodos',array_merge($arrProp,['data-url'=>url($this->getUrl('','comodo')), 'icon'=>'fa fa-bed'])),
-            app('form')->button('Despesas',array_merge($arrProp,['data-url'=>url($this->getUrl('','despesaobra')), 'icon'=>'fa fa-shopping-cart'])),
-            app('form')->button('Funcionários',array_merge($arrProp,['data-url'=>url($this->getUrl('','funcionarioobra')),'icon'=>'fa fa-users'])),
-            app('form')->button('Cronograma',array_merge($arrProp,['data-url'=>url($this->getUrl('','faseobra/cronograma')),'icon'=>'fa fa-calendar'])),
-            app('form')->button('Pagamentos', array_merge($arrProp,['data-url'=>url($this->getUrl('','pagamento')),'icon'=>'fa fa-usd'])),
+            app('form')->button('Fases da Obra',array_merge($arrProp,['id'=>'btn-faseobra','data-url'=>url($this->getUrl('','faseobra')),'icon'=>'fa fa-code-fork'])),
+            app('form')->button('Cômodos',array_merge($arrProp,['id'=>'btn-comodo','data-url'=>url($this->getUrl('','comodo')), 'icon'=>'fa fa-bed'])),
+            app('form')->button('Despesas',array_merge($arrProp,['id'=>'btn-despesa','data-url'=>url($this->getUrl('','despesaobra')), 'icon'=>'fa fa-shopping-cart'])),
+            app('form')->button('Funcionários',array_merge($arrProp,['id'=>'btn-funcionario','data-url'=>url($this->getUrl('','funcionarioobra')),'icon'=>'fa fa-users'])),
+            app('form')->button('Cronograma',array_merge($arrProp,['id'=>'btn-cronograma','data-url'=>url($this->getUrl('','faseobra/cronograma')),'icon'=>'fa fa-calendar'])),
+            app('form')->button('Pagamentos', array_merge($arrProp,['id'=>'btn-pagamento','data-url'=>url($this->getUrl('','pagamento')),'icon'=>'fa fa-usd'])),
         ];
     }
 
+    protected function getValidaController($record) {
+//        $valida[] = ['btns'=>['#btn-faseobra'],'value'=>1];
+        $valida[] = ['btns'=>['#btn-despesa','#btn-cronograma'],'value'=>($record->fasesObra->isEmpty() ? 0 : 1),'hint'=>'É necessário cadastrar as fases da obra.'];
+        return json_encode($valida);
+    }
+    
     protected function getTitulo() {
         return 'Obras';
     }
@@ -110,4 +116,3 @@ class ObraController extends Controller{
     }
 
 }
-

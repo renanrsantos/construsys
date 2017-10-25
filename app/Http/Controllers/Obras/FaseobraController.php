@@ -32,7 +32,7 @@ class FaseobraController extends DependenciaObraController{
     }
     
     protected function getModalSize(){
-        return 'modal-md';
+        return 'modal-lg';
     }
     
     protected function getDataGantt() {
@@ -54,8 +54,8 @@ class FaseobraController extends DependenciaObraController{
     }
     
     public function cronograma(){
-        $url = url($this->getUrl('','faseobra').'/data?gantt=true&idobra='.$this->getObra()->idobra);
-        return $this->view('obras.form-cronograma',['acao'=>'Visualizar','url'=>$url]);
+        $url = url($this->getUrl('','faseobra').'/data?gantt=true&idobra='.$this->getObra('index')->idobra);
+        return $this->view('obras.form-cronograma',['acao'=>'Visualizar','url'=>$url,'modalSize'=>'modal-xl']);
     }
     
 }

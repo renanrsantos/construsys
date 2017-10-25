@@ -36,7 +36,7 @@ class FormBuilder extends \Collective\Html\FormBuilder {
         if($validator){
             $options['data-toggle'] = 'validator';
         }
-        return $this->toHtmlString(parent::open($options) . $this->hidden('redirect', Request::url()));
+        return $this->toHtmlString(parent::open($options));
     }
 
     public function text($name, $value = null, $options = array()) {
@@ -248,8 +248,11 @@ class FormBuilder extends \Collective\Html\FormBuilder {
         $this->html->addClassAttributes($attributesId,'col-'.$colId);
         $this->html->addClassAttributes($attributes,'col-'.$colText);
         $inputId = $this->input('text', $id, $attributes['value-id'], $attributesId);
-        $btnSearch = $this->button('',['color'=>'info','icon'=>'fa fa-search','tabindex'=>'-1']);
-        return $this->validate($this->inputAddon($inputId . $this->input('text', $textAlt, $attributes['value'], $attributes),$btnSearch,true,true),$labelText,['class'=>'input-consulta']);
+        $modalId = 'modal-consulta-fr-'.$modulo.'-'.$rotina.'-'.rand(1,999);
+        $btnSearch = $this->button('',['class'=>'btn-input-consulta','data-url'=>url(Request::segment(1).'/modulo/'.$modulo.'/rotina/'.$rotina.'/model'),'color'=>'info','icon'=>'fa fa-search','tabindex'=>'-1','data-toggle'=>'modal','data-target'=>'#'.$modalId,'data-data'=>'camporetorno='.$id]);
+        $modal = '<div class="modal fade mymodal modal-consulta" id="'.$modalId.'" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static"><div class="modal-dialog modal-xl" role="document"></div></div>';
+        $modal .= '<script>$("#'.$modalId.'").appendTo($("#'.$modalId.'").closest(".modal"));</script>';
+        return $this->toHtmlString($modal.$this->validate($this->inputAddon($inputId . $this->input('text', $textAlt, $attributes['value'], $attributes),$btnSearch,true,true),$labelText,['class'=>'input-consulta']));
     }
 
     public function dropdownButton($value, $items,$attributes = []){

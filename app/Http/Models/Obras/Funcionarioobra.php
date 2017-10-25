@@ -35,8 +35,15 @@ class Funcionarioobra extends Model{
     }
     
     public function ultimoPeriodo(){
-        $periodoAtual = $this->periodos()->orderBy('idperiodofuncionario','desc')->first();
-        $dataFim = $periodoAtual->pefdatafim ? $periodoAtual->pefdatafim : '(Atual)';
-        return $periodoAtual->pefdatainicio.' à '. $dataFim;
+        return $this->periodos()->orderBy('idperiodofuncionario','desc')->first();
+    }
+    
+    public function descUltimoPeriodo(){
+        if($this->periodos->isEmpty()){
+            return 'Não há';
+        }
+        $ultimoPeriodo = $this->ultimoPeriodo();
+        $dataFim = $ultimoPeriodo->pefdatafim ? $ultimoPeriodo->pefdatafim : '(Atual)';
+        return $ultimoPeriodo->pefdatainicio.' à '. $dataFim;
     }
 }

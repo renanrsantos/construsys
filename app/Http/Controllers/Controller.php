@@ -174,7 +174,7 @@ abstract class Controller extends BaseController
         $data = [];
         foreach($this->getRecords()->get() as $record){
             $row = [];
-            $row[] = app('form')->checkboxSimple('id[]',$record->getAttributeValue($record->getKeyName()),null,['class'=>'chk-acao'])->toHtml();
+            $row[] = app('form')->checkboxSimple('id[]',$record->getKey(),null,['class'=>'chk-acao','data-valida-controller'=>$this->getValidaController($record)])->toHtml();
             foreach ($this->getColumns() as $column) {
                 $column = $column['name']; 
                 $row[] = $this->getValueFromRecord($record, $column);
@@ -210,7 +210,7 @@ abstract class Controller extends BaseController
     
     protected function getColumnsDataTable(){
         $columns[] = app('html')->column('checkbox',app('form')->checkboxSimple('','',null,['id'=>'chk-all','title'=>'Selecionar todos'])->toHtml());
-        $totalColunas = count($this->getColumns());
+        $totalColunas = count($this->getColumns()) ? count($this->getColumns()) : 1;
         $widthFixed = 100 / $totalColunas;
         foreach ($this->getColumns() as $column) {
             if((!is_array($column['name'])) && (strpos($column['name'], ','))){
@@ -238,6 +238,10 @@ abstract class Controller extends BaseController
     }
 
     protected function getModalSize(){
+        return '';
+    }
+    
+    protected function getValidaController($record){
         return '';
     }
 
@@ -282,21 +286,24 @@ abstract class Controller extends BaseController
         $record = $this->getModel();
         $record->processaNovo();
         $acao = 'Inserir';
-        return self::view($this->modulo.'.form-'.$this->rotina,array_merge(compact('record','acao'),$this->getPropExtra('novo')));
+        $modalSize = $this->getModalSize();
+        return self::view($this->modulo.'.form-'.$this->rotina,array_merge(compact('record','acao','modalSize'),$this->getPropExtra('novo')));
     }
     
     public function alterar(){
         $id = $this->request->get('id');
         $record = $this->getModel()->find($id[0]);
         $acao = 'Alterar';
-        return self::view($this->modulo.'.form-'.$this->rotina,array_merge(compact('record','acao'),$this->getPropExtra('alterar')));
+        $modalSize = $this->getModalSize();
+        return self::view($this->modulo.'.form-'.$this->rotina,array_merge(compact('record','acao','modalSize'),$this->getPropExtra('alterar')));
     }
     
     public function visualizar(){
         $id = $this->request->get('id');
         $record = $this->getModel()->find($id[0]);
         $acao = 'Visualizar';
-        return self::view($this->modulo.'.form-'.$this->rotina,array_merge(compact('record','acao'),$this->getPropExtra('visualizar')));
+        $modalSize = $this->getModalSize();
+        return self::view($this->modulo.'.form-'.$this->rotina,array_merge(compact('record','acao','modalSize'),$this->getPropExtra('visualizar')));
     }
     
     public function data(){
@@ -432,5 +439,23 @@ abstract class Controller extends BaseController
     
     protected function indexAsModal(){
         return false;
+    }
+    
+    public function model(){
+        $filters = $this->formatFilters($this->getFilters());
+        $btns = [];
+        $ajax = false;
+        $section = 'content';
+        $main = '';
+        $scrollY = $this->getHeightTable() - ($main ? 0 : 80);
+        $titulo = $this->getTitulo();
+        $modalSize = 'modal-xl';
+        $view = 'layouts.table-modal';
+        $acao = '';
+        $inputId = null;
+        $headerPai = '';
+        $urlAlt = str_replace('/model', '', $this->request->url());
+        $consulta = app('form')->button('Selecionar',['color'=>'primary','icon'=>'fa fa-hand-o-up','class'=>'btn-single btn-seleciona','data-camporetorno'=>'#'.$this->request->get('camporetorno')]);
+        return self::view($view,array_merge(compact('consulta','filters','btns','ajax','section','scrollY','titulo','modalSize','acao','main','inputId','headerPai','urlAlt'),$this->getPropExtra('index')));
     }
 }
