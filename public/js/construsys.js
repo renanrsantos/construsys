@@ -464,7 +464,6 @@ $(document).ready(function () {
             url = url !== undefined ? url : form.prop('action') + '/' + action;
             modal.load(url, data,function (responseText, textStatus, XMLHttpRequest){
                 var size = 'modal-xl';
-                $this.button('reset');
                 if(textStatus === "error"){
                     var title = $('<h5></h5>').addClass('modal-title').html('Erro');
                     var buttonClose = $('<button></button>').addClass('close').attr('data-dismiss','modal').html('<span>&times;</span>');
@@ -482,6 +481,7 @@ $(document).ready(function () {
                     .removeClass('modal-sm')
                     .addClass(size);
                 eval(modal.find('#table-scripts').html());
+                $this.button('reset');
             });
             if($(this).hasClass('btn-input-consulta')){
                 $(this).closest('.input-consulta').find('.flexdatalist-id').addClass('wait-response');
