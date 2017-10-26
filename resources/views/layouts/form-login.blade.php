@@ -5,10 +5,19 @@
             Html::listGroup($errors->all(),'danger'),
             Form::open(array('url' => 'login','class'=>'form-horizontal')),
             Form::formGroup([
-                Form::text('usulogin',null,['label' => 'Usuário','required'])
+                Html::col(
+                    Form::validate(
+                        Form::text('usulogin',null,['data-vindicate'=>'required']),
+                        Form::label('usulogin','Usuário')
+                    )
+                ,'12')
             ]),
             Form::formGroup([
-                Form::password('ususenha', null,['label'=>'Senha','required'])
+                Form::validate(
+                        Form::password('ususenha', null,['data-vindicate'=>'required']),
+                        Form::label('ususenha','Senha')
+                    )
+                ,'12')
             ]),
             Html::tag('div',
                 Form::formGroup([
@@ -23,5 +32,5 @@
         ],
         Html::icon('fa fa-copyright').date('Y').' '.Html::link('http://construsys.com.br','Construsys').'. Todos os direitos reservados',
         ['color'=>'primary']),
-    ['class'=>'col-md-4 col-md-offset-4'])
+    ['class'=>'text-center'])
 }}
