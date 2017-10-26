@@ -12,7 +12,7 @@ use App\Http\Models\Model;
 class Rotina extends Model{
     
     protected $fillable = [
-        'idrotina','idmodulo', 'rotnome', 'rotpath', 'roticone'
+        'idmodulo', 'rotnome', 'rotpath', 'roticone'
     ];
     
     public $consulta = ['visible'=>'idrotina,rotnome,modnome',
