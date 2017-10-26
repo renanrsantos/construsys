@@ -3,20 +3,25 @@ var camposFiltro;
 var operadoresFiltro;
 var valoresFiltro;
 
+$.fn.button = function(state){
+    var btn = $(this);
+    switch(state){
+        case 'loading':
+            var btnTxt = btn.html();
+            btn.attr('value-original',btnTxt);
+            btn.addClass('disabled');
+            btnTxt = btnTxt.substr(btnTxt.indexOf('</i>') + 4, btnTxt.length);
+            btn.html("<i class='fa fa-circle-o-notch fa-spin fa-fw'></i>" + btnTxt);
+            break;
+        case 'reset':
+            btn.html(btn.attr('value-original'));
+            btn.removeClass('disabled');
+            break;
+    }
+};
+
 function getDisabled() {
     return $('#btn-incluir').prop('disabled');
-}
-
-function setBtnLoading(btn, loading) {
-    if (loading) {
-        var btnTxt = btn.html();
-        btnTxt = btnTxt.substr(btnTxt.indexOf('</i>') + 4, btnTxt.length);
-        btn.attr('data-loading-text', '<i class="fa fa-circle-o-notch fa-spin fa-fw"></i>' + btnTxt);
-        return btn.button('loading');
-    } else {
-        btn.button('reset');
-        return null;
-    }
 }
 
 function alteraBotao(botao, habilitado) {
@@ -353,11 +358,11 @@ $(document).ready(function () {
     });
 
     $('body').on('click', '#btn-filtrar',function () {
-        var btn = setBtnLoading($(this), true);
+        $(this).button('loading')
         var sTable = $(this).attr('aria-controls');
         var table = $('#' + sTable);
         setFiltro(table, true);
-        setBtnLoading(btn, false);
+        $(this).button('reset');
     });
 
     $('body').on('keyup', 'input[type="search"]', function () {
@@ -442,12 +447,14 @@ $(document).ready(function () {
 
     $('body').on('click', '[data-toggle="modal"]', function (e) {
         if(botaoHabilitado($(this))){
+            var $this = $(this);
             var modal = $($(this).data('target') + ' .modal-dialog');
             var form = $($(this).data('form'));
             var url = $(this).data('url');
             var action = $(this).data('action');
             var data = null;
             var arr = ['alterar', 'visualizar'];
+            $this.button('loading');
             if ((arr.indexOf(action) > -1) || (url !== "")) {
                 data = form.serialize();
             }
@@ -457,6 +464,7 @@ $(document).ready(function () {
             url = url !== undefined ? url : form.prop('action') + '/' + action;
             modal.load(url, data,function (responseText, textStatus, XMLHttpRequest){
                 var size = 'modal-xl';
+                $this.button('reset');
                 if(textStatus === "error"){
                     var title = $('<h5></h5>').addClass('modal-title').html('Erro');
                     var buttonClose = $('<button></button>').addClass('close').attr('data-dismiss','modal').html('<span>&times;</span>');
@@ -582,11 +590,14 @@ $(document).ready(function () {
     $('body').on('click','[data-toggle="submit"]' ,function () {
         var form = $(this).closest('form');
         var validado = form.vindicate("validate");
+        var $this = $(this);
         form.prop('submited',true);
+        $this.button('loading');
         if (validado) {
             var url = form.prop('action');
             var data = form.serialize();
             $.post(url, data, function (data) {
+                $this.button('reset');
                 switch (data.status) {
                     case 'ERRO':
                         form.find('#msg-fr-modal').html(data.msg);
@@ -599,6 +610,7 @@ $(document).ready(function () {
         } else {
             var firstInvalid = form.vindicate('get').firstInvalid.element;
             var closest = firstInvalid.closest('.tab-pane');
+            $this.button('reset');
             if(closest){
                 $('.nav a[href="#' + closest.attr('id') + '"]').tab('show');
             }

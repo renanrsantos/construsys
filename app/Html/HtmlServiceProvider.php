@@ -20,9 +20,15 @@ class HtmlServiceProvider extends \Collective\Html\HtmlServiceProvider{
         });
     }
     
+    protected function registerChartBuilder(){
+        $this->app->singleton('chart', function ($app) {
+            return new Chart\ChartBuilder();
+        });
+    }
+    
     public function provides()
     {
-        return ['html', 'form', 'App\Html\HtmlBuilder', 'App\Html\FormBuilder'];
+        return ['html', 'form', 'chart', 'App\Html\HtmlBuilder', 'App\Html\FormBuilder','App\Html\Chart\ChartBuilder'];
     }
 
     public function register()
@@ -30,9 +36,12 @@ class HtmlServiceProvider extends \Collective\Html\HtmlServiceProvider{
         $this->registerHtmlBuilder();
 
         $this->registerFormBuilder();
+        
+        $this->registerChartBuilder();
 
         $this->app->alias('html', 'App\Html\HtmlBuilder');
         $this->app->alias('form', 'App\Html\FormBuilder');
+        $this->app->alias('chart', 'App\Html\Chart\ChartBuilder');
     }
     
     
