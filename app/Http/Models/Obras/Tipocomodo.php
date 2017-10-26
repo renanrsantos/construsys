@@ -7,7 +7,7 @@ use App\Http\Models\Model;
 class Tipocomodo extends Model{
 
     protected $fillable = [
-        'idtipocomodo', 'tconome', 
+        'tconome', 
     ];
 
     public static function getTiposComodo(){

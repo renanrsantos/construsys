@@ -10,7 +10,7 @@ use App\Http\Models\Model;
  * @author renan.santos
  */
 class Pagamento extends Model{
-    protected $fillable = ['idpagamento','idobra','pagobs','pagdata','pagvalor'];
+    protected $fillable = ['idobra','pagobs','pagdata','pagvalor'];
     
     public function obra(){
         return $this->belongsTo(Obra::class,'idobra');

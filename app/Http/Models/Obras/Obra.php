@@ -11,7 +11,7 @@ use App\Http\Models\Cadastros\Cliente;
  */
 class Obra extends Model{
     protected $fillable = [
-        'idobra','idcliente','idorcamento','obrtamanho','obrtipo','obrdescricao','obrdatainicio',
+        'idcliente','idorcamento','obrtamanho','obrtipo','obrdescricao','obrdatainicio',
         'obrprevisao','obrvalororcado','obrtipoprevisao'
     ];
     

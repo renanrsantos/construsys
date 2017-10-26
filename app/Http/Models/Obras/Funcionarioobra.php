@@ -12,7 +12,9 @@ use App\Http\Models\RH\Funcionario;
  * @author renan.santos
  */
 class Funcionarioobra extends Model{
-    protected $fillable = ['idfuncionarioobra','idobra','idfaseobra','fuoobs','idcargo','idfuncionario'];
+    protected $fillable = [
+        'idobra','idfaseobra','fuoobs','idcargo','idfuncionario'
+    ];
     
     public function obra(){
         return $this->belongsTo(Obra::class,'idobra');

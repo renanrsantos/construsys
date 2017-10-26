@@ -10,7 +10,7 @@ use App\Http\Models\Model;
  */
 class Fase extends Model{
     protected $fillable = [
-        'idfase','fsedescricao',
+        'fsedescricao',
     ];
     
     public static function getFases(){

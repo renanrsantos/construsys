@@ -12,7 +12,7 @@ use App\Http\Models\Model;
 class Unidademedida extends Model{
     
     protected $fillable = [
-        'idunidademdida','unmsigla','unmdescricao'
+        'unmsigla','unmdescricao'
     ];
 
     public $consulta = ['visible'=>'idunidademdida,unmsigla,unmdescricao',

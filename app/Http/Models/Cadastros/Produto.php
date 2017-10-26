@@ -10,7 +10,7 @@ use App\Http\Models\Model;
  */
 class Produto extends Model{
     protected $fillable = [
-        'idproduto','prddescricao','prddescdet','prdcodigobarras','idunidademedida',
+        'prddescricao','prddescdet','prdcodigobarras','idunidademedida',
         'idcategoriaproduto','idsubcategoriaproduto','prdvalorunitario'
     ];
     

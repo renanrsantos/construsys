@@ -13,7 +13,7 @@ use App\Http\Models\Model;
 class Fornecedor extends Model{
     
     protected $fillable = [
-        'idfornecedor','idpessoa',
+        'idpessoa',
     ];
     
 

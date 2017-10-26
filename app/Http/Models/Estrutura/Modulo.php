@@ -7,7 +7,7 @@ use App\Http\Models\Model;
 class Modulo extends Model{
 
     protected $fillable = [
-        'idmodulo', 'modnome', 'modpath', 'modicone'
+        'modnome', 'modpath', 'modicone'
     ];
     
     public $consulta = ['visible'=>'idmodulo,modnome',

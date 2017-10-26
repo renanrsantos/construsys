@@ -11,7 +11,7 @@ use App\Http\Models\Model;
  */
 class Faseobra extends Model{
     protected $fillable = [
-        'idfaseobra','idobra','fsodatainicio','fsodataprevistafim','fsoobservacao','fsostatus','idfase'
+        'idobra','fsodatainicio','fsodataprevistafim','fsoobservacao','fsostatus','idfase'
     ];
     
     public function obra(){

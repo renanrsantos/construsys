@@ -28,7 +28,7 @@ class Usuario extends Authenticatable
     }
     
     protected $fillable = [
-        'idusuario', 'usulogin', 'ususenha','usupermisao','usuadministrador'
+        'usulogin', 'ususenha','usupermisao','usuadministrador'
     ];
 
     protected $hidden = [

@@ -10,7 +10,7 @@ use App\Http\Models\Cadastros\Pessoa;
  * @author renan.santos
  */
 class Funcionario extends Model{
-    protected $fillable = ['idfuncionario','idcargo','idpessoa','fundataadmissao','funsalariobase'];
+    protected $fillable = ['idcargo','idpessoa','fundataadmissao','funsalariobase'];
     
     public $consulta = [
         'visible'=>'idfuncionario,pesnome,carnome',

@@ -7,7 +7,7 @@ use App\Http\Models\Model;
 class Moduloinstalado extends Model
 {
     protected $fillable = [
-        'idmoduloinstalado', 'idmodulo', 'identidade', 'mdiativo',
+        'idmodulo', 'identidade', 'mdiativo',
     ];
       
     public function getCampoAtivo() {

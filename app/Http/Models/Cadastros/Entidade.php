@@ -13,7 +13,7 @@ use App\Http\Models\Estrutura\Moduloinstalado;
 class Entidade extends Model{
 
     protected $fillable = [
-        'identidade','idpessoa',
+        'idpessoa',
     ];
     
     public function pessoa(){

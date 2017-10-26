@@ -9,7 +9,7 @@ use App\Http\Models\Model;
  * @author renan.santos
  */
 class Cargo extends Model{
-    protected $fillable = ['idcargo','carnome'];
+    protected $fillable = ['carnome'];
     
     public static function getCargos(){
         $cargos = [''=>''];

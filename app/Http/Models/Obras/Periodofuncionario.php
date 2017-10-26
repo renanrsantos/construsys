@@ -9,7 +9,7 @@ use App\Http\Models\Model;
  * @author renan.santos
  */
 class Periodofuncionario extends Model{
-    protected $fillable = ['idperiodofuncionario','idfuncionarioobra','pefdatainicio','pefdatafim'];
+    protected $fillable = ['idfuncionarioobra','pefdatainicio','pefdatafim'];
     
     public function funcionarioObra(){
         return $this->belongsTo(Funcionarioobra::class,'idfuncionarioobra');

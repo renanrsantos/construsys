@@ -12,7 +12,7 @@ use App\Http\Models\Model;
 class Categoriaproduto extends Model{
 
     protected $fillable = [
-        'idcategoriaproduto','catdescricao',
+        'catdescricao',
     ];
     
 }

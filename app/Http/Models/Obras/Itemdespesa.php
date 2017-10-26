@@ -12,7 +12,7 @@ use App\Http\Models\Cadastros\Produto;
  */
 class Itemdespesa extends Model{
     protected $fillable = [
-        'iditemdespesa','iddespesaobra','idproduto','itdquantidade','itdvalorunitario','itdcomplemento'
+       'iddespesaobra','idproduto','itdquantidade','itdvalorunitario','itdcomplemento'
     ];
 
     public function produto(){

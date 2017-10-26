@@ -11,7 +11,7 @@ use App\Http\Models\Model;
  */
 class Comodo extends Model{
     protected $fillable = [
-        'idcomodo','idobra','idtipocomodo','comdescricao','comtamanho'
+        'idobra','idtipocomodo','comdescricao','comtamanho'
     ];
     
     public function tipoComodo(){

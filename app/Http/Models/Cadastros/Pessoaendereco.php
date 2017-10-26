@@ -12,7 +12,7 @@ use App\Http\Models\Model;
 class Pessoaendereco extends Model{
     
     protected $fillable = [
-        'idpessoaendereco','peetipo','peecomplemento','peebairro','peelogradouro',
+        'peetipo','peecomplemento','peebairro','peelogradouro',
         'peenumero','idpessoa','peecep','peecidade','peeestado'
     ];
     

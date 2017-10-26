@@ -10,6 +10,6 @@ use App\Http\Models\Model;
  */
 class Subcategoriaproduto extends Model{
     protected $fillable = [
-        'idsubcategoriaproduto','sbcdescricao'
+        'sbcdescricao'
     ];
 }

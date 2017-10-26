@@ -7,7 +7,7 @@ use App\Http\Models\Model;
 class Subrotina extends Model {
     
     protected $fillable = [
-        'idsubrotina','sbrnome','sbrpath','idrotina','sbricone' 
+        'sbrnome','sbrpath','idrotina','sbricone' 
     ];
 
     function rotina(){
