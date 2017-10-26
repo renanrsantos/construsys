@@ -13,7 +13,7 @@
 <script type="text/javascript" src="{{URL::asset('js/popper.min.js')}}"></script>
 <script type="text/javascript" src="{{URL::asset('js/bootstrap.min.js')}}"></script>
 <script type="text/javascript" src="{{URL::asset('js/jquery.flexdatalist.min.js')}}"></script>
-<script type="text/javascript" src="js/jquery.datatables.min.js')}}"></script>
+<script type="text/javascript" src="{{URL::asset('js/jquery.datatables.min.js')}}"></script>
 <script type="text/javascript" src="{{URL::asset('js/datatables.bootstrap.js')}}"></script>
 <script type="text/javascript" src="{{URL::asset('js/jquery.mask.js')}}"></script>
 <script type="text/javascript" src="{{URL::asset('js/vindicate.js')}}"></script>
