@@ -2,7 +2,7 @@
     Html::tag('div',
         Html::panel('Login',
         [
-            Html::listGroup($errors->all(),'danger'),
+//            Html::listGroup($errors->all(),'danger'),
             Form::open(array('url' => 'login','class'=>'form-horizontal')),
             Form::formGroup([
                 Html::col(
