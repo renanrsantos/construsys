@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
  *
  * @author renan
  */
-class RHController extends Controller{
+class RhController extends Controller{
     
     protected function getColumns() {
         
