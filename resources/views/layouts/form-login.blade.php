@@ -13,7 +13,8 @@
                 ,'12')
             ]),
             Form::formGroup([
-                Form::validate(
+                Html::col(
+                    Form::validate(
                         Form::password('ususenha', null,['data-vindicate'=>'required']),
                         Form::label('ususenha','Senha')
                     )
