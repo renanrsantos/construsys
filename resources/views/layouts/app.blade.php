@@ -12,7 +12,7 @@
                 @include('layouts.menus.menu-sistema')
             @endif
         @show
-        @if(isset($rotina) && $rotina)
+        @if((isset($rotina) && $rotina->rotpath) || isset($subrotina))
             <ol class="breadcrumb bg-light">
                 <li class="breadcrumb-item"><a href="{{url($entidadeSelecionada->identidade.'/modulo'.$moduloSelecionado->modpath)}}">{{$moduloSelecionado->modnome}}</a></li>
                 @if($rotina)
