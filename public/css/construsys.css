@@ -1,9 +1,5 @@
-a.dropdown-toggle, .dropdown-menu > a, .dataTables_empty{
+a.dropdown-toggle, .dropdown-menu > a, .dataTables_empty, a.dropdown-item{
     cursor:pointer;
-}
-
-a.dropdown-item{
-    cursor: context-menu;
 }
 
 .dt-bootstrap{
