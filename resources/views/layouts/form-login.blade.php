@@ -33,5 +33,5 @@
         ],
         Html::icon('fa fa-copyright').date('Y').' '.Html::link('http://construsys.com.br','Construsys').'. Todos os direitos reservados',
         ['color'=>'primary']),
-    ['class'=>'text-center'])
+    ['class'=>'col d-flex justify-content-center','style'=>'margin-top:30px;'])
 }}
