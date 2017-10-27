@@ -482,6 +482,7 @@ $(document).ready(function () {
                     .addClass(size);
                 eval(modal.find('#table-scripts').html());
                 $this.button('reset');
+                modal.modal('show');
             });
             if($(this).hasClass('btn-input-consulta')){
                 $(this).closest('.input-consulta').find('.flexdatalist-id').addClass('wait-response');
