@@ -7,14 +7,11 @@ $.fn.button = function(state){
     var btn = $(this);
     switch(state){
         case 'loading':
-            var btnTxt = btn.html();
-            btn.attr('value-original',btnTxt);
             btn.addClass('disabled');
-            btnTxt = btnTxt.substr(btnTxt.indexOf('</i>') + 4, btnTxt.length);
-            btn.html("<i class='fa fa-circle-o-notch fa-spin fa-fw'></i>" + btnTxt);
+            btn.find('i').addClass('fa-circle-o-notch fa-spin fa-fw');
             break;
         case 'reset':
-            btn.html(btn.attr('value-original'));
+            btn.find('i').removeClass('fa-circle-o-notch fa-spin fa-fw');
             btn.removeClass('disabled');
             break;
     }
