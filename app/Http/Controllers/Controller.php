@@ -30,7 +30,7 @@ abstract class Controller extends BaseController
     protected $model;
 
     protected $id;
-
+    
     public function __construct() {
         $this->entidade = self::getEntidade();
     }

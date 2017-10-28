@@ -26,5 +26,9 @@ class UnidademedidaController extends Controller{
     protected function getTitulo() {
         return 'Unidades de Medida';
     }
+    
+    protected function getModalSize() {
+        return 'modal-md';
+    }
 
 }

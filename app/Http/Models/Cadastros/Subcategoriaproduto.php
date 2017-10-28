@@ -12,4 +12,10 @@ class Subcategoriaproduto extends Model{
     protected $fillable = [
         'sbcdescricao'
     ];
+    
+     public $consulta = ['visible'=>'idsubcategoriaproduto,sbcdescricao',
+        'search'=>'sbcdescricao',
+        'text'=>'sbcdescricao',
+        'label'=>'Sub Categoria'
+    ];
 }

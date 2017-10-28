@@ -15,4 +15,10 @@ class Categoriaproduto extends Model{
         'catdescricao',
     ];
     
+    public $consulta = ['visible'=>'idcategoriaproduto,catdescricao',
+        'search'=>'catdescricao',
+        'text'=>'catdescricao',
+        'label'=>'Categoria'
+    ];
+    
 }

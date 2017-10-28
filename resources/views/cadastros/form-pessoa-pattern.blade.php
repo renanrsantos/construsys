@@ -30,18 +30,7 @@
                     Form::label('pesrgie','RG / IE')
                 )
             ,'4')
-        ]) .
-        Form::formGroup([
-            Html::col(
-                Form::checkbox('cliente',1,$record->cliente,['label'=>'Cliente'])
-            ,'4'),
-            Html::col(
-                Form::checkbox('fornecedor',1,false,['label'=>'Fornecedor'])
-            ,'4'),
-            Html::col(
-                Form::checkbox('funcionario',1,false,['label'=>'Funcionário'])
-            ,'4')          
-        ])            
+        ])          
     ],
     ['label'=>'Endereço',
      'link'=>'tab-endereco',

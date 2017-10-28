@@ -22,5 +22,9 @@ class CategoriaprodutoController extends Controller{
     protected function getTitulo() {
         return 'Categoria dos Produtos';
     }
+    
+    protected function getModalSize() {
+        return 'modal-md';
+    }
 
 }

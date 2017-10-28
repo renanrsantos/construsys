@@ -29,8 +29,8 @@ class PessoaController extends Controller{
     }
     
     protected function processaNovoRelacao() {
-        $pessoa = $this->getModel();
-        $idpessoa = $pessoa->idpessoa;
+//        $pessoa = $this->getModel();
+        $idpessoa = $this->id;
         if($this->request->pectelefone){
             Pessoacontato::create(['idpessoa'=>$idpessoa,'pectipo'=>1,'peccontato'=>$this->request->pectelefone]);
         }
@@ -41,17 +41,9 @@ class PessoaController extends Controller{
             Pessoacontato::create(['idpessoa'=>$idpessoa,'pectipo'=>3,'peccontato'=> $this->request->pecemail]);
         }
         if($this->request->peetipo){
-            $arr = array_merge(['idpessoa'=>$idpessoa],$this->request->toArray());
+            $arr = $this->request->toArray();
+            $arr['idpessoa'] = $idpessoa;
             Pessoaendereco::create($arr);
-        }
-        if($this->request->cliente){
-            Cliente::create(['idpessoa'=>$idpessoa]);
-        }
-        if($this->request->fornecedor){
-            // Fornecedor::create(['idpessoa'=>$idpessoa]);
-        }
-        if($this->request->funcionario){
-            // Fornecedor::create(['idpessoa'=>$idpessoa]);
         }
     }
     

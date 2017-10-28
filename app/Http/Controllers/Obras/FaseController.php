@@ -27,5 +27,9 @@ class FaseController extends Controller{
     protected function getTitulo() {
         return 'Fases da Obra';
     }
+    
+    protected function getModalSize() {
+        return 'modal-md';
+    }
 
 }

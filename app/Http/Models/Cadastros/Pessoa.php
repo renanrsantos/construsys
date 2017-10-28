@@ -12,7 +12,7 @@ use App\Http\Models\Model;
 class Pessoa extends Model{
     
     protected $fillable = [
-        'pestipo','pesnome','pescpfcnpj','pesrgie'
+       'pestipo','pesnome','pescpfcnpj','pesrgie'
     ];
     
     public $consulta = [

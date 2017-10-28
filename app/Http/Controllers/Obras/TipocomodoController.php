@@ -22,4 +22,8 @@ class TipocomodoController extends Controller{
     protected function getTitulo() {
         return 'Tipos de Cômodo';
     }
+    
+    public function getModalSize() {
+        return 'modal-md';
+    }
 }
