@@ -3,8 +3,8 @@
 namespace App\Http\Models\Obras;
 
 use App\Http\Models\Model;
-use App\Http\Models\RH\Cargo;
-use App\Http\Models\RH\Funcionario;
+use App\Http\Models\Rh\Cargo;
+use App\Http\Models\Rh\Funcionario;
 
 /**
  * Description of Funcionarioobra

@@ -625,14 +625,19 @@ $(document).ready(function () {
         }
     });
     
-    $('body').on('click','.btn-seleciona',function(){
-       var val = $(this).closest('form').find('input[type="checkbox"]:checked').val();
-       var campoRetorno = $(this).data('camporetorno').replace('[]','\\[\\]');
-       $(campoRetorno).each(function(){
-            if($(this).hasClass('wait-response')){
-                $(this).trigger('input').val(val).trigger('blur');
-            } 
-       });
-       $(this).closest('.modal').modal('hide');
+    $('body').on('click','.btn-seleciona',function(e){
+        if(botaoHabilitado($(this))){
+            var val = $(this).closest('form').find('input[type="checkbox"]:checked').val();
+            var campoRetorno = $(this).data('camporetorno').replace('[]','\\[\\]');
+            $(campoRetorno).each(function(){
+                 if($(this).hasClass('wait-response')){
+                     $(this).trigger('input').val(val).trigger('blur');
+                 } 
+            });
+            $(this).closest('.modal').modal('hide');
+        } else {
+            e.preventDefault();
+            e.stopPropagation();
+        }
     });
 });

@@ -20,7 +20,7 @@
     Form::formGroup([
         Html::col(
             Form::validate(
-                Form::select('idcargo',App\Http\Models\RH\Cargo::getCargos(),$record->idcargo,['data-vindicate'=>'required']),
+                Form::select('idcargo',App\Http\Models\Rh\Cargo::getCargos(),$record->idcargo,['data-vindicate'=>'required']),
                 Form::label('idcargo','Cargo')
             )
         ,'4'),

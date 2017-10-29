@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Models\RH;
+namespace App\Http\Models\Rh;
 
 use App\Http\Models\Model;
 /**

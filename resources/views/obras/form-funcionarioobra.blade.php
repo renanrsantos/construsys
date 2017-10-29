@@ -25,7 +25,7 @@
         ,'6'),
         Html::col(
             Form::validate(
-                Form::select('idcargo',App\Http\Models\RH\Cargo::getCargos(),$record->idcargo ? $record->idcargo : $record->funcionario ? $record->funcionario->idcargo : ''),
+                Form::select('idcargo',App\Http\Models\Rh\Cargo::getCargos(),$record->idcargo ? $record->idcargo : $record->funcionario ? $record->funcionario->idcargo : ''),
                 Form::label('idcargo','Cargo')
             )
         ,'6')

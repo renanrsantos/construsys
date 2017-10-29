@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\RH;
+namespace App\Http\Controllers\Rh;
 /**
  * Description of FuncionarioController
  *
