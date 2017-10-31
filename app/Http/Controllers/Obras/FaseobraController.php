@@ -44,7 +44,7 @@ class FaseobraController extends DependenciaObraController{
                 'values'=>[
                     [
                         'from'=>$fase->fsodatainicio,
-                        'to'=>$fase->fsodataprevistafim,
+                        'to'=>$fase->fsodataprevistafim ? $fase->fsodataprevistafim : $fase->obra->dataFim(),
                         'label'=>$fase->fase->fsedescricao
                     ]
                 ]
@@ -58,4 +58,11 @@ class FaseobraController extends DependenciaObraController{
         return $this->view('obras.form-cronograma',['acao'=>'Visualizar','url'=>$url,'modalSize'=>'modal-xl']);
     }
     
+    public function getBtns() {
+        return [
+            app('form')->button('',['id'=>'btn-inicia','data-url'=>url($this->getUrl('','faseobra/inicia')),'icon'=>'fa fa-play','data-toggle'=>'modal','data-target'=>'#modal-fr-obras-faseobra','color'=>'success','class'=>'btn-single','data-form'=>'#fr-registros-obras-faseobra']),
+            app('form')->button('',['id'=>'btn-para','data-url'=>url($this->getUrl('','faseobra/para')),'icon'=>'fa fa-pause','data-toggle'=>'modal','data-target'=>'#modal-fr-obras-faseobra','color'=>'danger','class'=>'btn-single','data-form'=>'#fr-registros-obras-faseobra']),
+            app('form')->button('',['id'=>'btn-finaliza','data-url'=>url($this->getUrl('','faseobra/finaliza')),'icon'=>'fa fa-flag-checkered','data-toggle'=>'modal','data-target'=>'#modal-fr-obras-faseobra','color'=>'primary','class'=>'btn-single','data-form'=>'#fr-registros-obras-faseobra']) 
+        ];
+    }
 }

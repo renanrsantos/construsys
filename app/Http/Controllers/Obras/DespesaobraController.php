@@ -10,6 +10,7 @@ class DespesaobraController extends DependenciaObraController{
     protected function getColumns() {
         return [
             ['name'=>'iddespesaobra','label'=>'Código','width'=>'5'],
+            ['name'=>'dsodata','label'=>'Data','width'=>'10'],
             ['name'=>'dsoobs','label'=>'Descrição','width'=>'20'],
             ['name'=>'getTipoDespesa()','label'=>'Tipo','width'=>'10'],
             ['name'=>'dsovalortotal','label'=>'Valor Total','width'=>'10'],

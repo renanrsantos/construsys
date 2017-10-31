@@ -2,10 +2,12 @@
     Form::hidden('idcomodo[]',$comodo ? $comodo->idcomodo : ''),
     Html::col(
         Form::validate(
-            Form::select('idtipocomodo[]',App\Http\Models\Obras\Tipocomodo::getTiposComodo(),$comodo ? $comodo->idtipocomodo : ''),
-            Form::label('idtipocomodo[]','Tipo')
+            Form::inputConsulta('obras','tipocomodo',[
+                'value-id'=>$comodo ? $comodo->idtipocomodo : '',
+                'value'=>$comodo ? $comodo->tipoComodo->tconome : ''
+            ],['id'=>'idtipocomodo[]'])
         )
-    ,'auto'),
+    ,'3'),
     Html::col(
         Form::validate(
             Form::text('comdescricao[]',$comodo ? $comodo->comdescricao : ''),

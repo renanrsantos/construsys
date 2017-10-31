@@ -11,18 +11,18 @@ class FuncionarioobraController extends DependenciaObraController{
     
     protected function getColumns() {
         return [
-                ['name'=>'idfuncionarioobra','label'=>'Código','width'=>'5'],
-                ['name'=>'funcionario,pessoa,pesnome','label'=>'Nome','width'=>'50'],            
-                ['name'=>'cargo,carnome','label'=>'Cargo','width'=>'20'],
-                ['name'=>'descUltimoPeriodo()','label'=>'Último Perído','15']
-            ];
+            ['name'=>'idfuncionarioobra','label'=>'Código','width'=>'5'],
+            ['name'=>'funcionario,pessoa,pesnome','label'=>'Nome','width'=>'50'],            
+            ['name'=>'cargo,carnome','label'=>'Cargo','width'=>'20'],
+            ['name'=>'descUltimoPeriodo()','label'=>'Último Período','15']
+        ];
     }
 
     protected function getFilters() {
         return [
-                ['value'=>'funcionario,pessoa,pesnome','label'=>'Nome Funcionário','type'=>'string','data-column'=>2],
-                ['value'=>'cargo,carnome','label'=>'Cargo','type'=>'string','data-column'=>3],
-            ];
+            ['value'=>'funcionario,pessoa,pesnome','label'=>'Nome Funcionário','type'=>'string','data-column'=>2],
+            ['value'=>'cargo,carnome','label'=>'Cargo','type'=>'string','data-column'=>3],
+        ];
     }
     
     protected function getBtns() {

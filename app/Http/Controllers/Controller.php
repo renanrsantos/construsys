@@ -31,6 +31,10 @@ abstract class Controller extends BaseController
 
     protected $id;
     
+    private $camposFiltro;
+    private $operadoresFiltro;
+    private $valoresFiltro;
+    
     public function __construct() {
         $this->entidade = self::getEntidade();
     }
@@ -170,16 +174,84 @@ abstract class Controller extends BaseController
         return $record->$column;
     }
     
+    private function getTipoFiltro($campo){
+        foreach ($this->getFilters() as $filtro){
+            if($filtro['value'] === $campo){
+                return $filtro['type'];
+            }
+        }
+    }
+    
+    private function formataValorFiltro(&$valor, &$valorFiltro,$tipo){
+        switch($tipo){
+            case 'string':
+                $valor = mb_strtoupper($valor);
+                $valorFiltro = mb_strtoupper($valorFiltro);
+                break;
+            case 'int':
+                $valor = (int) $valor;
+                $valorFiltro = (int) $valorFiltro;
+                break;
+            case 'boolean':
+                $valor = (bool) $valor;
+                $valorFiltro = (bool) $valorFiltro;
+                break;
+        }
+    }
+    
+    private function comparaValorFiltro($valor, $valorFiltro, $operador){
+        switch ($operador){
+            case '=':
+                return $valor == $valorFiltro;
+            case '<>' :
+                return $valor != $valorFiltro;
+            case '%%' :
+                return strpos($valor,$valorFiltro) > -1;
+            case '%' :
+                return strpos($valor,$valorFiltro) === 0;
+            case '>' :
+                return $valor > $valorFiltro;
+            case '<' :
+                return $valor < $valorFiltro;
+        }
+    }
+    
+    private function registroEncontrado($record){
+        $retorno = true;
+        if(is_array($this->valoresFiltro) && count($this->valoresFiltro) > 1){
+            for($i=1; $i < count($this->valoresFiltro); $i++){
+                $campo = $this->camposFiltro[$i];
+                $operador = $this->operadoresFiltro[$i];
+                $valorFiltro = $this->valoresFiltro[$i];
+                if($valorFiltro){
+                    $valor = $this->getValueFromRecord($record, $campo);
+                    $this->formataValorFiltro($valor, $valorFiltro, $this->getTipoFiltro($campo));
+                    $retorno = $this->comparaValorFiltro($valor, $valorFiltro, $operador);
+                    if(!$retorno){
+                        break;
+                    }
+                }
+            }            
+        }
+        return $retorno;
+    }
+    
     protected function getRecordsDataTable(){
         $data = [];
+        $this->camposFiltro = $this->request->get('campo-filtro');
+        $this->operadoresFiltro = $this->request->get('operador-filtro');
+        $this->valoresFiltro = $this->request->get('valor-filtro');
         foreach($this->getRecords()->get() as $record){
-            $row = [];
-            $row[] = app('form')->checkboxSimple('id[]',$record->getKey(),null,['class'=>'chk-acao','data-valida-controller'=>$this->getValidaController($record)])->toHtml();
-            foreach ($this->getColumns() as $column) {
-                $column = $column['name']; 
-                $row[] = $this->getValueFromRecord($record, $column);
+            if($this->registroEncontrado($record)){
+                $row = [];
+                $row[] = app('form')->checkboxSimple('id[]',$record->getKey(),null,['class'=>'chk-acao','data-valida-controller'=>$this->getValidaController($record)])->toHtml();
+                foreach ($this->getColumns() as $column) {
+                    $column = $column['name']; 
+                    $value = $this->getValueFromRecord($record, $column);
+                    $row[] = $value;
+                }
+                $data[] = $row;
             }
-            $data[] = $row;
         }
         return $data;
     }

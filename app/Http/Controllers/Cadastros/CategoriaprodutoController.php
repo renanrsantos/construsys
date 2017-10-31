@@ -15,9 +15,9 @@ class CategoriaprodutoController extends Controller{
 
     protected function getFilters() {
         return [
-                ['value'=>'idcategoriaproduto','label'=>'Código','type'=>'int','data-column'=>1],
-                ['value'=>'catdescricao','label'=>'Descrição','type'=>'string','data-column'=>2],
-            ];
+            ['value'=>'idcategoriaproduto','label'=>'Código','type'=>'int'],
+            ['value'=>'catdescricao','label'=>'Descrição','type'=>'string'],
+        ];
     }
     protected function getTitulo() {
         return 'Categoria dos Produtos';

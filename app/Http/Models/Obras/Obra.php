@@ -81,4 +81,22 @@ class Obra extends Model{
     public function getObrdatainicioAttribute($value){
         return $this->getDateValue($value);
     }
+    
+    public function dataFim(){
+        $inc = 0 ;
+        switch($this->obrtipoprevisao){
+            case 1:
+                $inc = $this->obrprevisao;
+                break;
+            case 2:
+                $inc = $this->obrprevisao * 30;
+                break;
+            case 3:
+                $inc = $this->obrprevisao * 365;
+                break;
+        }
+        return date('Y-m-d',strtotime($this->obrdatainicio.' +'.$inc.' days'));
+//        return $inc;
+//        return $this->obrprevisao .' '.$this->getTiposPrevisao()[$this->obrtipoprevisao];
+    }
 }

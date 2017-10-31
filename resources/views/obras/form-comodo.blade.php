@@ -14,20 +14,23 @@
     Form::hidden('idobra',$obra->idobra),
     Html::col(
         Form::validate(
-            Form::select('idtipocomodo',App\Http\Models\Obras\Tipocomodo::getTiposComodo(),$record->idtipocomodo,['data-vindicate'=>'required']),
-            Form::label('idtipocomodo','Tipo')
+            Form::inputConsulta('obras','tipocomodo',[
+                'value-id'=>$record->tipoComodo ? $record->idtipocomodo : '',
+                'value'=>$record->tipoComodo ? $record->tipoComodo->tconome : '',
+                'data-vindicate'=>'required'
+            ])
         )
-    ,'2'),
+    ,'4'),
     Html::col(
         Form::validate(
             Form::text('comdescricao',$record->comdescricao,['data-vindicate'=>'required']),
             Form::label('comdescricao','Descrição')
         )
-    ,'8'),
+    ,'6'),
     Html::col(
         Form::validate(
             Form::text('comtamanho',$record->comtamanho,['data-vindicate'=>'required|format:decimal']),
-            Form::label('comtamanho','Tamanho (m²)')
+            Form::label('comtamanho','Tam. (m²)')
         )
     ,'2')
   ])

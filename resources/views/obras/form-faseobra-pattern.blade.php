@@ -3,10 +3,12 @@ Form::formGroup([
     Form::hidden('idfaseobra[]',$fase ? $fase->idfaseobra : ''),
     Html::col(
     	Form::validate(
-    		Form::select('idfase[]',App\Http\Models\Obras\Fase::getFases(),$fase ? $fase->idfase : ''),
-    		Form::label('idfase[]','Fase')
-    	)
-    ,'auto'),
+            Form::inputConsulta('obras','fase',[
+                'value-id'=>$fase ? $fase->idfase : '',
+                'value'=>$fase ? $fase->fase->fsedescricao : ''
+            ],['id'=>'idfase[]'])
+        )
+    ,'3'),
     Html::col(
         Form::validate(
             Form::date('fsodatainicio[]',$fase ? $fase->fsodatainicio : ''),
@@ -21,10 +23,10 @@ Form::formGroup([
     ,'auto'),
     Html::col(
     	Form::validate(
-    		Form::text('fsoobservacao[]',$fase ? $fase->fsoobservacao : ''),
+    		Form::textarea('fsoobservacao[]',$fase ? $fase->fsoobservacao : '',['rows'=>2]),
     		Form::label('fsoobservacao[]','Observação')
     	)
-    ,'3'),
+    ,'2'),
     Html::col(
     	Form::validate(
     		Form::text('fsoporcentagem[]',$fase ? $fase->fsoporcentagem : ''),

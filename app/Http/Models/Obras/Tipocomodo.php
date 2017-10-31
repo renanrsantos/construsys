@@ -10,6 +10,13 @@ class Tipocomodo extends Model{
         'tconome', 
     ];
 
+    public $consulta = [
+        'visible'=>'idtipocomodo,tconome',
+        'label'=>'Tipo',
+        'search'=>'tconome',
+        'text'=>'tconome'
+    ];
+    
     public static function getTiposComodo(){
         $tipos = [''=>''];
         foreach(self::all() as $tipo){

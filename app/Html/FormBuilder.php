@@ -36,7 +36,7 @@ class FormBuilder extends \Collective\Html\FormBuilder {
         if($validator){
             $options['data-toggle'] = 'validator';
         }
-        return $this->toHtmlString(parent::open($options));
+        return parent::open($options);
     }
 
     public function text($name, $value = null, $options = array()) {
@@ -160,9 +160,9 @@ class FormBuilder extends \Collective\Html\FormBuilder {
             [$this->html->icon('fa fa-close') . 'Remover Filtros', ['id' => 'remove-filter', 'aria-controls' => '#filtro-' . $table]],
             [$this->html->icon('fa fa-refresh') . 'Limpar Filtros', ['id' => 'reset-filter', 'aria-controls' => '#filtro-' . $table]]], 'info');
 
-        $inputsFiltro = $this->html->col($this->select('campo-filtro', $filters['options'], null, [], $filters['attributes']), 'auto').
-            $this->html->col($this->select('operador-filtro', $this->getOperadoresFiltro(), null, []), 'auto').
-            $this->html->col($this->input('text', 'valor-filtro', '', ['placeholder' => 'Pesquisar...']), '4');
+        $inputsFiltro = $this->html->col($this->select('campo-filtro[]', $filters['options'], null, [], $filters['attributes']), 'auto').
+            $this->html->col($this->select('operador-filtro[]', $this->getOperadoresFiltro(), null, []), 'auto').
+            $this->html->col($this->input('text', 'valor-filtro[]', '', ['placeholder' => 'Pesquisar...']), '4');
         
         $inputsFiltroExtra = $this->html->tag('div', $this->formRow([$inputsFiltro]), ['class' => 'sr-only', 'id' => 'filtro-padrao']);
         
@@ -170,10 +170,8 @@ class FormBuilder extends \Collective\Html\FormBuilder {
             $inputsFiltro,
             $this->html->col($botaoFiltro,'1')
         ]);
-
-        $form = '<form id="filtro-' . $table . '">' . $inputsFiltroExtra . $inputsFiltro . '</form>';
-
-        return $this->toHtmlString($form);
+//        $form = $this->html->tag('form',$inputsFiltroExtra . $inputsFiltro,['id'=>'filtro-'.$table,'class'=>'table-filter','method'=>'POST']);
+        return $this->toHtmlString($inputsFiltroExtra . $inputsFiltro);
     }
 
     public function splitButton(array $button, array $elements, $color = 'primary') {
@@ -210,7 +208,7 @@ class FormBuilder extends \Collective\Html\FormBuilder {
             'data-search-in' => '[' . $search . ']',
             'data-visible-properties' => '[' . $visible . ']',
             'data-visible-properties-alt' => '[' . $visibleAlt . ']',
-            'data-text-property' => '{' . $text . '}',
+            'data-text-property' => '{' . str_replace('[]','\\\[\\\]', $text) . '}',
             'data-request-type' => 'get',
             'id' => $textAlt,
             'placeholder' => $placeholder,

@@ -103,14 +103,17 @@ function montaDataTable(table,data = '') {
     var url = table.attr('url');
     $.getJSON(url + '?columns=true', function (result) {
         table.html(result.columns);
-//            setFiltro(table,true);
         carregaDados(table, data);
-//        $('.btn-group-from').appendTo('.btn-group-to');
     });
 }
 
 function carregaDados(table, data = '') {
+    var filtro = table.closest('.table-main').find('div .table-filter'),
+        limit = table.closest('.table-main').find('.table-limit select').val();
     data = (data !== '') ? '?data=true&' + data : '?data=true';
+    data += '&'+table.closest('.table-main').find('.fr-registros').serialize();
+    data += '&'+filtro.serialize();
+    data += (limit === undefined) ? '&limit=10' : '&limit='+limit;
     var url = $(table).attr('url') + data;
     $(table).DataTable({
         ajax : url,
@@ -119,67 +122,8 @@ function carregaDados(table, data = '') {
     atualizaBotoes(table);
 }
 
-function formataValorCampo(valor, tipo) {
-    switch (tipo) {
-        case 'int':
-            return parseInt(valor);
-        case 'float':
-            return parseFloat(valor);
-        case 'string':
-            return valor.trim().toUpperCase();
-        default:
-            return valor;
-    }
-}
-
-function setFiltro(table, botaoFiltrar) {
-    if (botaoFiltrar) {
-        camposFiltro = $('select[name=campo-filtro]');
-        operadoresFiltro = $('select[name=operador-filtro]');
-        valoresFiltro = $('input[name=valor-filtro]');
-        valoresFiltro.each(function () {
-            $(this).attr('valor', $(this).val());
-        });
-    }
-    table.DataTable().draw();
-}
-
-function registroEncontrado(data) {
-    var result = true;
-    if (camposFiltro !== undefined) {
-        for (var i = 1; i < camposFiltro.length; i++) {
-            var campoValorFiltro = $(valoresFiltro[i]);
-            var valorFiltro = campoValorFiltro.attr('valor');
-            if (valorFiltro !== '') {
-                var campoFiltro = $(camposFiltro[i]).find(':selected');
-                valorFiltro = formataValorCampo(valorFiltro, campoFiltro.attr('type'));
-                var valorRegistro = formataValorCampo(data[campoFiltro.attr('data-column')], campoFiltro.attr('type'));
-                var operador = $(operadoresFiltro[i]).val();
-                var parcial = false;
-                switch (operador) {
-                    case '=' :
-                        parcial = valorRegistro === valorFiltro;
-                        break;
-                    case '<>' :
-                        parcial = valorRegistro !== valorFiltro;
-                        break;
-                    case '%%' :
-                        parcial = valorRegistro.indexOf(valorFiltro) > -1;
-                        break;
-                    case '%' :
-                        parcial = valorRegistro.indexOf(valorFiltro) === 0;
-                        break;
-                    case '>' :
-                        parcial = valorRegistro > valorFiltro;
-                        break;
-                    case '<' :
-                        parcial = valorRegistro < valorFiltro;
-                }
-                result = result && parcial;
-            }
-        }
-    }
-    return result;
+function setFiltro(table) {
+    carregaDados(table);
 }
 
 $.fn.dataTable.ext.errMode = function (settings, helpPage, message) {
@@ -190,7 +134,7 @@ $.fn.dataTable.ext.errMode = function (settings, helpPage, message) {
 $.extend(true, $.fn.dataTable.defaults, {
     "dom": "<'row'<'col-8 btn-group-to'><'col-4'f>>" +
             "<'row'<'col-12'tr>>" +
-            "<'row'<'col-9'<'float-left'p>><'col-3'<'row'<'col-7'l><'col-5'i>>>>",
+            "<'row'<'col-9'<'float-left'p>><'col-3'<'row'<'col-7 table-limit'l><'col-5'i>>>>",
     "destroy": true,
     "columnDefs": [
         {
@@ -276,27 +220,29 @@ $(document).ready(function () {
 
     $('body').on('click', '#reset-filter', function (event) {
         event.preventDefault();
-        var form = $($(this).attr('aria-controls'));
-        $(form).each(function () {
-            this.reset();
+        var form = $(this).closest($(this).attr('aria-controls'));
+        form.find('input').each(function () {
+            $(this).val('');
         });
-        $('#btn-filtrar').trigger('click');
+        form.find('select').each(function () {
+            $(this).find('option').eq(0).attr('selected',true);
+        });
+        form.find('#btn-filtrar').trigger('click');
     });
 
     $('body').on('click', '#add-filter', function (event) {
         event.preventDefault();
-        var form = $($(this).attr('aria-controls'));
-        $(form).append('<div class="filtro-adicional">' + $('#filtro-padrao').html() + '</div>');
+        var form = $(this).closest($(this).attr('aria-controls'));
+        $(form).append('<div class="filtro-adicional">' + form.find('#filtro-padrao').html() + '</div>');
     });
 
     $('body').on('click', '#remove-filter', function (event) {
         event.preventDefault();
-        var form = $($(this).attr('aria-controls'));
-        var filtros = form.children('.filtro-adicional');
-        $(filtros).each(function () {
+        var form = $(this).closest($(this).attr('aria-controls'));
+        form.find('.filtro-adicional').each(function () {
             $(this).remove();
         });
-        $('#reset-filter').trigger('click');
+        form.find('#reset-filter').trigger('click');
     });
 
     $('.dropdown-submenu .dropdown-toggle').on('click', function () {
@@ -356,17 +302,16 @@ $(document).ready(function () {
 
     $('body').on('click', '#btn-filtrar',function () {
         $(this).button('loading')
-        var sTable = $(this).attr('aria-controls');
-        var table = $('#' + sTable);
-        setFiltro(table, true);
+        var table = $(this).closest('.table-main').find('#'+$(this).attr('aria-controls'));
+        setFiltro(table);
         $(this).button('reset');
     });
 
-    $('body').on('keyup', 'input[type="search"]', function () {
-        var sTable = $(this).attr('aria-controls');
-        var table = $('#' + sTable);
-        setFiltro(table, false);
-    });
+//    $('body').on('keyup', 'input[type="search"]', function () {
+//        var sTable = $(this).attr('aria-controls');
+//        var table = $('#' + sTable);
+//        setFiltro(table, false);
+//    });
 
     $('body').on('select:flexdatalist', '.flexdatalist', function (item, options) {
         var props = $(this).data('visible-properties');

@@ -14,29 +14,32 @@ Form::formGroup([
     Form::hidden('idobra',$obra->idobra),
     Html::col(
     	Form::validate(
-    		Form::select('idfase',App\Http\Models\Obras\Fase::getFases(),$record->idfase,['data-vindicate'=>'required']),
-    		Form::label('idfase','Fase')
-    	)
-    ,'4'),
+            Form::inputConsulta('obras','fase',[
+                'value-id'=>$record ? $record->idfase : '',
+                'value'=>$record->fase ? $record->fase->fsedescricao : '',
+                'data-vindicate'=>'required'
+            ])
+        )
+    ,'6'),
     Html::col(
         Form::validate(
             Form::date('fsodatainicio',$record->fsodatainicio,['data-vindicate'=>'required']),
             Form::label('fsodatainicio','Data início')
         )
-    ,'4'),
+    ,'3'),
     Html::col(
         Form::validate(
             Form::date('fsodataprevistafim',$record->fsodataprevistafim),
             Form::label('fsodataprevistafim','Data prev. fim')
         )
-    ,'4')
+    ,'3')
 ])
 }}
 {{
 Form::formGroup([
     Html::col(
     	Form::validate(
-    		Form::text('fsoobservacao',$record->fsoobservacao),
+    		Form::textarea('fsoobservacao',$record->fsoobservacao,['rows'=>2]),
     		Form::label('fsoobservacao','Observação')
     	)
     ,'8'),
