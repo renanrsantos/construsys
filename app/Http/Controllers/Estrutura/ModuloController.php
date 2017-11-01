@@ -11,7 +11,7 @@ class ModuloController extends Controller{
                 ['name'=>'idmodulo','label'=>'Código','width'=>'10'],
                 ['name'=>'modnome','label'=>'Nome','width'=>'30'],
                 ['name'=>'modpath','label'=>'Path','width'=>'30'],
-                ['name'=>'modicone','label'=>'Ícone','width'=>'20'],
+                ['name'=>'modicone','label'=>'Ícone','width'=>'20','type'=>'icon'],
             ];
     }
 

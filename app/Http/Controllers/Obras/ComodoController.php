@@ -12,9 +12,9 @@ class ComodoController extends DependenciaObraController{
     protected function getColumns() {
         return [
             ['name'=>'idcomodo','label'=>'Código','width'=>'5'],
-            ['name'=>'comdescricao','label'=>'Cômodo','width'=>'50'],
+            ['name'=>'comdescricao','label'=>'Cômodo','width'=>'50','type'=>'string','length'=>'80'],
             ['name'=>'tipoComodo,tconome','label'=>'Tipo','width'=>'30'],
-            ['name'=>'comtamanho','label'=>'Tamanho','width'=>'10']
+            ['name'=>'comtamanho','label'=>'Tamanho','width'=>'10','type'=>'decimal']
         ];
     }
 

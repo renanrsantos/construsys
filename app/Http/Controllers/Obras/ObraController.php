@@ -16,12 +16,12 @@ class ObraController extends Controller{
     protected function getColumns() {
         return [
                 ['name'=>'idobra','label'=>'Código','width'=>'5'],
-                ['name'=>'obrdescricao','label'=>'Descrição','width'=>'20'],
-                ['name'=>'cliente,pessoa,pesnome','label'=>'Cliente','width'=>'20'],
-                ['name'=>'obrtamanho','label'=>'Tamanho (m²)','width'=>'10'],
-                ['name'=>'obrvalororcado','label'=>'Valor','width'=>'10'],
-                ['name'=>'totalPago()','label'=>'Valor pago','width'=>'10'],
-                ['name'=>'custo()','label'=>'Custo','width'=>'10'],
+                ['name'=>'obrdescricao','label'=>'Descrição','width'=>'20','type'=>'string','length'=>'30'],
+                ['name'=>'cliente,pessoa,pesnome','label'=>'Cliente','width'=>'20','type'=>'string','length'=>'30'],
+                ['name'=>'obrtamanho','label'=>'Tamanho (m²)','width'=>'10','type'=>'decimal'],
+                ['name'=>'obrvalororcado','label'=>'Valor','width'=>'10','type'=>'decimal'],
+                ['name'=>'totalPago()','label'=>'Valor pago','width'=>'10','type'=>'decimal'],
+                ['name'=>'custo()','label'=>'Custo','width'=>'10','type'=>'decimal'],
             ];
     }
 

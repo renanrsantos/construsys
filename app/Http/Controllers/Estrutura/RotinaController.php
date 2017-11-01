@@ -13,7 +13,7 @@ class RotinaController extends Controller{
                 ['name'=>'idrotina','label'=>'Código','width'=>'10','grupo'=>'Rotina'],
                 ['name'=>'rotnome','label'=>'Nome','width'=>'25','grupo'=>'Rotina'],
                 ['name'=>'rotpath','label'=>'Path','width'=>'15','grupo'=>'Rotina'],
-                ['name'=>'roticone','label'=>'Ícone','width'=>'15','grupo'=>'Rotina'],
+                ['name'=>'roticone','label'=>'Ícone','width'=>'15','grupo'=>'Rotina','type'=>'icon'],
             ];
     }
 

@@ -170,8 +170,8 @@ class FormBuilder extends \Collective\Html\FormBuilder {
             $inputsFiltro,
             $this->html->col($botaoFiltro,'1')
         ]);
-//        $form = $this->html->tag('form',$inputsFiltroExtra . $inputsFiltro,['id'=>'filtro-'.$table,'class'=>'table-filter','method'=>'POST']);
-        return $this->toHtmlString($inputsFiltroExtra . $inputsFiltro);
+        $form = $this->html->tag('form',$inputsFiltroExtra . $inputsFiltro,['id'=>'filtro-'.$table,'class'=>'table-filter']);
+        return $form;
     }
 
     public function splitButton(array $button, array $elements, $color = 'primary') {

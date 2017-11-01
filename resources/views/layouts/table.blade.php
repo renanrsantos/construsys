@@ -4,16 +4,13 @@
 @endphp
 {{Html::tag('div','<div class="modal-dialog '.$modalSize.'" role="document"></div>',['class'=>'modal fade mymodal '.$main, 'id'=>'modal-fr-'.$table, 'tabindex'=>'-1','role'=>'dialog','data-keyboard'=>'false', 'data-backdrop'=>'static'])}}
 {{Html::tag('div','',['id'=>'msg-global'])}}
-<div class="table-main">
-    <div class="row col-12">
-        {!!Form::open(['class'=>'table-filter'])!!}
+<div class="table-main col-12">
+    <div class="row">
         {{Form::tableFilter($filters,$table)}}
-        {!!Form::close()!!}
     </div>
     <br>
-    <div class="form-row" id="{{$id}}">
-        {{Form::open(array('url'=>isset($urlAlt) ? $urlAlt : Request::url(),'class'=>'col-12 form-horizontal','id'=>'fr-registros-'.$table,'class'=>'fr-registros'))}}
-        {{Form::hidden('hash','')}}
+    <div class="row" id="{{$id}}">
+        {{Form::open(array('url'=>isset($urlAlt) ? $urlAlt : Request::url(),'class'=>'form-horizontal','id'=>'fr-registros-'.$table,'class'=>'fr-registros','style'=>'width:100%;'))}}
             @if(!$main)
                 {{$inputId}}
             @endif

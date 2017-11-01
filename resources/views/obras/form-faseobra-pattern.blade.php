@@ -14,13 +14,13 @@ Form::formGroup([
             Form::date('fsodatainicio[]',$fase ? $fase->fsodatainicio : ''),
             Form::label('fsodatainicio[]','Data início')
         )
-    ,'auto'),
+    ,'2'),
     Html::col(
         Form::validate(
-            Form::date('fsodataprevistafim[]',$fase ? $fase->fsodataprevistafim : ''),
+            Form::date('fsodataprevistafim[]',$fase ? $fase->fsodataprevistafim : '',['data-vindicate'=>'function:validaDataFaseObra(this)']),
             Form::label('fsodataprevistafim[]','Data prev. fim')
         )
-    ,'auto'),
+    ,'2'),
     Html::col(
     	Form::validate(
     		Form::textarea('fsoobservacao[]',$fase ? $fase->fsoobservacao : '',['rows'=>2]),

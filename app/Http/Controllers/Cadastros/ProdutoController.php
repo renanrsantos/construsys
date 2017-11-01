@@ -9,9 +9,9 @@ class ProdutoController extends Controller{
     protected function getColumns() {
         return [
             ['name'=>'idproduto','label'=>'Código','width'=>'5'],
-            ['name'=>'prddescricao','label'=>'Descrição','width'=>'55'],
+            ['name'=>'prddescricao','label'=>'Descrição','width'=>'55','type'=>'string','length'=>'80'],
             ['name'=>'unidadeMedida,unmsigla','label'=>'Un. Medida','width'=>'15'],
-            ['name'=>'prdvalorunitario','label'=>'Valor Unitário','width'=>'20'],
+            ['name'=>'prdvalorunitario','label'=>'Valor Unitário','width'=>'20','type'=>'decimal'],
         ];
     }
 

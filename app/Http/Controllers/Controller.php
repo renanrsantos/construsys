@@ -236,6 +236,27 @@ abstract class Controller extends BaseController
         return $retorno;
     }
     
+    private function getValorFormatado($column, $value){
+        if(isset($column['type'])){
+            switch($column['type']){
+                case 'date':
+                    return $value ? date('d/m/Y', strtotime($value)) : $value;
+                case 'decimal':
+                    return number_format ($value,2,',','.');
+                case 'string':
+                    $length = isset($column['length']) ? $column['length'] : strlen($value);
+                    $text = substr($value,0,$length);
+                    $text .= $length < strlen($value) ? '...' : '';
+                    return '<span title="'.$value.'" data-toggle="tooltip" data-placement="bottom">'.$text.'</span>';
+                case 'boolean':
+                    return (bool) $value ? 'Sim' : 'Não';
+                case 'icon':
+                    return '<i class="'.$value.'"></i>';
+            }
+        }
+        return $value;
+    }
+    
     protected function getRecordsDataTable(){
         $data = [];
         $this->camposFiltro = $this->request->get('campo-filtro');
@@ -246,8 +267,7 @@ abstract class Controller extends BaseController
                 $row = [];
                 $row[] = app('form')->checkboxSimple('id[]',$record->getKey(),null,['class'=>'chk-acao','data-valida-controller'=>$this->getValidaController($record)])->toHtml();
                 foreach ($this->getColumns() as $column) {
-                    $column = $column['name']; 
-                    $value = $this->getValueFromRecord($record, $column);
+                    $value = $this->getValorFormatado($column, $this->getValueFromRecord($record, $column['name']));
                     $row[] = $value;
                 }
                 $data[] = $row;
@@ -527,7 +547,7 @@ abstract class Controller extends BaseController
         $inputId = null;
         $headerPai = '';
         $urlAlt = str_replace('/model', '', $this->request->url());
-        $consulta = app('form')->button('Selecionar',['color'=>'primary','icon'=>'fa fa-hand-o-up','class'=>'btn-single btn-seleciona','data-camporetorno'=>'#'.$this->request->get('camporetorno')]);
+        $consulta = app('form')->button('Selecionar',['color'=>'primary','icon'=>'fa fa-hand-o-up','class'=>'btn-single btn-seleciona','data-camporetorno'=>$this->request->get('camporetorno')]);
         return self::view($view,array_merge(compact('consulta','filters','btns','ajax','section','scrollY','titulo','modalSize','acao','main','inputId','headerPai','urlAlt'),$this->getPropExtra('index')));
     }
 }

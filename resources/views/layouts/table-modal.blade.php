@@ -1,7 +1,7 @@
-@extends('layouts.modal')
+@extends('layouts.modal-sample')
 
 @section('header')
-	{{$titulo}}
+    {{$titulo}}
 @endsection
 @section('body')
     {{Html::tag('div',$headerPai)}}
@@ -10,10 +10,6 @@
     @overwrite
     @include('layouts.table')
 @endsection
-
-@section('footer')
-
-@overwrite
 
 @if(isset($consulta))
     @section('scripts')

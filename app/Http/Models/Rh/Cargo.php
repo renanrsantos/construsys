@@ -11,6 +11,13 @@ use App\Http\Models\Model;
 class Cargo extends Model{
     protected $fillable = ['carnome'];
     
+    public $consulta = [
+        'visible'=>'idcargo,carnome',
+        'text'=>'carnome',
+        'search'=>'carnome',
+        'label'=>'Cargo'
+    ];
+    
     public static function getCargos(){
         $cargos = [''=>''];
         foreach(self::all() as $cargo){

@@ -11,7 +11,7 @@ class ClienteController extends Controller{
     protected function getColumns(){
         return [
             ['name'=>'idcliente','label'=>'Código','width'=>'5'],
-            ['name'=>'pessoa,pesnome','label'=>'Nome','width'=>'40'],
+            ['name'=>'pessoa,pesnome','label'=>'Nome','width'=>'40','type'=>'string','length'=>'60'],
             ['name'=>'pessoa,pescpfcnpj','label'=>'Cpf / Cnpj','20'],
         ];
     }

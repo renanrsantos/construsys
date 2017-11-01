@@ -15,7 +15,7 @@ class SubrotinaController extends Controller{
                 ['name'=>'idsubrotina','label'=>'Código','width'=>5,'grupo'=>'Subrotina'],
                 ['name'=>'sbrnome','label'=>'Nome','width'=>20,'grupo'=>'Subrotina'],
                 ['name'=>'sbrpath','label'=>'Path','width'=>20,'grupo'=>'Subrotina'],
-                ['name'=>'sbricone','label'=>'Ícone','width'=>15,'grupo'=>'Subrotina'] 
+                ['name'=>'sbricone','label'=>'Ícone','width'=>15,'grupo'=>'Subrotina','type'=>'icon'] 
             ];
     }
 

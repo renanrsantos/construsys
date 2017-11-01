@@ -3,7 +3,7 @@
     $table = Request::segment(3) . '-' . Request::segment(5);
 ?>
 <div class="modal-content" id="content-{{$table}}">
-    {{Form::open(['url'=>isset($urlAlt) ? $urlAlt : Request::url(),'class'=>'form-horizontal','id'=>'fr-'.$table],true)}}
+{{Form::open(['url'=>isset($urlAlt) ? $urlAlt : Request::url(),'class'=>'form-horizontal','id'=>'fr-'.$table],true)}}
     <div class="modal-header">
         <h5 class="modal-title" id="myModalLabel">{{$acao}} @yield('header')</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&nbsp;&times;&nbsp;</span></button>
@@ -19,14 +19,13 @@
     </div>
     <div class="modal-footer">
         @section('footer')
-        <div class="{{$disableAll ? 'disable-all' : 'enable-all'}}">
-            @include('layouts.buttons-form',['table'=>'fr-'.$table])
-        </div>
+            <div class="{{$disableAll ? 'disable-all' : 'enable-all'}}">
+                @include('layouts.buttons-form',['table'=>'fr-'.$table])
+            </div>
         @show
-    </div>
-</div>
+    </div>   
 {{Form::close()}}
-
+</div>
 @section('scripts')
     @include('scripts.modal',['content'=>'#content-'.$table])
 @show

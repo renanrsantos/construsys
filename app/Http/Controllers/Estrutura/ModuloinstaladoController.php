@@ -12,7 +12,7 @@ class ModuloinstaladoController extends Controller{
                 ['name'=>'entidade,pessoa,pesnome','label'=>'Empresa','width'=>'30'],                
                 ['name'=>'modulo,idmodulo','label'=>'Cód. Módulo','width'=>'10'],
                 ['name'=>'modulo,modnome','label'=>'Módulo','width'=>'15'],
-                ['name'=>'mdiativo','label'=>'Ativo','width'=>'5'],
+                ['name'=>'mdiativo','label'=>'Ativo','width'=>'5','type'=>'boolean'],
             ];        
     }
 

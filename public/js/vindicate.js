@@ -13,7 +13,10 @@ function vindicateForm(options) {
         showSuccess: true,
         submitTo: "",
         requiredMessage: "Este campo é obrigatório.",
-        minLengthMessage: "Você não preencheu o comprimento mínimo",
+        minLengthMessage: "Você não preencheu o comprimento mínimo.",
+        minValMessage: "O valor deve ser maior que [MIN]",
+        maxValMessage: "O valor deve ser menor que [MAX]",
+        betweenMessage: "O valor deve ser entre [MIN] e [MAX]",
         parent: "input-validate",
         helper: "form-control-feedback",
         validationStates: {
@@ -174,8 +177,12 @@ function vindicateField($element,$form, formId, options) {
     };
     this.group = false;
     this.minLength = false;
+    this.minVal = false;
+    this.maxVal = false;
+    this.between = false;
     this.matchValue = false;
     this.matchField = false;
+    this.function = false;
     this.setMask = function(){
         var maskOptions = options.formats[this.format].mask;
         if(maskOptions){
@@ -243,6 +250,16 @@ function vindicateField($element,$form, formId, options) {
                 this.matchValue = input_option.substring(7, input_option.length);
             } else if (input_option.substring(0, 6) === "match:") {
                 this.matchField = input_option.substring(6, input_option.length);
+            } else if(input_option.substring(0,9) === "function:"){
+                this.function = input_option.substring(9, input_option.length);
+            } else if(input_option.substring(0,7) === "minVal:"){
+                this.minVal = input_option.substring(7, input_option.length);
+            } else if(input_option.substring(0,7) === "maxVal:"){
+                this.maxVal = input_option.substring(7, input_option.length);
+            } else if(input_option.substring(0,8) === "between:"){
+                this.between = input_option.substring(8, input_option.length).split(';');
+                this.minVal = this.between[0];
+                this.maxVal = this.between[1];
             }
         }
 
@@ -375,6 +392,29 @@ function vindicateField($element,$form, formId, options) {
             this.validationMessage = options.minLengthMessage;
         }
     };
+    
+    this.validateMinVal = function (options) {
+        if (this.element.val() <= this.minVal) {
+            this.validationSoftFail = true;
+            this.validationMessage = options.minValMessage.replace('[MIN]',this.minVal);
+        }
+    };
+    
+    this.validateMaxVal = function (options) {
+        if (this.element.val() >= this.maxVal) {
+            this.validationSoftFail = true;
+            this.validationMessage = options.maxValMessage.replace('[MAX]',this.maxVal);
+        }
+    };
+    
+    this.validateBetween = function (options) {
+        if (this.element.val() <= this.minVal || this.element.val() >= this.maxVal) {
+            this.validationSoftFail = true;
+            this.validationMessage = options.betweenMessage
+                    .replace('[MIN]',this.minVal)
+                    .replace('[MAX]',this.maxVal);
+        }
+    };
 
     this.validateEquals = function (options) {
         if (this.element.val() !== this.form.findById(this.matchField).element.val()) {
@@ -404,10 +444,21 @@ function vindicateField($element,$form, formId, options) {
         if (this.minLength) {
             this.validateMinLength(options);
         }
+        if(this.function){
+            eval(this.function);
+        }
+        
+        if(this.between){
+            this.validateBetween(options);
+        } else if(this.minVal){
+            this.validateMinVal(options);
+        } else if(this.maxVal){
+            this.validateMaxVal(options);
+        }
+        
         return this.validateComplete(options);
     };
 }
-
 
 (function ($) {
     $.fn.vindicate = function () {
@@ -448,10 +499,10 @@ function vindicateField($element,$form, formId, options) {
             }
             window.vindicate[form_id] = vin;
             //window.vindicate.push(vin);
-            // form_index = (window.vindicate.length-1); // Minus 1 because array is 0 based
+            //form_index = (window.vindicate.length-1); // Minus 1 because array is 0 based
             //$form_this.data("vindicate-index", form_index);
             // }
-//             console.log("Vindicate - Form Initialized", form_id);
+            //console.log("Vindicate - Form Initialized", form_id);
         } 
         if (action === "validate") {
             var vin = window.vindicate[form_id];

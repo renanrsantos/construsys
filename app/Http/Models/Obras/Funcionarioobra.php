@@ -45,7 +45,7 @@ class Funcionarioobra extends Model{
             return 'Não há';
         }
         $ultimoPeriodo = $this->ultimoPeriodo();
-        $dataFim = $ultimoPeriodo->pefdatafim ? $ultimoPeriodo->pefdatafim : '(Atual)';
-        return $ultimoPeriodo->pefdatainicio.' à '. $dataFim;
+        $dataFim = $ultimoPeriodo->pefdatafim ? date('d/m/Y', strtotime($ultimoPeriodo->pefdatafim)) : '';
+        return date('d/m/Y', strtotime($ultimoPeriodo->pefdatainicio)).' ~ '. $dataFim;
     }
 }

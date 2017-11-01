@@ -10,6 +10,16 @@ function calcValorTotal(inputVlrUnit, inputQuantidade, inputVlrTotal){
     }
 }
 
+function validaDataFaseObra(field){
+    var dataFim = field.element.val(),
+        dataIni = field.element.closest('.form-group')
+            .find('#'+field.id.replace('fsodataprevistafim','fsodatainicio')).val();
+    if(dataFim !== "" && dataFim < dataIni){
+        field.validationSoftFail = true;
+        field.validationMessage = "A data deve ser superior à data de início.";
+    }
+}
+
 $(document).ready(function(){
    $('body').on('blur', '#itdvalorunitario\\[\\]',function(){
        calcValorTotal('[name="itdvalorunitario\\[\\]"]','[name="itdquantidade\\[\\]"]','[name="dsovalortotal"]');

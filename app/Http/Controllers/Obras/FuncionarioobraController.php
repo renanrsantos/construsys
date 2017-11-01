@@ -12,7 +12,7 @@ class FuncionarioobraController extends DependenciaObraController{
     protected function getColumns() {
         return [
             ['name'=>'idfuncionarioobra','label'=>'Código','width'=>'5'],
-            ['name'=>'funcionario,pessoa,pesnome','label'=>'Nome','width'=>'50'],            
+            ['name'=>'funcionario,pessoa,pesnome','label'=>'Nome','width'=>'50','type'=>'string','length'=>'100'],            
             ['name'=>'cargo,carnome','label'=>'Cargo','width'=>'20'],
             ['name'=>'descUltimoPeriodo()','label'=>'Último Período','15']
         ];
@@ -38,7 +38,7 @@ class FuncionarioobraController extends DependenciaObraController{
     }
     
     protected function getModalSize() {
-        return 'modal-xl';
+        return 'modal-lg';
     }
     protected function getValidaController($record) {
         if($record->periodos->isEmpty()){

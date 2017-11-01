@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Obras;
 
 use App\Http\Models\Obras\Funcionarioobra;
-use Illuminate\Support\Facades\Redirect;
 
 /**
  * Description of PeriodofuncionarioController
@@ -16,8 +15,8 @@ class PeriodofuncionarioController extends \App\Http\Controllers\Controller{
     protected function getColumns() {
         return [
             ['name'=>'idperiodofuncionario','label'=>'Código','width'=>'5'],
-            ['name'=>'pefdatainicio','label'=>'Data início','width'=>'45'],
-            ['name'=>'pefdatafim','label'=>'Data fim','width'=>'45'],
+            ['name'=>'pefdatainicio','label'=>'Data início','width'=>'45','type'=>'date'],
+            ['name'=>'pefdatafim','label'=>'Data fim','width'=>'45','type'=>'date'],
         ];
     }
 

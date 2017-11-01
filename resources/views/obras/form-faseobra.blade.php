@@ -29,7 +29,7 @@ Form::formGroup([
     ,'3'),
     Html::col(
         Form::validate(
-            Form::date('fsodataprevistafim',$record->fsodataprevistafim),
+            Form::date('fsodataprevistafim',$record->fsodataprevistafim,['data-vindicate'=>'function:validaDataFaseObra(this)']),
             Form::label('fsodataprevistafim','Data prev. fim')
         )
     ,'3')

@@ -9,7 +9,7 @@ class CategoriaprodutoController extends Controller{
     protected function getColumns() {
         return [
             ['name'=>'idcategoriaproduto','label'=>'Código','width'=>'5'],
-            ['name'=>'catdescricao','label'=>'Descrição','width'=>'90'],                  
+            ['name'=>'catdescricao','label'=>'Descrição','width'=>'90','type'=>'string','length'=>'200'],                  
         ];
     }
 

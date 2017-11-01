@@ -14,7 +14,7 @@ class PessoaController extends Controller{
     protected function getColumns() {
         return [
             ['name'=>'idpessoa','label'=>'Código','width'=>'5'],
-            ['name'=>'pesnome','label'=>'Nome','width'=>'80'],
+            ['name'=>'pesnome','label'=>'Nome','width'=>'80','type'=>'string','length'=>'100'],
             ['name'=>'pescpfcnpj','label'=>'Cpf / Cnpj','width'=>'15'],                    
 //            ['name'=>'pesrgie','label'=>'RG / IE','width'=>'20'],                    
         ];

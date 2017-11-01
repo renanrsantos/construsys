@@ -20,8 +20,11 @@
     Form::formGroup([
         Html::col(
             Form::validate(
-                Form::select('idcargo',App\Http\Models\Rh\Cargo::getCargos(),$record->idcargo,['data-vindicate'=>'required']),
-                Form::label('idcargo','Cargo')
+                Form::inputConsulta('rh','cargo',[
+                    'value-id'=>$record->idcargo,
+                    'value'=>$record->cargo ? $record->cargo->carnome : '',
+                    'data-vindicate'=>'required'
+                ])
             )
         ,'4'),
         Html::col(
@@ -32,7 +35,7 @@
         ,'4'),
         Html::col(
             Form::validate(
-                Form::text('funsalariobase',$record->funsalariobase,['data-vindicate'=>'required|format:decimal']),
+                Form::text('funsalariobase',$record->funsalariobase,['data-vindicate'=>'required|format:decimal|minVal:0']),
                 Form::label('funsalariobase','Salário Base')
             )    
         ,'4')

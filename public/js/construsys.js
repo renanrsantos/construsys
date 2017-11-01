@@ -4,14 +4,18 @@ var operadoresFiltro;
 var valoresFiltro;
 
 $.fn.button = function(state){
-    var btn = $(this);
+    var btn = $(this),
+        i = btn.find('i');
     switch(state){
         case 'loading':
             btn.addClass('disabled');
-            btn.find('i').addClass('fa-circle-o-notch fa-spin fa-fw');
+            i.attr('original-icon',i.attr('class'));
+            i.removeClass();
+            i.addClass('fa fa-circle-o-notch fa-spin fa-fw');
             break;
         case 'reset':
-            btn.find('i').removeClass('fa-circle-o-notch fa-spin fa-fw');
+            i.removeClass();
+            i.addClass(i.attr('original-icon'));
             btn.removeClass('disabled');
             break;
     }
@@ -108,7 +112,7 @@ function montaDataTable(table,data = '') {
 }
 
 function carregaDados(table, data = '') {
-    var filtro = table.closest('.table-main').find('div .table-filter'),
+    var filtro = table.closest('.table-main').find('.table-filter'),
         limit = table.closest('.table-main').find('.table-limit select').val();
     data = (data !== '') ? '?data=true&' + data : '?data=true';
     data += '&'+table.closest('.table-main').find('.fr-registros').serialize();
@@ -301,8 +305,8 @@ $(document).ready(function () {
     });
 
     $('body').on('click', '#btn-filtrar',function () {
-        $(this).button('loading')
         var table = $(this).closest('.table-main').find('#'+$(this).attr('aria-controls'));
+        $(this).button('loading');
         setFiltro(table);
         $(this).button('reset');
     });
@@ -417,11 +421,8 @@ $(document).ready(function () {
                 } else {
                     size = modal.find('#modal-size').html() ? modal.find('#modal-size').html() : size;;
                 }
-                modal.removeClass('modal-xl')
-                    .removeClass('modal-lg')
-                    .removeClass('modal-md')
-                    .removeClass('modal-sm')
-                    .addClass(size);
+                modal.removeClass('modal-xl').removeClass('modal-lg').removeClass('modal-md')
+                    .removeClass('modal-sm').addClass(size);
                 eval(modal.find('#table-scripts').html());
                 $this.button('reset');
             });
@@ -451,7 +452,7 @@ $(document).ready(function () {
                 table.DataTable().destroy();
             }
             if(btnSeleciona.length > 0){
-                $(btnSeleciona.data('camporetorno').replace('[]','\\[\\]')).removeClass('wait-response');
+                $('[name="'+btnSeleciona.data('camporetorno').replace('[]','\\[\\]')+'"]').removeClass('wait-response');
             }
             $(this).html('');
         });
@@ -573,11 +574,11 @@ $(document).ready(function () {
     $('body').on('click','.btn-seleciona',function(e){
         if(botaoHabilitado($(this))){
             var val = $(this).closest('form').find('input[type="checkbox"]:checked').val();
-            var campoRetorno = $(this).data('camporetorno').replace('[]','\\[\\]');
+            var campoRetorno = '[name="'+$(this).data('camporetorno').replace('[]','\\[\\]')+'"]';
             $(campoRetorno).each(function(){
-                 if($(this).hasClass('wait-response')){
-                     $(this).trigger('input').val(val).trigger('blur');
-                 } 
+                if($(this).hasClass('wait-response')){
+                    $(this).trigger('input').val(val).trigger('blur');
+                } 
             });
             $(this).closest('.modal').modal('hide');
         } else {

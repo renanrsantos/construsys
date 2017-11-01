@@ -13,9 +13,9 @@ class FaseobraController extends DependenciaObraController{
         return [
                 ['name'=>'idfaseobra','label'=>'Código','width'=>'5'],
                 ['name'=>'fase,fsedescricao','label'=>'Fase','width'=>'20'],            
-                ['name'=>'fsoobservacao','label'=>'Observação','width'=>'30'],
-                ['name'=>'fsodatainicio','label'=>'Data início','width'=>'15'],
-                ['name'=>'fsodataprevistafim','label'=>'Data prev. fim','width'=>'15'],
+                ['name'=>'fsoobservacao','label'=>'Observação','width'=>'30','type'=>'string','length'=>'50'],
+                ['name'=>'fsodatainicio','label'=>'Data início','width'=>'15','type'=>'date'],
+                ['name'=>'fsodataprevistafim','label'=>'Data prev. fim','width'=>'15','type'=>'date'],
                 ['name'=>'status()','label'=>'Status','width'=>'15'],
             ];
     }
