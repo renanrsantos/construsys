@@ -132,6 +132,9 @@ abstract class Controller extends BaseController
             $filtersAux['options'][$value] = $filter['label'];
             unset($filter['value']);
             unset($filter['label']);
+            if(isset($filter['options'])){
+                $filter['options'] = json_encode($filter['options']);
+            }
             $filtersAux['attributes'][$value] = $filter;
         }
         return $filtersAux;
@@ -182,15 +185,20 @@ abstract class Controller extends BaseController
         }
     }
     
-    private function formataValorFiltro(&$valor, &$valorFiltro,$tipo){
+    private function formataValorFiltro(&$valor, &$valorFiltro,$tipo,$operador = ''){
         switch($tipo){
             case 'string':
                 $valor = mb_strtoupper($valor);
                 $valorFiltro = mb_strtoupper($valorFiltro);
                 break;
             case 'int':
+            case 'multi':
                 $valor = (int) $valor;
-                $valorFiltro = (int) $valorFiltro;
+                if(in_array($operador, ['in'])){
+                    $valorFiltro = explode(',', $valorFiltro);
+                } else {
+                    $valorFiltro = (int) $valorFiltro;
+                }
                 break;
             case 'boolean':
                 $valor = (bool) $valor;
@@ -213,19 +221,25 @@ abstract class Controller extends BaseController
                 return $valor > $valorFiltro;
             case '<' :
                 return $valor < $valorFiltro;
+            case '>=':
+                return $valor >= $valorFiltro;
+            case '<=':
+                return $valor <= $valorFiltro;
+            case 'in':
+                return in_array($valor, $valorFiltro);
         }
     }
     
     private function registroEncontrado($record){
         $retorno = true;
-        if(is_array($this->valoresFiltro) && count($this->valoresFiltro) > 1){
-            for($i=1; $i < count($this->valoresFiltro); $i++){
+        if(is_array($this->valoresFiltro)){
+            for($i=0; $i < count($this->valoresFiltro); $i++){
                 $campo = $this->camposFiltro[$i];
                 $operador = $this->operadoresFiltro[$i];
                 $valorFiltro = $this->valoresFiltro[$i];
-                if($valorFiltro){
+                if($valorFiltro != ''){
                     $valor = $this->getValueFromRecord($record, $campo);
-                    $this->formataValorFiltro($valor, $valorFiltro, $this->getTipoFiltro($campo));
+                    $this->formataValorFiltro($valor, $valorFiltro, $this->getTipoFiltro($campo),$operador);
                     $retorno = $this->comparaValorFiltro($valor, $valorFiltro, $operador);
                     if(!$retorno){
                         break;
@@ -265,7 +279,11 @@ abstract class Controller extends BaseController
         foreach($this->getRecords()->get() as $record){
             if($this->registroEncontrado($record)){
                 $row = [];
-                $row[] = app('form')->checkboxSimple('id[]',$record->getKey(),null,['class'=>'chk-acao','data-valida-controller'=>$this->getValidaController($record)])->toHtml();
+                $valida = $this->getValidaController($record);
+                if(is_array($valida)){
+                    $valida = json_encode($valida);
+                }
+                $row[] = app('form')->checkboxSimple('id[]',$record->getKey(),null,['class'=>'chk-acao','data-valida-controller'=>$valida])->toHtml();
                 foreach ($this->getColumns() as $column) {
                     $value = $this->getValorFormatado($column, $this->getValueFromRecord($record, $column['name']));
                     $row[] = $value;
@@ -334,6 +352,11 @@ abstract class Controller extends BaseController
     }
     
     protected function getValidaController($record){
+        /* 
+         return [
+            ['btns'=>['#btn1','#btn2'],'value'=>0 ou 1, 'hint'=>"Caso seja falso hint para o botão"]
+         ];
+         */
         return '';
     }
 

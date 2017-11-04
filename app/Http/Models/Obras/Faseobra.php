@@ -28,14 +28,5 @@ class Faseobra extends Model{
     
     public static function getStatusFase(){
         return [1=>'Não iniciada',2=>'Iniciada',3=>'Parada',4=>'Finalizada'];
-    }
-    
-    public function getFsodatainicioAttribute($value){
-        return $this->getDateValue($value);
-    }
-    
-    public function getFsodataprevistafimAttribute($value){
-        return $this->getDateValue($value);
-    }
-    
+    }    
 }

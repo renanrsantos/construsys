@@ -20,8 +20,11 @@ class Fase extends Model{
         'text'=>'fsedescricao'
     ];
     
-    public static function getFases(){
-        $fases = [''=>''];
+    public static function getFases($addNulo = true){
+        $fases = [];
+        if($addNulo){
+            $fases = [''=>''];
+        }
         foreach(self::all() as $fase){
             $fases[$fase->idfase] = $fase->fsedescricao;
         }

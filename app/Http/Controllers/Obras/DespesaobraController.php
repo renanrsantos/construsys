@@ -19,8 +19,11 @@ class DespesaobraController extends DependenciaObraController{
 
     protected function getFilters() {
         return [
-                ['value'=>'iddespesaobra','label'=>'Código','type'=>'int','data-column'=>1],
-            ];
+            ['value'=>'iddespesaobra','label'=>'Código','type'=>'int'],
+            ['value'=>'dsoobs','label'=>'Descrição','type'=>'string'],
+            ['value'=>'dsotipo','label'=>'Tipo','type'=>'multi','options'=>$this->getModel()->getTiposDespesa(false)],
+            ['value'=>'dsodata','label'=>'Data','type'=>'date'],
+        ];
     }
     protected function getTitulo() {
         return 'Despesa da Obra';
@@ -47,7 +50,7 @@ class DespesaobraController extends DependenciaObraController{
     private function processaItensDespesa(){
         // despesa por item
         if($this->request->dsotipo == 2){
-            $iddespesaobra = $this->model->iddespesaobra;
+            $iddespesaobra = $this->id;
             $iditemdespesa = $this->request->get('iditemdespesa');
             $idproduto = $this->request->get('idproduto');
             $itdquantidade = $this->request->get('itdquantidade');

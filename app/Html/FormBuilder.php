@@ -147,22 +147,16 @@ class FormBuilder extends \Collective\Html\FormBuilder {
         }
         return parent::textarea($name, $value, $options);
     }
-    public function getOperadoresFiltro() {
-        return [
-            '=' => 'Igual',
-            '<>' => 'Diferente',
-            '%%' => 'Contém'
-        ];
-    }
-
+    
     public function tableFilter($filters, $table) {
         $botaoFiltro = $this->splitButton([' Filtrar', ['id' => 'btn-filtrar', 'aria-controls' => $table]], [[$this->html->icon('fa fa-plus') . ' Adicionar Filtro', ['id' => 'add-filter', 'aria-controls' => '#filtro-' . $table]],
             [$this->html->icon('fa fa-close') . 'Remover Filtros', ['id' => 'remove-filter', 'aria-controls' => '#filtro-' . $table]],
             [$this->html->icon('fa fa-refresh') . 'Limpar Filtros', ['id' => 'reset-filter', 'aria-controls' => '#filtro-' . $table]]], 'info');
-
-        $inputsFiltro = $this->html->col($this->select('campo-filtro[]', $filters['options'], null, [], $filters['attributes']), 'auto').
-            $this->html->col($this->select('operador-filtro[]', $this->getOperadoresFiltro(), null, []), 'auto').
-            $this->html->col($this->input('text', 'valor-filtro[]', '', ['placeholder' => 'Pesquisar...']), '4');
+        $filters['options'] = array_merge([''=>''],$filters['options']);
+        $filters['attributes'] = array_merge([''=>['selected','disabled']],$filters['attributes']);
+        $inputsFiltro = $this->html->col($this->select('campo-filtro[]', $filters['options'], null, [], $filters['attributes']), 'auto campo-filtro').
+            $this->html->col($this->select('operador-filtro[]', [], null, []), '2 operador-filtro').
+            $this->html->col($this->input('text', 'valor-filtro[]', ''), '3 valor-filtro');
         
         $inputsFiltroExtra = $this->html->tag('div', $this->formRow([$inputsFiltro]), ['class' => 'sr-only', 'id' => 'filtro-padrao']);
         
@@ -170,8 +164,8 @@ class FormBuilder extends \Collective\Html\FormBuilder {
             $inputsFiltro,
             $this->html->col($botaoFiltro,'1')
         ]);
-        $form = $this->html->tag('form',$inputsFiltroExtra . $inputsFiltro,['id'=>'filtro-'.$table,'class'=>'table-filter']);
-        return $form;
+        $form = $this->html->tag('form',$inputsFiltro,['id'=>'filtro-'.$table,'class'=>'table-filter','style'=>'width:70%;']);
+        return $this->html->tag('div',$inputsFiltroExtra . $form,['class'=>'table-filter-main','style'=>'width:100%;']);
     }
 
     public function splitButton(array $button, array $elements, $color = 'primary') {
@@ -239,7 +233,10 @@ class FormBuilder extends \Collective\Html\FormBuilder {
         $attributesId = ['campoId' => $model->getKeyName(), 'class' => 'flexdatalist-id', 'validado' => $validado, 'data-target' => '#' . $textAlt, $readonly,'data-main'=>$attributes['data-main']];
         if(isset($attributes['data-vindicate'])){
             $attributesId['data-vindicate'] = $attributes['data-vindicate']. '|format:numeric';
-            unset($attributes['data-vindicate']);
+            if(strpos($attributes['data-vindicate'],'required') === 0){
+                $attributes['data-vindicate'] = 'requiredField:'.$id;
+            }
+//            unset($attributes['data-vindicate']);
         } 
         $colId = isset($attributes['colid']) ? $attributes['colid'] : '2';
         $colText = isset($attributes['coltext']) ? $attributes['coltext'] : '10';
@@ -247,7 +244,7 @@ class FormBuilder extends \Collective\Html\FormBuilder {
         $this->html->addClassAttributes($attributes,'col-'.$colText);
         $inputId = $this->input('text', $id, $attributes['value-id'], $attributesId);
         $modalId = 'modal-consulta-fr-'.$modulo.'-'.$rotina.'-'.rand(1,999);
-        $btnSearch = $this->button('',['class'=>'btn-input-consulta','data-url'=>url(Request::segment(1).'/modulo/'.$modulo.'/rotina/'.$rotina.'/model'),'color'=>'info','icon'=>'fa fa-search','tabindex'=>'-1','data-toggle'=>'modal','data-target'=>'#'.$modalId,'data-data'=>'camporetorno='.$id]);
+        $btnSearch = $this->button('',['class'=>'btn-input-consulta','data-url'=>url(Request::segment(1).'/modulo/'.$modulo.'/rotina/'.$rotina.'/model'),'color'=>'secondary','icon'=>'fa fa-search','tabindex'=>'-1','data-toggle'=>'modal','data-target'=>'#'.$modalId,'data-data'=>'camporetorno='.$id]);
         $modal = '<div class="modal fade mymodal modal-consulta" id="'.$modalId.'" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static"><div class="modal-dialog modal-xl" role="document"></div></div>';
         $modal .= '<script>$("#'.$modalId.'").appendTo($("#'.$modalId.'").closest(".modal"));</script>';
         return $this->toHtmlString($modal.$this->validate($this->inputAddon($inputId . $this->input('text', $textAlt, $attributes['value'], $attributes),$btnSearch,true,true),$labelText,['class'=>'input-consulta']));

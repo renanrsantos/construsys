@@ -68,7 +68,10 @@ function vindicateForm(options) {
             },
             numeric: {
                 regex: /^\d+$/,
-                message: "Insira um número válido. (0-9)"
+                message: "Insira um número válido. (0-9)",
+                mask : {
+                    mask : '0#'
+                }
             },
             phone: {
                 regex: /^(\([0-9]{2}\)[-\s\.]?[0-9]{4}[-\s\.]?[0-9]{4})$/,
@@ -183,6 +186,7 @@ function vindicateField($element,$form, formId, options) {
     this.matchValue = false;
     this.matchField = false;
     this.function = false;
+    this.chainedField = false;
     this.setMask = function(){
         var maskOptions = options.formats[this.format].mask;
         if(maskOptions){
@@ -227,12 +231,12 @@ function vindicateField($element,$form, formId, options) {
                     if (requiredString.indexOf("[") > -1) {
                         var element_id = requiredString.slice(0, requiredString.indexOf("["));
                         requiredFields.push({
-                            "id": window.vindicate[this.formId].findById(element_id).fieldId,
+                            "id": this.form.findById(element_id).fieldId,
                             "value": requiredString.slice(requiredString.indexOf("[") + 1, requiredString.indexOf("]"))
                         });
                     } else {
                         //console.log(requiredString, $("#" + requiredString).data("vindicate-id"));
-                        requiredFields.push({"id": window.vindicate[this.formId].findById(requiredString).fieldId, "value": false});
+                        requiredFields.push({"id": requiredString, "value": false});
                     }
                 }
                 this.requiredFields = requiredFields;
@@ -260,6 +264,8 @@ function vindicateField($element,$form, formId, options) {
                 this.between = input_option.substring(8, input_option.length).split(';');
                 this.minVal = this.between[0];
                 this.maxVal = this.between[1];
+            }else if(input_option.substring(0,13) === "chainedField:"){
+                this.chainedField = input_option.substring(13, input_option.length);
             }
         }
 
@@ -271,41 +277,73 @@ function vindicateField($element,$form, formId, options) {
 
     this.init(options);
 
+
+    this.fieldChained = function(){
+        console.log(this.form);
+        return this.form.findById(this.chainedField);
+    };
+    
+    this.clearState = function(){
+        this.element.removeClass(this.options.validationStates.valid.input);
+        this.formFeedback.removeClass(this.options.validationStates.valid.parent);
+        this.element.removeClass(this.options.validationStates.invalid.input);
+        this.formFeedback.removeClass(this.options.validationStates.invalid.parent);
+        this.element.removeClass(this.options.validationStates.warning.input);
+        this.formFeedback.removeClass(this.options.validationStates.warning.parent);
+    };
+    
+    this.setSuccess = function(){
+        this.clearState();
+        this.element.addClass(this.options.validationStates.valid.input);
+        this.formFeedback.addClass(this.options.validationStates.valid.parent);
+        if(this.chainedField){
+            this.fieldChained().setSucces();
+        }
+    };
+    
+    this.setHardFail = function(){
+        this.clearState();
+        this.element.addClass(this.options.validationStates.invalid.input);
+        this.formFeedback.addClass(this.options.validationStates.invalid.parent);
+        this.validationHardFail = false;
+        if(this.chainedField){
+            this.fieldChained().setHardFail();
+        }
+    };
+   
+    this.setSoftFail = function(){
+        this.clearState();
+        this.element.addClass(this.options.validationStates.warning.input);
+        this.formFeedback.addClass(this.options.validationStates.warning.parent);
+        this.validationSoftFail = false;
+        if(this.chainedField){
+            this.fieldChained().setSoftFail();
+        }
+    };
+    
     this.validatePrep = function () {
         this.formFeedback.text("");
         if (this.validationSoftFail) {
-            this.element.removeClass(this.options.validationStates.warning.input);
-            this.formFeedback.removeClass(this.options.validationStates.warning.parent);
-            this.label.removeClass(this.options.validationStates.warning.label);
-            this.validationSoftFail = false;
+            this.setSoftFail();
         }
         if (this.validationHardFail) {
-            this.element.removeClass(this.options.validationStates.invalid.input);
-            this.formFeedback.removeClass(this.options.validationStates.invalid.parent);
-            this.label.removeClass(this.options.validationStates.invalid.label);
-            this.validationHardFail = false;
+            this.setHardFail();
         }
     };
 
     this.validateComplete = function (options) {
         if (this.validationHardFail) {
-            this.element.addClass(this.options.validationStates.invalid.input);
-            this.formFeedback.addClass(this.options.validationStates.invalid.parent);
-            this.label.addClass(this.options.validationStates.invalid.label);
-            this.formFeedback.text(this.validationMessage);
+            this.setHardFail();
+            this.formFeedback.text(this.validationMessage);            
             return false;
         } else {
             if (this.validationSoftFail) {
-                this.element.addClass(this.options.validationStates.warning.input);
-                this.formFeedback.addClass(this.options.validationStates.warning.parent);
-                this.label.addClass(this.options.validationStates.warning.label);
+                this.setSoftFail();
                 this.formFeedback.text(this.validationMessage);
                 return false;
             } else {
                 if (options.showSuccess) {
-                    this.element.addClass(this.options.validationStates.valid.input);
-                    this.formFeedback.addClass(this.options.validationStates.valid.parent);
-                    this.label.addClass(this.options.validationStates.valid.label);
+                    this.setSuccess();
                 }
                 return true;
             }
@@ -315,17 +353,19 @@ function vindicateField($element,$form, formId, options) {
     this.validateRequiredFields = function (options) {
         if (this.requiredField) {
             // requiredFields values
+            var validate = true;
+            this.validationSoftFail = false;
             for (var index in this.requiredFields) {
                 var field_id = this.requiredFields[index].id; // id does not contain loop index prefix...?
                 // console.log("field_id", field_id);
-                var required = window.vindicate[this.formId].fields[field_id].validateRequired();
-                if (required && this.requiredFields[index].value) {
-                    return window.vindicate[this.formId].fields[field_id].validateMatch();
-                }
-                if (required) {
-                    return true; // If required==true for any case, end loop and return true
+                validate = validate && this.form.findById(field_id).validateRequired(options);
+                if(!validate){
+                    this.validationSoftFail = true;
+                    this.validationMessage = options.requiredMessage;
+                    break;
                 }
             }
+            return validate;
         }
         return false; // Not Required
     };
@@ -426,7 +466,7 @@ function vindicateField($element,$form, formId, options) {
     this.validate = function (options) {
         this.validatePrep(options);
         if (this.required === false && this.requiredField) {
-            this.required = this.validateRequiredFields(options);
+            this.validateRequiredFields(options);
         }
         if (this.required) {
             if (!this.validateRequired(options)) {
@@ -482,7 +522,7 @@ function vindicateField($element,$form, formId, options) {
             var vin = new vindicateForm(options);
             var fields = $form_this.find(":input").map(function () {
                 var $input_this = $(this);
-                if ($input_this.attr('data-vindicate')) {
+                if ($input_this.attr('data-vindicate') && !$input_this.hasClass('flexdatalist-set')) {
                     var field = new vindicateField($input_this, vin,form_id, vin.options);
                     return field;
                 }

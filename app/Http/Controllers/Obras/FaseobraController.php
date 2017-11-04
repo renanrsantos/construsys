@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Obras;
+use App\Http\Models\Obras\Fase;
 
 /**
  * Description of FaseobraController
@@ -22,9 +23,9 @@ class FaseobraController extends DependenciaObraController{
 
     protected function getFilters() {
         return [
-                ['value'=>'fase,fsedescrocap','label'=>'Fase','type'=>'string','data-column'=>2],
-                ['value'=>'fsostatus','label'=>'Status','type'=>'int','data-column'=>6],
-                ['value'=>'fsodatainicio','label'=>'Data início','type'=>'date','data-column'=>4],
+                ['value'=>'idfase','label'=>'Tipo da Fase','type'=>'multi','options'=>Fase::getFases(false)],
+                ['value'=>'fsostatus','label'=>'Status','type'=>'multi','options'=>$this->getModel()->getStatusFase()],
+                ['value'=>'fsodatainicio','label'=>'Data início','type'=>'date'],
             ];
     }
     protected function getTitulo() {
@@ -63,6 +64,12 @@ class FaseobraController extends DependenciaObraController{
             app('form')->button('',['id'=>'btn-inicia','data-url'=>url($this->getUrl('','faseobra/inicia')),'icon'=>'fa fa-play','data-toggle'=>'modal','data-target'=>'#modal-fr-obras-faseobra','color'=>'success','class'=>'btn-single','data-form'=>'#fr-registros-obras-faseobra']),
             app('form')->button('',['id'=>'btn-para','data-url'=>url($this->getUrl('','faseobra/para')),'icon'=>'fa fa-pause','data-toggle'=>'modal','data-target'=>'#modal-fr-obras-faseobra','color'=>'danger','class'=>'btn-single','data-form'=>'#fr-registros-obras-faseobra']),
             app('form')->button('',['id'=>'btn-finaliza','data-url'=>url($this->getUrl('','faseobra/finaliza')),'icon'=>'fa fa-flag-checkered','data-toggle'=>'modal','data-target'=>'#modal-fr-obras-faseobra','color'=>'primary','class'=>'btn-single','data-form'=>'#fr-registros-obras-faseobra']) 
+        ];
+    }
+    
+    public function getValidaController($record) {
+        return [
+            ['btns'=>['#btn-inicia','#btn-para','#btn-finaliza'],'value'=>0,'hint'=>'Não implementado']
         ];
     }
 }
