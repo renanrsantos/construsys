@@ -56,7 +56,7 @@ function botaoHabilitado(botao) {
 function atualizaBotoes(table = null) {
     var selecionados = 0;
     var checks = $('.chk-acao');
-    var checkAll = $('#chk-all'); 
+//    var checkAll = $('#chk-all'); 
     var btnSingle = $('.btn-single');
     var btnMulti = $('.btn-multi');
     if (table !== null){
@@ -69,7 +69,7 @@ function atualizaBotoes(table = null) {
         if ($(this).prop('checked') === true) {
             selecionados++;
         } else {
-            checkAll.prop('checked', false);
+//            checkAll.prop('checked', false);
         }
     });
     if (selecionados === 1) {
@@ -186,7 +186,7 @@ $(document).ready(function () {
     });
 
     $('body').on('click', 'tr[role="row"]', function (e) {
-        var td = $(this).find('td').eq(0);
+        var td = $(this).children().eq(0);
         var check = $(td).children();
         if(check.prop('id') !== 'chk-all'){
             var checked = (clickChk) ? !check.prop('checked') : check.prop('checked');

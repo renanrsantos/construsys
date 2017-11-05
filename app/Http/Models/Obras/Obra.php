@@ -63,11 +63,11 @@ class Obra extends Model{
     }
     
     public function custo(){
-        return $this->getFloatValue($this->despesas->sum('dsovalortotal'));
+        return $this->despesas->sum('dsovalortotal');
     }
     
     public function totalPago(){
-        return $this->getFloatValue($this->pagamentos->sum('pagvalor'));
+        return $this->pagamentos->sum('pagvalor');
     }
     
     public function getObrvalororcadoAttribute($value){

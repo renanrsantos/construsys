@@ -105,7 +105,7 @@
     background-size: 24px 24px;
     background-image: linear-gradient(to left, rgba(221, 221, 221, 0.7) 1px, transparent 1px), linear-gradient(to top, rgba(221, 221, 221, 0.7) 1px, transparent 1px);
     */
-    background-image: url(../images/grid.png);
+    background-image: url(../../images/grid.png);
     background-repeat: repeat;
     position: relative;
 }
@@ -292,7 +292,7 @@
 .fn-gantt .navigate-g .nav-slider-button {
     width: 17px;
     height: 60px;
-    background: url(../images/slider_handle.png) center center no-repeat;
+    background: url(../../images/slider_handle.png) center center no-repeat;
     left: 0;
     top: 0;
     margin: -26px 0 0 0;
@@ -323,7 +323,7 @@
     width: 20px;
     height: 20px;
     font-size: 0;
-    background: #595959 url(../images/icon_sprite.png) !important;
+    background: #595959 url(../../images/icon_sprite.png) !important;
     border: 1px solid #454546;
     cursor: pointer;
     vertical-align: top;
