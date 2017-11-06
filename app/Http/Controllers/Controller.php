@@ -261,6 +261,11 @@ abstract class Controller extends BaseController
                     $length = isset($column['length']) ? $column['length'] : strlen($value);
                     $text = substr($value,0,$length);
                     $text .= $length < strlen($value) ? '...' : '';
+                    for($i=0; $i < count($this->valoresFiltro); $i++){
+                        if($this->valoresFiltro[$i] != "" && $this->camposFiltro[$i] === $column['name']){
+                            $text = str_ireplace($this->valoresFiltro[$i], '<b style="text-decoration:underline;">'.strtoupper($this->valoresFiltro[$i]).'</b>', $text);
+                        }
+                    }
                     return '<span title="'.$value.'" data-toggle="tooltip" data-placement="bottom">'.$text.'</span>';
                 case 'boolean':
                     return (bool) $value ? 'Sim' : 'Não';
@@ -286,6 +291,11 @@ abstract class Controller extends BaseController
                 $row[] = app('form')->checkboxSimple('id[]',$record->getKey(),null,['class'=>'chk-acao','data-valida-controller'=>$valida])->toHtml();
                 foreach ($this->getColumns() as $column) {
                     $value = $this->getValorFormatado($column, $this->getValueFromRecord($record, $column['name']));
+                    if(isset($column['hint'])){
+                        $hint = $column['hint'];
+                        $hint = $record->$hint();
+                        $value = '<span data-toggle="tooltip" data-placement="bottom" title="'.$hint.'">'.$value.'</span>';
+                    }
                     $row[] = $value;
                 }
                 $data[] = $row;

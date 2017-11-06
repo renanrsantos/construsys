@@ -1,16 +1,13 @@
 <script type='text/javascript'>
-    $('{{$content}} .flexdatalist').each(function () {
+    $('#fr-{{$table}} .flexdatalist').each(function () {
         var readonly = $(this).prop('readonly');
         if (!readonly) {
             $(this).flexdatalist();
         }
     });
-    $('{{$content}} .disable-all :input').prop('disabled', true);
-    $('{{$content}} .disable-all :button').prop('disabled', true);
-    $('{{$content}} [data-dismiss="modal"]').prop('disabled',false);
+    $('#fr-{{$table}} .disable-all :input').prop('disabled', true).addClass('disabled');
+    $('#fr-{{$table}} .disable-all :button').prop('disabled', true).addClass('disabled');
+    $('#fr-{{$table}} [data-dismiss="modal"]').prop('disabled',false).removeClass('disabled');
     
-    $('{{$content}} form[data-toggle="validator"]').each(function(){
-        $(this).vindicate("init");
-        $(this).prop('submited',false);
-    });
+    inicializaForms($('#fr-{{$table}}'));
 </script>

@@ -48,4 +48,18 @@ class Funcionarioobra extends Model{
         $dataFim = $ultimoPeriodo->pefdatafim ? date('d/m/Y', strtotime($ultimoPeriodo->pefdatafim)) : '';
         return date('d/m/Y', strtotime($ultimoPeriodo->pefdatainicio)).' ~ '. $dataFim;
     }
+    
+    public function getTotalCusto(){
+        $total = 0;
+        $salario = $this->funcionario->funsalariobase;
+        foreach($this->periodos as $periodo){
+            $dataIni = new \DateTime($periodo->pefdatainicio);
+            $dataFim = new \DateTime($periodo->pefdatafim ? $periodo->pefdatafim : date('Y-m-d'));
+            $dif = $dataIni->diff($dataFim)->format('%r%a');
+            if($dif > 0){
+                $total += $dif * ($salario / 30);
+            }
+        }
+        return $total;
+    }
 }

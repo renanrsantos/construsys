@@ -171,8 +171,9 @@ $(document).ready(function(){
         $(this).button('loading');
         if($(this).closest('form').vindicate('validate')){
             setFiltro(table);
+        } else {
+            $(this).button('reset');
         }
-        $(this).button('reset');
     });
     
     $('body').on('change','[name="campo-filtro[]"]',function(){
@@ -201,6 +202,16 @@ $(document).ready(function(){
         var main = $(this).closest('.form-row'),
             selected = main.find('[name="campo-filtro[]"]').find('option:selected');
         setValorByType(main,selected.attr('type'),$(this).val());
+    });
+    
+    $('body').on('keydown', 'input[name="valor-filtro[]"]', function (e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            $btn = $(this).closest('form').find('#btn-filtrar');
+            $btn.focus();
+            $btn.trigger('click');
+            return false;
+        }
     });
     
     $('body').on('click','.ms-select',function(){

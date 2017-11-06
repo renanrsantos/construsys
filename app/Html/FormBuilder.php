@@ -164,7 +164,7 @@ class FormBuilder extends \Collective\Html\FormBuilder {
             $inputsFiltro,
             $this->html->col($botaoFiltro,'1')
         ]);
-        $form = $this->html->tag('form',$inputsFiltro,['id'=>'filtro-'.$table,'class'=>'table-filter','style'=>'width:70%;']);
+        $form = $this->html->tag('form',$inputsFiltro,['id'=>'filtro-'.$table,'class'=>'table-filter','style'=>'width:70%;','data-toggle'=>'validator']);
         return $this->html->tag('div',$inputsFiltroExtra . $form,['class'=>'table-filter-main','style'=>'width:100%;']);
     }
 
@@ -194,14 +194,15 @@ class FormBuilder extends \Collective\Html\FormBuilder {
         return implode(',', $retorno);
     }
 
-    public function mergeAttributesConsulta($attributes, $url, $search, $visible, $visibleAlt, $text, $textAlt, $placeholder) {
+    public function mergeAttributesConsulta($attributes, $url, $search, $visible, $props, $propsAlt, $text, $textAlt, $placeholder) {
         return array_merge($attributes, ['data-data' => url($url),
             'data-focus-first-result' => 'true',
             'data-min-length' => '2',
             'data-search-contain' => 'true',
             'data-search-in' => '[' . $search . ']',
             'data-visible-properties' => '[' . $visible . ']',
-            'data-visible-properties-alt' => '[' . $visibleAlt . ']',
+            'data-properties' => '[' . $props . ']',
+            'data-properties-alt' => '[' . str_replace('[]','\\\[\\\]', $propsAlt) . ']',
             'data-text-property' => '{' . str_replace('[]','\\\[\\\]', $text) . '}',
             'data-request-type' => 'get',
             'id' => $textAlt,
@@ -215,14 +216,15 @@ class FormBuilder extends \Collective\Html\FormBuilder {
         $search = $this->formataCamposInputConsulta($model->consulta['search']);
         $text = $model->consulta['text'];
         $textAlt = isset($consulta['text']) ? $consulta['text'] : $text;
-        $visibleAlt = isset($consulta['visible']) ? $this->formataCamposInputConsulta($consulta['visible']) : $visible;
-        $placeholder = isset($consulta['placeholder']) ? $consulta['placeholder'] : isset($model->consulta['placeholder']) ? $model->consulta['placeholder'] : 'Digite para pesquisar...';
         $id = isset($consulta['id']) ? $consulta['id'] : $model->getKeyName();
+        $props = isset($consulta['props']) ? $this->formataCamposInputConsulta($consulta['props']) : $visible;
+        $propsAlt = isset($consulta['propsAlt']) ? $this->formataCamposInputConsulta($consulta['propsAlt']) : str_replace($model->getKeyName(),$id,$props);
+        $placeholder = isset($consulta['placeholder']) ? $consulta['placeholder'] : isset($model->consulta['placeholder']) ? $model->consulta['placeholder'] : 'Digite para pesquisar...';
         $label = isset($consulta['label']) ? $consulta['label'] : $model->consulta['label'];
         $labelText = $this->label($text,$label);
-        $url = Request::segment(1) . '/modulo/' . $modulo . '/rotina/' . $rotina . '/data?datalist=true&campos=' . $model->consulta['visible']; //.'&_token='.csrf_token();
+        $url = Request::segment(1) . '/modulo/' . $modulo . '/rotina/' . $rotina . '/data?datalist=true&campos=' . (isset($consulta['props']) ? $consulta['props'] : $model->consulta['visible']); //.'&_token='.csrf_token();
         if (!isset($attributes['readonly'])) {
-            $attributes = $this->mergeAttributesConsulta($attributes, $url, $search, $visible, $visibleAlt, $text, $textAlt, $placeholder);
+            $attributes = $this->mergeAttributesConsulta($attributes, $url, $search, $visible, $props, $propsAlt, $text, $textAlt, $placeholder);
         }
         $readonly = in_array('readonly', $attributes) ? 'readonly' : '';
         $validado = in_array('readonly', $attributes) ? 'true' : 'false';

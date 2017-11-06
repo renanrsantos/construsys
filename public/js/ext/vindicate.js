@@ -193,7 +193,9 @@ function vindicateField($element,$form, formId, options) {
             switch(this.format){ 
                 case 'decimal':
                     var valor = this.element.val();//.replace('.','').replace(',','.');
-                    this.element.val(parseFloat(valor).toFixed(2));
+                    if(valor){
+                        this.element.val(parseFloat(valor).toFixed(2));
+                    }
                     break;
             }            
             this.element.mask(maskOptions.mask,maskOptions);

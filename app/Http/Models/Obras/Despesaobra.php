@@ -27,14 +27,9 @@ class Despesaobra extends Model{
     }
     
     public function getTiposDespesa($addNulo = true){
-        $tipos = [1=>'Manual',2=>'Por Item'];
         if($addNulo){
-            $tipos[''] = '';
+            return [''=>'',1=>'Manual',2=>'Por Item'];
         }
-        return $tipos;
-    }
-    
-    public function getDsovalortotalAttribute($value){
-        return $this->getFloatValue($value);
+        return [1=>'Manual',2=>'Por Item'];
     }
 }

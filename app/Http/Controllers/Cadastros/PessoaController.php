@@ -15,7 +15,7 @@ class PessoaController extends Controller{
         return [
             ['name'=>'idpessoa','label'=>'Código','width'=>'5'],
             ['name'=>'pesnome','label'=>'Nome','width'=>'80','type'=>'string','length'=>'100'],
-            ['name'=>'pescpfcnpj','label'=>'Cpf / Cnpj','width'=>'15'],                    
+            ['name'=>'pescpfcnpj','label'=>'Cpf / Cnpj','width'=>'15','type'=>'string'],                    
 //            ['name'=>'pesrgie','label'=>'RG / IE','width'=>'20'],                    
         ];
     }

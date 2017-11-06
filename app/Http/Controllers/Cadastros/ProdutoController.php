@@ -11,7 +11,7 @@ class ProdutoController extends Controller{
             ['name'=>'idproduto','label'=>'Código','width'=>'5'],
             ['name'=>'prddescricao','label'=>'Descrição','width'=>'55','type'=>'string','length'=>'80'],
             ['name'=>'unidadeMedida,unmsigla','label'=>'Un. Medida','width'=>'15'],
-            ['name'=>'prdvalorunitario','label'=>'Valor Unitário','width'=>'20','type'=>'decimal'],
+            ['name'=>'prdvalorunitario','label'=>'Valor Unitário','width'=>'15','type'=>'decimal'],
         ];
     }
 

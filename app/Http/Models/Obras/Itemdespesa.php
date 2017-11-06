@@ -19,12 +19,4 @@ class Itemdespesa extends Model{
     	return $this->belongsTo(Produto::class,'idproduto');
     }
     
-    public function getItdquantidadeAttribute($value){
-        return $this->getFloatValue($value);
-    }
-    
-    public function getItdvalorunitarioAttribute($value){
-        return $this->getFloatValue($value);
-    }
-    
 }

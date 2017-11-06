@@ -116,3 +116,8 @@ ol.breadcrumb{
     background-color: #1e90ff;
     color : white;
 }
+
+.tooltip-inner {
+    white-space:pre;
+    max-width:none;
+}

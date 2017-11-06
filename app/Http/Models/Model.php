@@ -54,7 +54,7 @@ class Model extends \Illuminate\Database\Eloquent\Model{
     }
     
     public function getFloatValue($value){
-       return number_format($value,2,'.',''); 
+       return number_format($value,2,',','.'); 
     }
     
     public function getDateValue($value){

@@ -26,4 +26,7 @@ class CargoController extends \App\Http\Controllers\Controller{
         return 'Cargos';
     }
 
+    protected function getModalSize() {
+        return 'modal-md';
+    }
 }

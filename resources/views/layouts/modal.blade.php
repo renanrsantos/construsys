@@ -27,5 +27,5 @@
 {{Form::close()}}
 </div>
 @section('scripts')
-    @include('scripts.modal',['content'=>'#content-'.$table])
+    @include('scripts.modal',['content'=>'#content-'.$table,'table'=>$table])
 @show

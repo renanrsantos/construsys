@@ -10,7 +10,8 @@
     Html::col(
         Form::validate(
             Form::inputConsulta('rh','funcionario',['value'=>$record->funcionario ? $record->funcionario->pessoa->pesnome : '',
-                'value-id'=>$record ? $record->idfuncionario : '','data-vindicate'=>'required'])
+                'value-id'=>$record ? $record->idfuncionario : '','data-vindicate'=>'required',
+                'data-main'=>'form'],['props'=>'idfuncionario,pesnome,idcargo,carnome'])
         )
     ,'12')
 ])
@@ -25,8 +26,8 @@
         ,'6'),
         Html::col(
             Form::validate(
-                Form::select('idcargo',App\Http\Models\Rh\Cargo::getCargos(),$record->idcargo ? $record->idcargo : $record->funcionario ? $record->funcionario->idcargo : ''),
-                Form::label('idcargo','Cargo')
+                Form::inputConsulta('rh','cargo',['value-id'=>$record->funcionario ? $record->funcionario->idcargo : '',
+                    'value'=>$record->funcionario ? $record->funcionario->cargo->carnome : '','data-vindicate'=>'required'])
             )
         ,'6')
     ])

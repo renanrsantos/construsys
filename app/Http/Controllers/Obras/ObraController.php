@@ -21,7 +21,7 @@ class ObraController extends Controller{
                 ['name'=>'obrtamanho','label'=>'Tamanho (m²)','width'=>'10','type'=>'decimal'],
                 ['name'=>'obrvalororcado','label'=>'Valor','width'=>'10','type'=>'decimal'],
                 ['name'=>'totalPago()','label'=>'Valor pago','width'=>'10','type'=>'decimal'],
-                ['name'=>'custo()','label'=>'Custo','width'=>'10','type'=>'decimal'],
+                ['name'=>'custo()','label'=>'Custo','width'=>'10','type'=>'decimal', 'hint'=>'hintCusto'],
             ];
     }
 

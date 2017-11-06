@@ -16,7 +16,7 @@
     ,'5'),
     Html::col(
         Form::validate(
-            Form::text('comtamanho[]',$comodo ? $comodo->comtamanho : ''),
+            Form::text('comtamanho[]',$comodo ? $comodo->comtamanho : '',['data-vindicate'=>'decimal']),
             Form::label('comtamanho[]','Tamanho (m²)')
         )
     ,'2'),

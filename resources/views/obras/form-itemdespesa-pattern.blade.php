@@ -3,7 +3,10 @@ Form::formGroup([
     Form::hidden('iditemdespesa[]',$item ? $item->iditemdespesa : ''),
     Html::col(
         Form::validate(
-            Form::inputConsulta('cadastros','produto',['value-id'=> $item ? $item->produto->idproduto : '','value'=>$item ? $item->produto->prddescricao : '','data-main'=>'.form-group'],['visible'=>'idproduto[],prddescricao,unmsigla,itdvalorunitario[]','id'=>'idproduto[]'])
+            Form::inputConsulta('cadastros','produto',['value-id'=> $item ? $item->produto->idproduto : '','value'=>$item ? $item->produto->prddescricao : '','data-main'=>'.form-group'],
+                ['props'=>'idproduto,prddescricao,unmsigla,prdvalorunitario',
+                 'propsAlt'=>'idproduto[],prddescricao,unmsigla,itdvalorunitario[]',
+                 'id'=>'idproduto[]'])
         )
     ,'6'),
     Html::col(

@@ -34,12 +34,11 @@
             </div>
             <div class="form-group">
                 <table id="{{$table}}" scrollY="{{$scrollY}}" class="table table-bordered table-hover table-sm" url="{{isset($urlAlt) ? $urlAlt : Request::url()}}/data"></table>
-                <script type='text/javascript'>
-                    montaDataTable($('#{{$id}}').find('#{{$table}}'),$('#{{$id}}').find('#fr-registros-{{$table}}').serialize());
-                    atualizaBotoes($('#{{$id}}').find('#fr-registros-{{$table}}'));
-                </script>
             </div>
         {{Form::close()}}
         <!--<div class="minmaxCon" style="margin-bottom: 50px;"></div>-->
     </div>
 </div>
+@section('scripts')
+    @include('scripts.table',['id'=>$id,'table'=>$table])
+@show

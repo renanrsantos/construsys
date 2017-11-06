@@ -34,6 +34,10 @@ class Obra extends Model{
     public function pagamentos(){
         return $this->hasMany(Pagamento::class,'idobra');
     }
+    
+    public function funcionarios(){
+        return $this->hasMany(Funcionarioobra::class,'idobra');
+    }
 
     public function comodosAsArray(){
         $comodos = [''=>''];
@@ -62,26 +66,26 @@ class Obra extends Model{
         return [''=>'', 1=>'Construção', 2=>'Reforma'];
     }
     
-    public function custo(){
+    public function getTotalDespesas(){
         return $this->despesas->sum('dsovalortotal');
+    }
+    
+    public function getTotalMaoDeObra(){
+        $total = 0;
+        foreach($this->funcionarios as $funcionario){
+            $total += $funcionario->getTotalCusto();
+        }
+        return $total;
+    }
+    
+    public function custo(){
+        return $this->getTotalDespesas() + $this->getTotalMaoDeObra();
     }
     
     public function totalPago(){
         return $this->pagamentos->sum('pagvalor');
     }
-    
-    public function getObrvalororcadoAttribute($value){
-        return $this->getFloatValue($value);
-    }
-    
-    public function getObrtamanhoAttribute($value){
-        return $this->getFloatValue($value);
-    }
-    
-    public function getObrdatainicioAttribute($value){
-        return $this->getDateValue($value);
-    }
-    
+        
     public function dataFim(){
         $inc = 0 ;
         switch($this->obrtipoprevisao){
@@ -98,5 +102,11 @@ class Obra extends Model{
         return date('Y-m-d',strtotime($this->obrdatainicio.' +'.$inc.' days'));
 //        return $inc;
 //        return $this->obrprevisao .' '.$this->getTiposPrevisao()[$this->obrtipoprevisao];
+    }
+    
+    public function hintCusto(){
+        $despesas = $this->getFloatValue($this->getTotalDespesas());
+        $maodeobra = $this->getFloatValue($this->getTotalMaoDeObra());
+        return 'Despesas: R$ '.$despesas."\n".'Mão de Obra: R$ '.$maodeobra;
     }
 }
