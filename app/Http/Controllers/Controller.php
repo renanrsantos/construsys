@@ -481,6 +481,7 @@ abstract class Controller extends BaseController
                 $msgRelacao .= "\n".'[Registro não encontrado]';
                 throw new Exception();
             }
+            $this->id = $model->getKey();
             $model->update($this->request->toArray());
             $this->model = $model;
             try{

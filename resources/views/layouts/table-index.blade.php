@@ -6,6 +6,6 @@
 
 @section('content')
     @include('layouts.table')
-@overwrite
+@endsection
 
 

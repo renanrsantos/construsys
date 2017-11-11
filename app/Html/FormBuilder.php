@@ -165,7 +165,8 @@ class FormBuilder extends \Collective\Html\FormBuilder {
             $this->html->col($botaoFiltro,'1')
         ]);
         $form = $this->html->tag('form',$inputsFiltro,['id'=>'filtro-'.$table,'class'=>'table-filter','style'=>'width:70%;','data-toggle'=>'validator']);
-        return $this->html->tag('div',$inputsFiltroExtra . $form,['class'=>'table-filter-main','style'=>'width:100%;']);
+        $script = '<script>$("#filtro-'.$table.'").vindicate("init");</script>';
+        return $this->html->tag('div',$inputsFiltroExtra . $form . $script,['class'=>'table-filter-main','style'=>'width:100%;']);
     }
 
     public function splitButton(array $button, array $elements, $color = 'primary') {

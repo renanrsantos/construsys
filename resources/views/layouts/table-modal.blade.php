@@ -10,8 +10,3 @@
     @overwrite
     @include('layouts.table')
 @endsection
-
-@if(isset($consulta))
-    @section('scripts')
-    @overwrite
-@endif

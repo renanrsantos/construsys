@@ -19,4 +19,12 @@ class Itemdespesa extends Model{
     	return $this->belongsTo(Produto::class,'idproduto');
     }
     
+    public function despesa(){
+        return $this->belongsTo(Despesaobra::class,'iddespesaobra');
+    }
+    
+    public function total(){
+        return $this->itdquantidade * $this->itdvalorunitario;
+    }
+    
 }

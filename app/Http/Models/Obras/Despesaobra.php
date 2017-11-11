@@ -32,4 +32,16 @@ class Despesaobra extends Model{
         }
         return [1=>'Manual',2=>'Por Item'];
     }
+    
+    public function descricao(){
+        if($this->dsotipo == 2){
+            $desc = 'Produtos:';
+            foreach($this->itens as $item){
+                $desc .= "\n".$this->getFloatValue($item->itdquantidade).' - '.$item->produto->prddescricao;
+            }
+        } else {
+            $desc = $this->dsoobs;
+        }
+        return $desc;
+    }
 }

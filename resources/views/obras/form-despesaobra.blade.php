@@ -61,7 +61,7 @@ Html::navTabs([
     [
         'link'=>'itens',
         'label'=>'Itens da Desesa',
-        'tab'=> View::make('obras.form-itemdespesa',['despesa'=>$record])->render()
+        'tab'=> View::make('obras.form-itemdespesa-alt',['despesa'=>$record])->render()
     ]
 ])
 }}

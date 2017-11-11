@@ -11,7 +11,7 @@ class DespesaobraController extends DependenciaObraController{
         return [
             ['name'=>'iddespesaobra','label'=>'Código','width'=>'5'],
             ['name'=>'dsodata','label'=>'Data','width'=>'10','type'=>'date'],
-            ['name'=>'dsoobs','label'=>'Descrição','width'=>'20','type'=>'string','length'=>'60'],
+            ['name'=>'descricao()','label'=>'Descrição','width'=>'20','type'=>'string','length'=>'40'],
             ['name'=>'getTipoDespesa()','label'=>'Tipo','width'=>'10'],
             ['name'=>'dsovalortotal','label'=>'Valor Total','width'=>'10','type'=>'decimal'],
         ];
@@ -25,6 +25,13 @@ class DespesaobraController extends DependenciaObraController{
             ['value'=>'dsodata','label'=>'Data','type'=>'date'],
         ];
     }
+    
+    protected function getBtns() {
+        return [
+            app('form')->button('Itens',['id'=>'btn-itemdespesa','data-url'=>url($this->getUrl('','itemdespesa')),'icon'=>'fa fa-list-ol','data-toggle'=>'modal','data-target'=>'#modal-fr-obras-despesaobra','color'=>'primary','class'=>'btn-single','data-form'=>'#fr-registros-obras-despesaobra'])
+        ];
+    }
+    
     protected function getTitulo() {
         return 'Despesa da Obra';
     }

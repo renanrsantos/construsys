@@ -39,6 +39,4 @@
         <!--<div class="minmaxCon" style="margin-bottom: 50px;"></div>-->
     </div>
 </div>
-@section('scripts')
-    @include('scripts.table',['id'=>$id,'table'=>$table])
-@show
+@include('scripts.table',['id'=>$id,'table'=>$table])

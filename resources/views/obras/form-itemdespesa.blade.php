@@ -1,19 +1,45 @@
-{{
-    Form::formGroup([
-        Html::col(
-            Form::validate(
-                Form::input('text','dsovalortotal',$despesa->dsovalortotal,['disabled','data-vindicate'=>'format:decimal']),
-                Form::label('dsovalortotal','Valor Total')
-            )
-        ,'3')
-    ])
-}}
-@include('obras.form-itemdespesa-pattern',['item'=>null,'pattern'=>true])
-@foreach($despesa->itens as $item)
-    @include('obras.form-itemdespesa-pattern',['item'=>$item,'pattern'=>false])
-@endforeach
-@include('obras.form-itemdespesa-pattern',['item'=>null,'pattern'=>false])
+@extends('layouts.modal')
 
-@if($despesa->dsotipo ==2)
-<script>calcValorTotal('[name="itdvalorunitario[]"]','[name="itdquantidade[]"]','[name="dsovalortotal"]');</script>
-@endif
+@section('header')
+Item Despesa
+@endsection
+@section('body')
+{{Form::hidden('iddespesaobra',$despesa->iddespesaobra)}}
+{{Form::hidden('iditemdespesa',$record->iditemdespesa)}}
+{{Form::formGroup([
+    Html::col(
+        Form::validate(
+            Form::inputConsulta('cadastros','produto',
+            ['value-id'=>$record->idproduto,
+             'value'=> $record->produto ? $record->produto->prddescricao : '',
+             'data-vindicate'=>'required',
+             'data-main'=>'form'
+            ],['props'=>'idproduto,prddescricao,unmsigla,prdvalorunitario',
+               'propsAlt'=>'idproduto,prddescricao,unmsigla,itdvalorunitario'])
+        )
+    ,'12')
+])}}
+{{Form::formGroup([
+    Html::col(
+        Form::validate(
+            Form::text('itdquantidade',$record->itdquantidade,['data-vindicate'=>'required|format:decimal']),
+            Form::label('itdquantidade','Quantidade')
+        )
+    ,'6'),
+    Html::col(
+        Form::validate(
+            Form::text('itdvalorunitario',$record->itdvalorunitario,['data-vindicate'=>'required|format:decimal']),
+            Form::label('itdvalorunitario','Valor Unitário')
+        )
+    ,'6')
+    
+])}}
+{{Form::formGroup([
+    Html::col(
+        Form::validate(
+            Form::textarea('itdcomplemento',$record->itdcomplemento,['rows'=>3]),
+            Form::label('itdcomplemento','Complemento')
+        )
+    ,'12')
+])}}
+@endsection

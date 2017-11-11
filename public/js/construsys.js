@@ -71,6 +71,7 @@ function atualizaBotoes(table = null) {
         btnMulti = table.closest('form').find('.btn-multi');
     }
     checks.each(function () {
+        validaControllers($(this).data('valida-controller'),$(this).prop('checked'));
         if ($(this).prop('checked') === true) {
             selecionados++;
         } else {
@@ -148,6 +149,8 @@ $.extend(true, $.fn.dataTable.defaults, {
     "dom": "<'row'<'col-8 btn-group-to'><'col-4'f>>" +
             "<'row'<'col-12'tr>>" +
             "<'row'<'col-9'<'float-left'p>><'col-3'<'row pull-right'<'col-auto table-limit'l><'col-auto'i>>>>",
+    "serverSide" : false,
+    "processing" : true,
     "destroy": true,
     "columnDefs": [
         {
@@ -170,8 +173,9 @@ $.extend(true, $.fn.dataTable.defaults, {
         "sThousands": ".",
         "sInfoThousands": ".",
         "sLengthMenu": "Exibir _MENU_",
-        "sLoadingRecords": "<i class='fa fa-circle-o-notch fa-spin fa-2x fa-fw'></i>",
-        "sProcessing": "<i class='fa fa-circle-o-notch fa-spin fa-2x fa-fw'></i>",
+        "sLoadingRecords": "",
+//        "sLoadingRecords": "<i class='fa fa-circle-o-notch fa-spin fa-4x fa-fw'></i>",
+        "sProcessing": "<i class='fa fa-circle-o-notch fa-spin fa-4x fa-fw'></i>",
         "sSearch": "Pesquisa rápida",
         "sZeroRecords": "Registro não encontrado",
         "oPaginate": {
@@ -415,7 +419,9 @@ $(document).ready(function () {
         if(!modal.hasClass('modal-consulta')){
             var table = $('#'+modal.attr('id').replace('modal-fr-','')),
                 formData = $('#'+modal.attr('id').replace('modal-fr-','fr-registros-'));
-            carregaDados(table,formData.serialize());  
+            if($(this).find('[data-dismissed="true"]').length === 0){
+                carregaDados(table,formData.serialize());  
+            }
         }
         $('[modal-parent="'+modal.attr('id')+'"]').each(function(){
             $(this).remove();
@@ -453,6 +459,10 @@ $(document).ready(function () {
     
     $('body').on('shown.bs.modal','.modal',function(){
         $(this).find('input').not('[type="hidden"]').eq(0).focus();
+    });
+    
+    $('body').on('click','[data-dismiss="modal"]',function(){
+        $(this).attr('data-dismissed',true);
     });
 
     $('body').on('click','[data-action="replicar"]',function(){
@@ -507,6 +517,7 @@ $(document).ready(function () {
         var validado = form.vindicate("validate");
         var $this = $(this);
         form.prop('submited',true);
+        $(this).closest('.modal').find('[data-dismissed="true"]').attr('data-dismissed',false);
         $this.button('loading');
         if (validado) {
             var url = form.prop('action');
