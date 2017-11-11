@@ -37,7 +37,7 @@ class Despesaobra extends Model{
         if($this->dsotipo == 2){
             $desc = 'Produtos:';
             foreach($this->itens as $item){
-                $desc .= "\n".$this->getFloatValue($item->itdquantidade).' - '.$item->produto->prddescricao;
+                $desc .= "\n".$this->getFloatValue($item->itdquantidade).' '.$item->produto->unidadeMedida->unmsigla.' - '.$item->produto->prddescricao;
             }
         } else {
             $desc = $this->dsoobs;
