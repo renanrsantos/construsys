@@ -197,7 +197,8 @@ function vindicateField($element,$form, formId, options) {
                         this.element.val(parseFloat(valor).toFixed(2));
                     }
                     break;
-            }            
+            }      
+            console.log(this.element);
             this.element.mask(maskOptions.mask,maskOptions);
         }
     };
